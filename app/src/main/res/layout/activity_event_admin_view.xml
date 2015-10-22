@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".EventAdminViewActivity">
+
+    <!--This activity to be editable for admin to update the details -->
+    <TextView android:id="@+id/event_title_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="Event Name"/>
+
+    <EditText android:id="@+id/event_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_title_label"
+        android:layout_alignLeft="@+id/event_desc_label" />
+
+    <TextView android:id="@+id/event_desc_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_below="@+id/event_title"
+        android:text="Event Description"/>
+
+    <EditText
+        android:id="@+id/event_desc_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/event_desc_label"
+        android:layout_alignLeft="@+id/event_desc_label">
+    </EditText>
+
+
+    <TextView android:id="@+id/event_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="Event Date"
+        android:layout_below="@id/event_desc_edit"/>
+
+    <DatePicker
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:id="@+id/event_date_picker"
+        android:spinnersShown="true"
+        android:calendarViewShown="false"
+        android:layout_below="@+id/event_date_label"
+        android:minHeight="@dimen/abc_action_bar_default_height" />
+
+
+
+    <TextView android:id="@+id/start_time_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="Start Time"
+        android:layout_below="@id/event_date_picker" />
+
+    <TimePicker
+        android:id="@+id/start_time"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/start_time_label"/>
+
+
+    <TextView android:id="@+id/end_time_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="End Time"
+        android:layout_below="@id/start_time"/>
+
+    <TimePicker
+        android:id="@+id/end_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/end_time_label"/>
+
+
+    <TextView android:id="@+id/event_duration_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="Event Duration"
+        android:layout_below="@id/end_time"/>
+
+    <EditText android:id="@+id/event_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/event_duration_label"
+        android:layout_marginTop="@dimen/text_margin"
+        android:layout_marginBottom="@dimen/text_margin"
+        android:layout_alignRight="@+id/venue_edit"
+        android:layout_alignLeft="@+id/event_duration_label" />
+
+    <TextView android:id="@+id/venue_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="Venue"
+        android:layout_below="@id/event_duration"/>
+
+    <EditText android:id="@+id/venue_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/venue_label"
+        android:layout_alignRight="@+id/brief_location_label"
+        android:layout_alignLeft="@+id/brief_time_label" />
+
+
+    <TextView android:id="@+id/brief_time_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_below="@id/venue_edit"
+        android:text="Brief Time"/>
+
+    <TimePicker
+        android:id="@+id/brief_date_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/brief_time_label"/>
+
+    <TextView android:id="@+id/brief_location_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="Place of Briefing"
+        android:layout_below="@id/brief_date_picker"/>
+
+    <EditText android:id = "@+id/brief_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/brief_location_label"
+        android:layout_marginTop="@dimen/text_margin"
+        android:layout_marginBottom="@dimen/text_margin"
+        android:layout_alignRight="@+id/max_volunteers_label"
+        android:layout_alignLeft="@+id/teacher_in_charge_label" />
+
+    <TextView android:id="@+id/teacher_in_charge_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="Teacher in Charge"
+        android:layout_below="@id/brief_edit"/>
+
+    <EditText android:id = "@+id/teacher_in_charge_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/teacher_in_charge_label"
+        android:layout_marginLeft="@dimen/text_margin"
+        android:layout_marginTop="@dimen/text_margin"
+        android:layout_marginBottom="@dimen/text_margin" />
+
+
+    <TextView android:id="@+id/max_volunteers_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="Max no. of volunteers"
+        android:layout_below="@id/teacher_in_charge_edit"/>
+
+    <EditText
+        android:id="@+id/max_volunteers_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:layout_below="@+id/max_volunteers_label"
+        android:layout_alignRight="@+id/teacher_in_charge_label"
+        android:layout_alignLeft="@+id/max_volunteers_label">
+    </EditText>
+
+    <Button
+        android:id="@+id/add_update_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Event Details"
+        android:layout_below="@+id/max_volunteers_edit" />
+
+
+
+</RelativeLayout >
+ </ScrollView>
