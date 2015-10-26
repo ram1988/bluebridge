@@ -52,7 +52,7 @@ public class EventAdminHomeActivity extends EventMasterActivity {
                     final Event item = (Event) parent.getItemAtPosition(position);
 
                     Intent intent = new Intent(ctxt, EventFormViewActivity.class);
-                    intent.putExtra("EventAction", "edit");
+                    intent.putExtra("EventAction", 1);
                     intent.putExtra("EventObj", item);
 
                     startActivity(intent);
