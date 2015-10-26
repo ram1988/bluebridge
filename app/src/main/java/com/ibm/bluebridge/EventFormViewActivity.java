@@ -2,19 +2,20 @@ package com.ibm.bluebridge;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
+import com.ibm.bluebridge.valueobject.Event;
+
 import java.util.Calendar;
 
-public class EventAdminViewActivity extends ActionBarActivity {
+public class EventFormViewActivity extends EventMasterActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_admin_view);
+        setContentView(R.layout.activity_event_form_view);
 
         Button addEditButton = (Button)findViewById(R.id.add_update_button);
 
@@ -25,6 +26,7 @@ public class EventAdminViewActivity extends ActionBarActivity {
          */
         Intent intent = getIntent();
         String actionType = intent.getStringExtra("EventAction");
+        Event currentEvent = (Event)intent.getSerializableExtra("EventObj");
         String eventDesc = null;
 
         if(actionType.equals("edit")) {

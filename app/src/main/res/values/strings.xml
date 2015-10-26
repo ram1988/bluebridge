@@ -107,4 +107,6 @@
     </string>
     <string name="title_activity_event_parent_view">EventParentViewActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_event_admin_home">EventAdminHomeActivity</string>
+    <string name="title_activity_event_form_view">EventFormViewActivity</string>
 </resources>

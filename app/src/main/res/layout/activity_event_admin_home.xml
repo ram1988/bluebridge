@@ -7,7 +7,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
-
+    <TextView android:id="@+id/no_events_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No events have been created"
+        android:visibility="invisible"/>
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/listview"

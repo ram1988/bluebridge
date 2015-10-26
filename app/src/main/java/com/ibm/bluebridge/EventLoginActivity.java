@@ -291,9 +291,11 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
             if (success) {
                 Intent intent = null;
                 if(mEmail.equals("admin@school.com")) {
-                    intent = new Intent(ctxt, MainActivity.class);
+                    intent = new Intent(ctxt, EventAdminHomeActivity.class);
+                    intent.putExtra("user_id","A000000E");
                 } else {
                     intent = new Intent(ctxt, EventParentViewActivity.class);
+                    intent.putExtra("user_id","A000000E");
                 }
                 startActivity(intent);
             } else {

@@ -3,7 +3,6 @@ package com.ibm.bluebridge;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentTransaction;
 
@@ -21,11 +20,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.valueobject.Event;
 
-public class EventParentViewActivity extends ActionBarActivity implements ActionBar.TabListener {
+import java.util.List;
+
+public class EventParentViewActivity extends EventMasterActivity implements ActionBar.TabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -144,7 +145,7 @@ public class EventParentViewActivity extends ActionBarActivity implements Action
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
@@ -154,6 +155,8 @@ public class EventParentViewActivity extends ActionBarActivity implements Action
                     return "All Events";
                 case 1:
                     return "Joined Events";
+                case 2:
+                    return "Completed Events";
             }
             return null;
         }
@@ -193,22 +196,22 @@ public class EventParentViewActivity extends ActionBarActivity implements Action
             //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
 
-            final EventsAdapter eventsAdapter = new EventsAdapter();
+            final EventsAdapter eventsAdapter = new EventsAdapter(selfCtxt);
             final ListView listView = (ListView) rootView.findViewById(R.id.listview);
 
             //For all events
             if(tabNumber == 1 ) {
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(selfCtxt,
-                        android.R.layout.simple_list_item_1, eventsAdapter.getAdminEventsList());
+                List<Event> eventList = eventsAdapter.getAllEventsList();
+                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList.toArray(new Event[eventList.size()]));
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, final View view,
                                             int position, long id) {
-                        final String item = (String) parent.getItemAtPosition(position);
+                        final Event item = (Event) parent.getItemAtPosition(position);
 
-                        Intent intent = new Intent(selfCtxt, EventAdminViewActivity.class);
+                        Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
                         intent.putExtra("EventAction", "edit");
                         intent.putExtra("EventDesc", item);
 
@@ -218,8 +221,8 @@ public class EventParentViewActivity extends ActionBarActivity implements Action
             }
             //For joined events
             else if(tabNumber == 2) {
-                final ArrayAdapter<String> adapter = new ArrayAdapter<String>(selfCtxt,
-                        android.R.layout.simple_list_item_1, eventsAdapter.getAdminEventsList());
+                final ArrayAdapter<Event> adapter = new ArrayAdapter<Event>(selfCtxt,
+                        android.R.layout.simple_list_item_1, eventsAdapter.getAllEventsList());
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -228,7 +231,7 @@ public class EventParentViewActivity extends ActionBarActivity implements Action
                                             int position, long id) {
                         final String item = (String) parent.getItemAtPosition(position);
 
-                        Intent intent = new Intent(selfCtxt, EventAdminViewActivity.class);
+                        Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
                         intent.putExtra("EventAction", "edit");
                         intent.putExtra("EventDesc", item);
 

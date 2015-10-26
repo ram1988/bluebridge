@@ -1,34 +1,285 @@
 package com.ibm.bluebridge.adapter;
 
+import android.content.Context;
+import android.os.AsyncTask;
+import android.os.Environment;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.channels.AsynchronousCloseException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONArray;
+
+import com.ibm.bluebridge.valueobject.Event;
 
 /**
  * Created by manirm on 10/10/2015.
  */
 public class EventsAdapter {
 
-    private List<String> eventsList;
+    private List<Event> eventsList;
+    private static final String BASE_RESTURI = "http://school-volunteer-bluebridge.eu-gb.mybluemix.net/api";
+    private HttpURLConnection restConnection;
+    private Context ctxt;
+    private JSONObject respJsonObj;
 
     public EventsAdapter() {
-        this.eventsList = new ArrayList<String>();
+        this.respJsonObj = new JSONObject();
     }
 
-    public List<String> getAdminEventsList() {
-        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-                "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-                "Android", "iPhone", "WindowsMobile" };
+    public EventsAdapter(Context ctxt) {
+        this.respJsonObj = new JSONObject();
+        this.ctxt = ctxt;
+    }
 
-        for (int i = 0; i < values.length; ++i) {
-            eventsList.add(values[i]);
+    /*******Admin Methods**********/
+    public List<Event> getAdminEventsList(String admin_id) {
+        String allEventsAPI = BASE_RESTURI + "/admin_list_events?admin_id="+admin_id;
+        eventsList = new ArrayList<Event>();
+
+        try {
+            getResponse(allEventsAPI);
+            Object response = respJsonObj.get("response");
+
+            if(response != null ) {
+                JSONArray list = (JSONArray) response;
+                int contentLength = list.length();
+
+                if (contentLength > 0) {
+                    for (int i = 0; i < list.length(); i++) {
+                        JSONObject item = list.getJSONObject(i);
+
+                        Event event = new Event();
+                        event.setEventId(item.getString("id"));
+                        event.setEventName(item.getString("name"));
+                        event.setEventDescription(item.getString("duty"));
+                        event.setEventDate(item.getString("date"));
+                        event.setStartTime(item.getString("start_time"));
+                        event.setEndTime(item.getString("end_time"));
+                        event.setVenue(item.getString("venue"));
+                        event.setTeacherInCharge(item.getString("teacher_in_charge"));
+                        event.setBriefingTime(item.getString("briefing_time"));
+                        event.setBriefingPlace(item.getString("briefing_place"));
+                        event.setMaxVolunteers(item.getInt("max_volunteers"));
+                        event.setVacancy(item.getInt("event_vacancy"));
+                        event.setCategory(item.getString("category"));
+
+                        eventsList.add(event);
+
+                        //System.out.println("jsonobj--->" + item.get("name"));
+                    }
+                } else {
+
+                }
+            }
+
         }
+        catch(JSONException excep) {
+            excep.printStackTrace();
+        }
+        catch(Exception excep){
+            excep.printStackTrace();
+        }
+        finally {
+            // restConnection.disconnect();
+        }
+
+
 
         return eventsList;
     }
 
-    public void addEvent(String event) {
-        eventsList.add(event);
+
+    /*
+    public void addEvent(Event event) {
+
+        //TEST LINE UNTIL BLUEMIX URL IS UP
+        List<Event> eventsList = getAllEventsList();
+        JSONObject eventObj = new JSONObject();
+
+        try {
+            eventObj.put("id",eventsList.size()+1);
+            eventObj.put("name",event.getEventName());
+            eventObj.put("duty",event.getEventDescription());
+            eventObj.put("date",event.getEventDate());
+            eventObj.put("start_time",event.getStartTime());
+            eventObj.put("end_time",event.getEndTime());
+            eventObj.put("venue",event.getVenue());
+            eventObj.put("teacher_in_charge",event.getTeacherInCharge());
+            eventObj.put("briefing_time",event.getBriefingTime());
+            eventObj.put("briefing_place",event.getBriefingPlace());
+            eventObj.put("max_volunteers",event.getMaxVolunteers());
+            eventObj.put("event_vacancy",event.getVacancy());
+            eventObj.put("category",event.getCategory());
+
+            JSONObject jsonObj = getResponse();
+            JSONArray list = (JSONArray)jsonObj.get("response");
+
+            list.put(eventObj);
+
+            String jsonStr = list.toString();
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(ctxt.openFileOutput("events.json", ctxt.MODE_WORLD_READABLE)));
+            bw.write(jsonStr);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
+    */
+
+    /*******Parent methods*********/
+    public List<Event> getAllEventsList() {
+        String allEventsAPI = BASE_RESTURI + "/parent_list_events";
+        eventsList = new ArrayList<Event>();
+
+        try {
+            getResponse(allEventsAPI);
+            Object response = respJsonObj.get("response");
+
+            if(response != null ) {
+                JSONArray list = (JSONArray) response;
+                int contentLength = list.length();
+
+                if (contentLength > 0) {
+                    for (int i = 0; i < list.length(); i++) {
+                        JSONObject item = list.getJSONObject(i);
+
+                        Event event = new Event();
+                        event.setEventId(item.getString("id"));
+                        event.setEventName(item.getString("name"));
+                        event.setEventDescription(item.getString("duty"));
+                        event.setEventDate(item.getString("date"));
+                        event.setStartTime(item.getString("start_time"));
+                        event.setEndTime(item.getString("end_time"));
+                        event.setVenue(item.getString("venue"));
+                        event.setTeacherInCharge(item.getString("teacher_in_charge"));
+                        event.setBriefingTime(item.getString("briefing_time"));
+                        event.setBriefingPlace(item.getString("briefing_place"));
+                        event.setMaxVolunteers(item.getInt("max_volunteers"));
+                        event.setVacancy(item.getInt("event_vacancy"));
+                        event.setCategory(item.getString("category"));
+
+                        eventsList.add(event);
+
+                        //System.out.println("jsonobj--->" + item.get("name"));
+                    }
+                } else {
+
+                }
+            }
+
+        }
+        catch(JSONException excep) {
+            excep.printStackTrace();
+        }
+        catch(Exception excep){
+            excep.printStackTrace();
+        }
+        finally {
+            // restConnection.disconnect();
+        }
+
+
+
+        return eventsList;
+    }
+
+    private boolean getConnection(String urlStr) {
+
+
+        boolean isConnFine = true;
+        try {
+            URL url = new URL(urlStr);
+            restConnection = (HttpURLConnection) url.openConnection();
+            System.out.println("connection established");
+        }
+        catch (MalformedURLException e) {
+            isConnFine = false;
+            //Log Exception
+            e.printStackTrace();
+        }
+        catch(Exception excep) {
+            isConnFine = false;
+            //Log Exception
+            excep.printStackTrace();
+        }
+
+        return isConnFine;
+
+    }
+
+    private void getResponse(String url) {
+
+        synchronized (respJsonObj) {
+            GetResponseTask getRespObj = new GetResponseTask(url);
+            getRespObj.start();
+            try {
+                System.out.println("Main Thread Waiting for response...");
+                respJsonObj.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class GetResponseTask extends Thread {
+
+        private String requestUrl;
+
+        public GetResponseTask(String url) {
+            requestUrl = url;
+        }
+        public void run() {
+            try {
+                boolean isConnFine = getConnection(requestUrl);
+                if(isConnFine) {
+                    synchronized(respJsonObj) {
+                        BufferedReader in = new BufferedReader(new InputStreamReader(restConnection.getInputStream()));
+                        StringBuffer jsonStr = new StringBuffer();
+                        String line = null;
+                        while ((line = in.readLine()) != null) {
+                            System.out.println("line-->" + line);
+                            jsonStr.append(line);
+                        }
+                        System.out.println("jsonStrfrom-->" + jsonStr.toString());
+                        respJsonObj.put("response", new JSONArray(jsonStr.toString()));
+                        System.out.println("jsonObj-->" + respJsonObj);
+                        respJsonObj.notifyAll();
+                    }
+                } else {
+                    //throw ApplicationException
+                    respJsonObj.put("response", null);
+                    System.out.println("issue in connection");
+                }
+            } catch (Exception e ) {
+                e.printStackTrace();
+                //System.out.println(e.getMessage());
+                //Log Exception
+            }
+            finally {
+                restConnection.disconnect();
+            }
+        }
+    }
+
+
 }

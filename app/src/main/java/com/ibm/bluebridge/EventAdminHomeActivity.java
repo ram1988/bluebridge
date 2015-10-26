@@ -11,39 +11,54 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.valueobject.Event;
 import com.melnykov.fab.FloatingActionButton;
 
-public class MainActivity extends ActionBarActivity {
+import java.util.List;
 
+public class EventAdminHomeActivity extends EventMasterActivity {
+
+    //sample admin A000000E
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_event_admin_home);
 
         final Context ctxt = this;
-
-        final EventsAdapter eventsAdapter = new EventsAdapter();
+        final EventsAdapter eventsAdapter = new EventsAdapter(ctxt);
         final ListView listView = (ListView) findViewById(R.id.listview);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(ctxt,
-                android.R.layout.simple_list_item_1, eventsAdapter.getAdminEventsList());
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        TextView noEventsMsg = (TextView)findViewById(R.id.no_events_message);
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
+        Intent intent = getIntent();
+        String admin_id = intent.getStringExtra("user_id");
 
-                Intent intent = new Intent(ctxt, EventAdminViewActivity.class);
-                intent.putExtra("EventAction", "edit");
-                intent.putExtra("EventDesc", item);
+        List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
 
-                startActivity(intent);
-            }
-        });
+        if(eventList.isEmpty()){
+            noEventsMsg.setVisibility(View.VISIBLE);
+        } else {
+            noEventsMsg.setVisibility(View.INVISIBLE);
 
+            final ArrayAdapter<Event> adapter = getEventArrayAdapter(ctxt, eventList.toArray(new Event[eventList.size()]));
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, final View view,
+                                        int position, long id) {
+                    final Event item = (Event) parent.getItemAtPosition(position);
+
+                    Intent intent = new Intent(ctxt, EventFormViewActivity.class);
+                    intent.putExtra("EventAction", "edit");
+                    intent.putExtra("EventObj", item);
+
+                    startActivity(intent);
+                }
+            });
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +69,7 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
 
 
-                Intent intent = new Intent(ctxt, EventAdminViewActivity.class);
+                Intent intent = new Intent(ctxt, EventFormViewActivity.class);
                 intent.putExtra("EventAction", "add");
                 startActivity(intent);
 
