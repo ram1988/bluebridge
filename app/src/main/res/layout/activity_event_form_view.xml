@@ -53,8 +53,7 @@
             android:id="@+id/event_date_picker"
             android:spinnersShown="true"
             android:calendarViewShown="false"
-            android:layout_below="@+id/event_date_label"
-            android:minHeight="@dimen/abc_action_bar_default_height" />
+            android:layout_below="@+id/event_date_label" />
 
 
 

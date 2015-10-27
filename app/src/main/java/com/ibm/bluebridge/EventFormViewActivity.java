@@ -1,5 +1,6 @@
 package com.ibm.bluebridge;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,6 +18,9 @@ import java.util.Calendar;
 
 public class EventFormViewActivity extends EventMasterActivity {
 
+    private Context ctxt;
+    private String adminId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +31,10 @@ public class EventFormViewActivity extends EventMasterActivity {
          * and displayed here
          *
          */
+        ctxt = this;
         Intent intent = getIntent();
         int mode = intent.getIntExtra("EventAction", 0);
+        adminId = intent.getStringExtra("admin_id");
         Event currentEvent = (Event)intent.getSerializableExtra("EventObj");
 
 
@@ -54,7 +60,7 @@ public class EventFormViewActivity extends EventMasterActivity {
     }
 
     //add mode-0, edit mode-1, read mode-2
-    private void populateControls(Event event,int mode) {
+    private void populateControls(final Event event,int mode) {
         Button actionButton = (Button) findViewById(R.id.action_button);
         final EventsAdapter eventsAdapter = new EventsAdapter(this);
 
@@ -62,9 +68,15 @@ public class EventFormViewActivity extends EventMasterActivity {
             actionButton.setText("Add");
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Event result =  setEvent();
+                    Event newEvent = new Event();
+                    newEvent =  setEvent(newEvent);
+                    eventsAdapter.addEvent(newEvent);
 
-                    eventsAdapter.addEvent(result);
+                    Intent intent = new Intent(ctxt, EventAdminHomeActivity.class);
+                    intent.putExtra("user_id", adminId);
+
+                    startActivity(intent);
+
                 }
             });
         }
@@ -116,10 +128,16 @@ public class EventFormViewActivity extends EventMasterActivity {
             maxVolunteers.setText(event.getMaxVolunteers());
 
             actionButton.setText("Update");
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Event result = setEvent(event);
+                    eventsAdapter.updateEvent(result);
+                }
+            });
         }
     }
 
-    private Event setEvent() {
+    private Event setEvent(Event newEvent) {
 
         EditText eventTitle = (EditText) findViewById(R.id.event_title);
         EditText duty = (EditText) findViewById(R.id.event_desc_edit);
@@ -132,7 +150,7 @@ public class EventFormViewActivity extends EventMasterActivity {
         EditText teacherInCharge = (EditText) findViewById(R.id.teacher_in_charge_edit);
         EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_edit);
 
-        Event newEvent = new Event();
+
         newEvent.setEventName(eventTitle.getText().toString());
         newEvent.setEventDescription(duty.getText().toString());
 

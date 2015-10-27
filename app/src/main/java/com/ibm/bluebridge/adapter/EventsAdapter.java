@@ -142,10 +142,36 @@ public class EventsAdapter {
         catch(Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
+    public void updateEvent(Event event) {
+
+        String updateEventsAPI = BASE_RESTURI + "/admin_add_event?admin_id=A000000E&event_id="+event.getEventId();
+
+        JSONObject eventObj = new JSONObject();
+
+        try {
+            eventObj.put("name", event.getEventName());
+            eventObj.put("duty",event.getEventDescription());
+            eventObj.put("date",event.getEventDate());
+            eventObj.put("start_time",event.getStartTime());
+            eventObj.put("end_time",event.getEndTime());
+            eventObj.put("venue",event.getVenue());
+            eventObj.put("teacher_in_charge",event.getTeacherInCharge());
+            eventObj.put("briefing_time",event.getBriefingTime());
+            eventObj.put("briefing_place",event.getBriefingPlace());
+            eventObj.put("max_volunteers",event.getMaxVolunteers());
+            eventObj.put("event_vacancy",event.getVacancy());
+            eventObj.put("category", event.getCategory());
+
+            postResponse(updateEventsAPI,eventObj);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /*******Parent methods*********/
     public List<Event> getAllEventsList() {
@@ -259,6 +285,8 @@ public class EventsAdapter {
                 boolean isConnFine = getConnection(requestUrl);
                 if(isConnFine) {
                     synchronized(respJsonObj) {
+                        restConnection.setReadTimeout(10000);
+                        restConnection.setConnectTimeout(15000);
                         BufferedReader in = new BufferedReader(new InputStreamReader(restConnection.getInputStream()));
                         StringBuffer jsonStr = new StringBuffer();
                         String line = null;
@@ -277,6 +305,15 @@ public class EventsAdapter {
                     System.out.println("issue in connection");
                 }
             } catch (Exception e ) {
+                try {
+                    synchronized(respJsonObj) {
+                        respJsonObj.put("response", null);
+                        respJsonObj.notifyAll();
+                    }
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
+                System.out.println("issue in connection");
                 e.printStackTrace();
                 //System.out.println(e.getMessage());
                 //Log Exception
@@ -309,7 +346,7 @@ public class EventsAdapter {
                     restConnection.setDoInput(true);
                     restConnection.setDoOutput(true);
 
-                    System.out.println("url-->"+requestUrl);
+                    System.out.println("url-->" + requestUrl);
 
                     DataOutputStream printout = new DataOutputStream(restConnection.getOutputStream ());
                     printout.write(URLEncoder.encode(input.toString(), "UTF-8").getBytes());

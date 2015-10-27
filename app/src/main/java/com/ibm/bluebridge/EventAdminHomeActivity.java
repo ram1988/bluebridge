@@ -33,7 +33,7 @@ public class EventAdminHomeActivity extends EventMasterActivity {
         TextView noEventsMsg = (TextView)findViewById(R.id.no_events_message);
 
         Intent intent = getIntent();
-        String admin_id = intent.getStringExtra("user_id");
+        final String admin_id = intent.getStringExtra("user_id");
 
         List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
 
@@ -54,6 +54,7 @@ public class EventAdminHomeActivity extends EventMasterActivity {
                     Intent intent = new Intent(ctxt, EventFormViewActivity.class);
                     intent.putExtra("EventAction", 1);
                     intent.putExtra("EventObj", item);
+                    intent.putExtra("admin_id", admin_id);
 
                     startActivity(intent);
                 }
@@ -71,6 +72,7 @@ public class EventAdminHomeActivity extends EventMasterActivity {
 
                 Intent intent = new Intent(ctxt, EventFormViewActivity.class);
                 intent.putExtra("EventAction", 0);
+                intent.putExtra("admin_id", admin_id);
                 startActivity(intent);
 
                 /*
