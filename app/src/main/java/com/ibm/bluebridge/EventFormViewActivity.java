@@ -62,10 +62,12 @@ public class EventFormViewActivity extends EventMasterActivity {
     //add mode-0, edit mode-1, read mode-2
     private void populateControls(final Event event,int mode) {
         Button actionButton = (Button) findViewById(R.id.action_button);
+        Button cancelButton = (Button) findViewById(R.id.cancel_button);
         final EventsAdapter eventsAdapter = new EventsAdapter(this);
 
         if(mode == 0) {
             actionButton.setText("Add");
+            cancelButton.setVisibility(View.INVISIBLE);
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Event newEvent = new Event();
@@ -99,7 +101,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             EditText briefLocation = (EditText) findViewById(R.id.brief_location);
             EditText teacherInCharge = (EditText) findViewById(R.id.teacher_in_charge_edit);
             EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_text);
-            Button cancelButton = (Button) findViewById(R.id.cancel_button);
+            cancelButton.setVisibility(View.VISIBLE);
 
             eventTitle.setText(event.getEventName());
 

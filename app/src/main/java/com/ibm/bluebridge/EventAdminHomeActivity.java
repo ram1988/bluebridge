@@ -37,8 +37,10 @@ public class EventAdminHomeActivity extends EventMasterActivity {
         final String admin_id = intent.getStringExtra("user_id");
         String message = intent.getStringExtra("message");
 
-        Toast.makeText(this, message,
-                Toast.LENGTH_LONG).show();
+        if(message!=null && !message.equals("") ) {
+            Toast.makeText(this, message,
+                    Toast.LENGTH_LONG).show();
+        }
 
         List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
 
