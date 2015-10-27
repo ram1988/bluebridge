@@ -91,7 +91,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             TimePicker briefTimePicker = (TimePicker) findViewById(R.id.brief_time_picker);
             EditText briefLocation = (EditText) findViewById(R.id.brief_location);
             EditText teacherInCharge = (EditText) findViewById(R.id.teacher_in_charge_edit);
-            EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_edit);
+            EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_text);
 
             eventTitle.setText(event.getEventName());
 
@@ -148,7 +148,7 @@ public class EventFormViewActivity extends EventMasterActivity {
         TimePicker briefTimePicker = (TimePicker) findViewById(R.id.brief_time_picker);
         EditText briefLocation = (EditText) findViewById(R.id.brief_location);
         EditText teacherInCharge = (EditText) findViewById(R.id.teacher_in_charge_edit);
-        EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_edit);
+        EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_text);
 
 
         newEvent.setEventName(eventTitle.getText().toString());

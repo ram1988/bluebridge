@@ -25,8 +25,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
@@ -86,7 +89,7 @@ public class EventsAdapter {
                         event.setBriefingPlace(item.getString("briefing_place"));
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(item.getInt("event_vacancy"));
-                        event.setCategory(item.getString("category"));
+                       // event.setCategory(item.getString("category"));
 
                         eventsList.add(event);
 
@@ -335,44 +338,29 @@ public class EventsAdapter {
         }
 
         public void run() {
+
+            HttpClient httpClient = new DefaultHttpClient();
             try {
-                boolean isConnFine = getConnection(requestUrl);
-                if(isConnFine) {
-
-                    HttpClient httpClient = new DefaultHttpClient();
                     HttpPost httpPost = new HttpPost(requestUrl);
-                    //StringEntity
+                    StringEntity se = new StringEntity(input.toString());
 
+                    httpPost.setEntity(se);
+                    httpPost.setHeader("Accept", "application/json");
+                    httpPost.setHeader("Content-Type", "application/json");
 
-                    restConnection.setReadTimeout(10000);
-                    restConnection.setConnectTimeout(15000);
-                    restConnection.setRequestMethod("POST");
-                    restConnection.setUseCaches(false);
-                    restConnection.setRequestProperty("Content-Type", "application/json");
-                    restConnection.setDoInput(true);
-                    restConnection.setDoOutput(true);
-
-                    System.out.println("url-->" + requestUrl);
-
-                    DataOutputStream printout = new DataOutputStream(restConnection.getOutputStream ());
-                    printout.write(URLEncoder.encode(input.toString(), "UTF-8").getBytes());
-                    printout.flush();
-                    printout.close();
+                    HttpResponse  httpResponse = httpClient.execute(httpPost);
 
                     System.out.println("insertion successful");
                     isPostSubmitted = true;
-                } else {
-                    //throw ApplicationException
-                    isPostSubmitted = false;
-                    System.out.println("issue in connection");
-                }
             } catch (Exception e ) {
+                isPostSubmitted = false;
+                System.out.println("issue in connection");
                 e.printStackTrace();
                 //System.out.println(e.getMessage());
                 //Log Exception
             }
             finally {
-                restConnection.disconnect();
+
             }
         }
     }

@@ -169,7 +169,7 @@
             android:layout_below="@id/teacher_in_charge_edit"/>
 
         <EditText
-            android:id="@+id/max_volunteers_edit"
+            android:id="@+id/max_volunteers_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
@@ -183,7 +183,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Update Event Details"
-            android:layout_below="@+id/max_volunteers_edit" />
+            android:layout_below="@+id/max_volunteers_text" />
 
 
 
