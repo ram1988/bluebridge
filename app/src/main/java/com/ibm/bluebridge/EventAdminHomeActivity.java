@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.valueobject.Event;
@@ -34,6 +35,10 @@ public class EventAdminHomeActivity extends EventMasterActivity {
 
         Intent intent = getIntent();
         final String admin_id = intent.getStringExtra("user_id");
+        String message = intent.getStringExtra("message");
+
+        Toast.makeText(this, message,
+                Toast.LENGTH_LONG).show();
 
         List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
 

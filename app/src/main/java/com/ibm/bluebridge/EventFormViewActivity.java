@@ -72,8 +72,15 @@ public class EventFormViewActivity extends EventMasterActivity {
                     newEvent =  setEvent(newEvent);
                     eventsAdapter.addEvent(newEvent);
 
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
                     Intent intent = new Intent(ctxt, EventAdminHomeActivity.class);
                     intent.putExtra("user_id", adminId);
+                    intent.putExtra("message","Event Added!!!");
 
                     startActivity(intent);
 
@@ -92,6 +99,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             EditText briefLocation = (EditText) findViewById(R.id.brief_location);
             EditText teacherInCharge = (EditText) findViewById(R.id.teacher_in_charge_edit);
             EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_text);
+            Button cancelButton = (Button) findViewById(R.id.cancel_button);
 
             eventTitle.setText(event.getEventName());
 
@@ -125,13 +133,32 @@ public class EventFormViewActivity extends EventMasterActivity {
             venue.setText(event.getVenue());
             briefLocation.setText(event.getBriefingPlace());
             teacherInCharge.setText(event.getTeacherInCharge());
-            maxVolunteers.setText(event.getMaxVolunteers());
+            //maxVolunteers.setText(event.getMaxVolunteers());
 
             actionButton.setText("Update");
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Event result = setEvent(event);
                     eventsAdapter.updateEvent(result);
+                }
+            });
+
+            cancelButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Event result = setEvent(event);
+                    eventsAdapter.deleteEvent(result);
+
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    Intent intent = new Intent(ctxt, EventAdminHomeActivity.class);
+                    intent.putExtra("user_id", adminId);
+                    intent.putExtra("message","Event Deleted!!!");
+
+                    startActivity(intent);
                 }
             });
         }
@@ -170,7 +197,7 @@ public class EventFormViewActivity extends EventMasterActivity {
 
         newEvent.setBriefingPlace(briefLocation.getText().toString());
         newEvent.setTeacherInCharge(teacherInCharge.getText().toString());
-        newEvent.setMaxVolunteers(Integer.parseInt(maxVolunteers.getText().toString()));
+        //newEvent.setMaxVolunteers(Integer.parseInt(maxVolunteers.getText().toString()));
 
         return newEvent;
     }

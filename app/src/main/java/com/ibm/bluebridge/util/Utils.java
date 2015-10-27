@@ -40,7 +40,7 @@ public class Utils {
         int[] splitTime = new int[splittedTime.length];
 
         splitTime[0] = Integer.parseInt(splittedTime[0]);
-        splitTime[1] = Integer.parseInt(splittedTime[1].substring(0,2));
+        splitTime[1] = Integer.parseInt(splittedTime[1]);
 
         //0-year,1-month,2-date
         return splitTime;

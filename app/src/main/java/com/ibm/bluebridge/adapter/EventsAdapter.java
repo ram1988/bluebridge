@@ -3,6 +3,7 @@ package com.ibm.bluebridge.adapter;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -28,6 +29,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -65,6 +68,7 @@ public class EventsAdapter {
         eventsList = new ArrayList<Event>();
 
         try {
+            System.out.println("Admin URI--->" + allEventsAPI);
             getResponse(allEventsAPI);
             Object response = respJsonObj.get("response");
 
@@ -126,7 +130,7 @@ public class EventsAdapter {
 
         try {
             eventObj.put("name", event.getEventName());
-            eventObj.put("duty",event.getEventDescription());
+            eventObj.put("duty", event.getEventDescription());
             eventObj.put("date",event.getEventDate());
             eventObj.put("start_time",event.getStartTime());
             eventObj.put("end_time",event.getEndTime());
@@ -138,7 +142,7 @@ public class EventsAdapter {
             eventObj.put("event_vacancy",event.getVacancy());
             eventObj.put("category", event.getCategory());
 
-            postResponse(addEventsAPI,eventObj);
+            postResponse(addEventsAPI,eventObj,"post");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -167,7 +171,7 @@ public class EventsAdapter {
             eventObj.put("event_vacancy",event.getVacancy());
             eventObj.put("category", event.getCategory());
 
-            postResponse(updateEventsAPI,eventObj);
+            postResponse(updateEventsAPI,eventObj,"post");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -176,6 +180,16 @@ public class EventsAdapter {
         }
     }
 
+    public void deleteEvent(Event event) {
+
+        String deleteEventsAPI = BASE_RESTURI + "/admin_cancel_event?admin_id=A000000E&event_id="+event.getEventId();
+
+        try {
+            postResponse(deleteEventsAPI,null,"delete");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     /*******Parent methods*********/
     public List<Event> getAllEventsList() {
         String allEventsAPI = BASE_RESTURI + "/parent_list_events";
@@ -271,8 +285,8 @@ public class EventsAdapter {
         }
     }
 
-    private void postResponse(String url,JSONObject input) {
-            PostResponseTask postRespObj = new PostResponseTask(url,input);
+    private void postResponse(String url,JSONObject input, String method) {
+            PostResponseTask postRespObj = new PostResponseTask(url,input,method);
             postRespObj.start();
     }
 
@@ -331,26 +345,36 @@ public class EventsAdapter {
 
         private String requestUrl;
         private JSONObject input;
+        private String httpMethod;
 
-        public PostResponseTask(String url, JSONObject input) {
+        public PostResponseTask(String url, JSONObject input, String method) {
             this.input = input;
             this.requestUrl = url;
+            this.httpMethod = method;
         }
 
         public void run() {
 
             HttpClient httpClient = new DefaultHttpClient();
             try {
-                    HttpPost httpPost = new HttpPost(requestUrl);
-                    StringEntity se = new StringEntity(input.toString());
+                    if(httpMethod.equals("post")) {
+                        HttpPost httpRequest = new HttpPost(requestUrl);
+                        StringEntity se = new StringEntity(input.toString());
 
-                    httpPost.setEntity(se);
-                    httpPost.setHeader("Accept", "application/json");
-                    httpPost.setHeader("Content-Type", "application/json");
+                        httpRequest.setEntity(se);
+                        httpRequest.setHeader("Accept", "application/json");
+                        httpRequest.setHeader("Content-Type", "application/json");
 
-                    HttpResponse  httpResponse = httpClient.execute(httpPost);
+                        HttpResponse httpResponse = httpClient.execute(httpRequest);
+                        Toast.makeText(ctxt, "Event Details Updated!!!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else if(httpMethod.equals("delete")) {
+                        HttpDelete httpRequest = new HttpDelete(requestUrl);
+                        HttpResponse httpResponse = httpClient.execute(httpRequest);
+                    }
 
-                    System.out.println("insertion successful");
+                    System.out.println("action successful for " + requestUrl);
                     isPostSubmitted = true;
             } catch (Exception e ) {
                 isPostSubmitted = false;
