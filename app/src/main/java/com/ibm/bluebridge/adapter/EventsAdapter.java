@@ -338,6 +338,12 @@ public class EventsAdapter {
             try {
                 boolean isConnFine = getConnection(requestUrl);
                 if(isConnFine) {
+
+                    HttpClient httpClient = new DefaultHttpClient();
+                    HttpPost httpPost = new HttpPost(requestUrl);
+                    //StringEntity
+
+
                     restConnection.setReadTimeout(10000);
                     restConnection.setConnectTimeout(15000);
                     restConnection.setRequestMethod("POST");
