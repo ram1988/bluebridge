@@ -2,12 +2,14 @@ package com.ibm.bluebridge;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.valueobject.Event;
 
@@ -28,6 +30,7 @@ public class EventFormViewActivity extends EventMasterActivity {
         Intent intent = getIntent();
         int mode = intent.getIntExtra("EventAction", 0);
         Event currentEvent = (Event)intent.getSerializableExtra("EventObj");
+
 
         //setCurrentDateOnView();
         populateControls(currentEvent, mode);
@@ -53,12 +56,17 @@ public class EventFormViewActivity extends EventMasterActivity {
     //add mode-0, edit mode-1, read mode-2
     private void populateControls(Event event,int mode) {
         Button actionButton = (Button) findViewById(R.id.action_button);
+        final EventsAdapter eventsAdapter = new EventsAdapter(this);
 
         if(mode == 0) {
-
-
-
             actionButton.setText("Add");
+            actionButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Event result =  setEvent();
+
+                    eventsAdapter.addEvent(result);
+                }
+            });
         }
         else if(mode == 1) {
             EditText eventTitle = (EditText) findViewById(R.id.event_title);
@@ -111,7 +119,43 @@ public class EventFormViewActivity extends EventMasterActivity {
         }
     }
 
+    private Event setEvent() {
 
+        EditText eventTitle = (EditText) findViewById(R.id.event_title);
+        EditText duty = (EditText) findViewById(R.id.event_desc_edit);
+        DatePicker eventDatePicker = (DatePicker) findViewById(R.id.event_date_picker);
+        TimePicker startTimePicker = (TimePicker) findViewById(R.id.start_time);
+        TimePicker endTimePicker = (TimePicker) findViewById(R.id.end_time);
+        EditText venue = (EditText) findViewById(R.id.venue_edit);
+        TimePicker briefTimePicker = (TimePicker) findViewById(R.id.brief_time_picker);
+        EditText briefLocation = (EditText) findViewById(R.id.brief_location);
+        EditText teacherInCharge = (EditText) findViewById(R.id.teacher_in_charge_edit);
+        EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_edit);
+
+        Event newEvent = new Event();
+        newEvent.setEventName(eventTitle.getText().toString());
+        newEvent.setEventDescription(duty.getText().toString());
+
+        String eventDate = eventDatePicker.getYear()+"/"+eventDatePicker.getMonth()+"/"+eventDatePicker.getDayOfMonth();
+        newEvent.setEventDate(eventDate);
+
+        String startTime = startTimePicker.getCurrentHour()+":"+startTimePicker.getCurrentMinute();
+        newEvent.setStartTime(startTime);
+
+        String endTime = endTimePicker.getCurrentHour()+":"+endTimePicker.getCurrentMinute();
+        newEvent.setEndTime(endTime);
+
+        newEvent.setVenue(venue.getText().toString());
+
+        String briefTime = briefTimePicker.getCurrentHour()+":"+briefTimePicker.getCurrentMinute();
+        newEvent.setBriefingTime(briefTime);
+
+        newEvent.setBriefingPlace(briefLocation.getText().toString());
+        newEvent.setTeacherInCharge(teacherInCharge.getText().toString());
+        newEvent.setMaxVolunteers(Integer.parseInt(maxVolunteers.getText().toString()));
+
+        return newEvent;
+    }
 
 
 

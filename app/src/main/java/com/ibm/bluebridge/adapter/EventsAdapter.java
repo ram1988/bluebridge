@@ -6,6 +6,7 @@ import android.os.Environment;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -14,10 +15,20 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.channels.AsynchronousCloseException;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -34,6 +45,7 @@ public class EventsAdapter {
     private HttpURLConnection restConnection;
     private Context ctxt;
     private JSONObject respJsonObj;
+    private Boolean isPostSubmitted = false;
 
     public EventsAdapter() {
         this.respJsonObj = new JSONObject();
@@ -102,16 +114,15 @@ public class EventsAdapter {
     }
 
 
-    /*
+
     public void addEvent(Event event) {
 
-        //TEST LINE UNTIL BLUEMIX URL IS UP
-        List<Event> eventsList = getAllEventsList();
+        String addEventsAPI = BASE_RESTURI + "/admin_add_event?admin_id=A000000E";
+
         JSONObject eventObj = new JSONObject();
 
         try {
-            eventObj.put("id",eventsList.size()+1);
-            eventObj.put("name",event.getEventName());
+            eventObj.put("name", event.getEventName());
             eventObj.put("duty",event.getEventDescription());
             eventObj.put("date",event.getEventDate());
             eventObj.put("start_time",event.getStartTime());
@@ -122,19 +133,9 @@ public class EventsAdapter {
             eventObj.put("briefing_place",event.getBriefingPlace());
             eventObj.put("max_volunteers",event.getMaxVolunteers());
             eventObj.put("event_vacancy",event.getVacancy());
-            eventObj.put("category",event.getCategory());
+            eventObj.put("category", event.getCategory());
 
-            JSONObject jsonObj = getResponse();
-            JSONArray list = (JSONArray)jsonObj.get("response");
-
-            list.put(eventObj);
-
-            String jsonStr = list.toString();
-
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(ctxt.openFileOutput("events.json", ctxt.MODE_WORLD_READABLE)));
-            bw.write(jsonStr);
-
-
+            postResponse(addEventsAPI,eventObj);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -144,7 +145,7 @@ public class EventsAdapter {
 
 
     }
-    */
+
 
     /*******Parent methods*********/
     public List<Event> getAllEventsList() {
@@ -241,6 +242,11 @@ public class EventsAdapter {
         }
     }
 
+    private void postResponse(String url,JSONObject input) {
+            PostResponseTask postRespObj = new PostResponseTask(url,input);
+            postRespObj.start();
+    }
+
     private class GetResponseTask extends Thread {
 
         private String requestUrl;
@@ -268,6 +274,53 @@ public class EventsAdapter {
                 } else {
                     //throw ApplicationException
                     respJsonObj.put("response", null);
+                    System.out.println("issue in connection");
+                }
+            } catch (Exception e ) {
+                e.printStackTrace();
+                //System.out.println(e.getMessage());
+                //Log Exception
+            }
+            finally {
+                restConnection.disconnect();
+            }
+        }
+    }
+
+    private class PostResponseTask extends Thread {
+
+        private String requestUrl;
+        private JSONObject input;
+
+        public PostResponseTask(String url, JSONObject input) {
+            this.input = input;
+            this.requestUrl = url;
+        }
+
+        public void run() {
+            try {
+                boolean isConnFine = getConnection(requestUrl);
+                if(isConnFine) {
+                    restConnection.setReadTimeout(10000);
+                    restConnection.setConnectTimeout(15000);
+                    restConnection.setRequestMethod("POST");
+                    restConnection.setUseCaches(false);
+                    restConnection.setRequestProperty("Content-Type", "application/json");
+                    restConnection.setDoInput(true);
+                    restConnection.setDoOutput(true);
+
+                    System.out.println("url-->"+requestUrl);
+
+                    DataOutputStream printout = new DataOutputStream(restConnection.getOutputStream ());
+                    printout.write(URLEncoder.encode(input.toString(), "UTF-8").getBytes());
+                    printout.flush();
+                    printout.close();
+
+                    System.out.println("insertion successful");
+                    isPostSubmitted = true;
+                } else {
+                    //throw ApplicationException
+                    isPostSubmitted = false;
                     System.out.println("issue in connection");
                 }
             } catch (Exception e ) {

@@ -70,7 +70,7 @@ public class EventAdminHomeActivity extends EventMasterActivity {
 
 
                 Intent intent = new Intent(ctxt, EventFormViewActivity.class);
-                intent.putExtra("EventAction", "add");
+                intent.putExtra("EventAction", 0);
                 startActivity(intent);
 
                 /*
