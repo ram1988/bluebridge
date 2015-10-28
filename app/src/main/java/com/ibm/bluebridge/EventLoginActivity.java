@@ -17,7 +17,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings.Secure;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +30,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
+import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPush;
+import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushException;
+import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushResponseListener;
+
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,6 +63,11 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
     private View mProgressView;
     private View mLoginFormView;
     private Context ctxt;
+
+    // Push Notification
+    MFPPush push;
+    MFPPushResponseListener notificationListener;
+    private String android_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +100,44 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         ctxt = this;
+
+        // Initialize IBM Bluemix Push Notification SDK
+        try {
+            // Initialize the SDK for Java (Android) with IBM Bluemix GUID and route
+            //BMSClient.getInstance().initialize(getApplicationContext(), "http://hq-mobile-test.mybluemix.net", "4f2f35d9-105e-47af-9394-4036c8af47f5"); //working
+            //BMSClient.getInstance().initialize(getApplicationContext(), "https://hq-mobile-test.eu-gb.mybluemix.net", "20dcd9f4-035d-42ec-bc59-158e1d143e51");
+
+            BMSClient.getInstance().initialize(getApplicationContext(), "http://school-volunteer-bluebridge.mybluemix.net", "c5328838-1f5f-4221-8845-7872da171306");
+
+        }catch(MalformedURLException e){
+            Log.d("BMSClient", "Malformed bluemix route URL");
+        }
+        //Initializing client Push SDK
+        MFPPush.getInstance().initialize(getApplicationContext());
+        push = MFPPush.getInstance();
+
+        //For Java (Android)
+        notificationListener = new MFPPushResponseListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                Log.d("Push Notification", "Device registration succeeded.");
+            }
+
+            @Override
+            public void onFailure(MFPPushException e) {
+                Log.d("Push Notification", "Device registration failed.");
+            }
+        };
+
+        Log.d("Device id", android_id);
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if (push != null) {
+            push.register(notificationListener);
+        }
     }
 
     private void populateAutoComplete() {

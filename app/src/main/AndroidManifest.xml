@@ -6,7 +6,13 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.ibm.clientsdk.android.app.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -34,6 +40,30 @@
             android:name=".EventFormViewActivity"
             android:label="@string/title_activity_event_form_view" >
         </activity>
+
+        <!-- Push Settings Start -->
+        <!--Notification Intent -->
+        <intent-filter>
+            <action android:name="com.test.push.huangq.pushtest.ItemListActivity" />
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
+
+        <!-- Add GCM Intent Service and intent-filters for RECEIVE and REGISTRATION of notifications -->
+        <service android:name="com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushIntentService" />
+
+        <receiver
+            android:name="com.ibm.mobilefirstplatform.clientsdk.android.push.internal.MFPPushBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.test.push.huangq.pushtest" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="com.test.push.huangq.pushtest" />
+            </intent-filter>
+        </receiver>
+        <!-- Push Settings End -->
     </application>
 
 </manifest>
