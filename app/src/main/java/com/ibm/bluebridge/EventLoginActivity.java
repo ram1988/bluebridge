@@ -34,6 +34,9 @@ import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPush;
 import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushException;
 import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushResponseListener;
+import com.ibm.mobilefirstplatform.clientsdk.android.security.api.AuthorizationManager;
+
+import org.json.JSONException;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -67,7 +70,6 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
     // Push Notification
     MFPPush push;
     MFPPushResponseListener notificationListener;
-    private String android_id = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,13 +106,9 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
         // Initialize IBM Bluemix Push Notification SDK
         try {
             // Initialize the SDK for Java (Android) with IBM Bluemix GUID and route
-            //BMSClient.getInstance().initialize(getApplicationContext(), "http://hq-mobile-test.mybluemix.net", "4f2f35d9-105e-47af-9394-4036c8af47f5"); //working
-            //BMSClient.getInstance().initialize(getApplicationContext(), "https://hq-mobile-test.eu-gb.mybluemix.net", "20dcd9f4-035d-42ec-bc59-158e1d143e51");
-
             BMSClient.getInstance().initialize(getApplicationContext(), "http://school-volunteer-bluebridge.mybluemix.net", "c5328838-1f5f-4221-8845-7872da171306");
-
         }catch(MalformedURLException e){
-            Log.d("BMSClient", "Malformed bluemix route URL");
+            Log.d("BMSClient", "Malformed Bluemix route URL");
         }
         //Initializing client Push SDK
         MFPPush.getInstance().initialize(getApplicationContext());
@@ -120,16 +118,18 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
         notificationListener = new MFPPushResponseListener<String>() {
             @Override
             public void onSuccess(String s) {
-                Log.d("Push Notification", "Device registration succeeded.");
+                Log.d("MFPPushResponseListener", "Device registration succeeded.");
             }
 
             @Override
             public void onFailure(MFPPushException e) {
-                Log.d("Push Notification", "Device registration failed.");
+                Log.d("MFPPushResponseListener", "Device registration failed.");
             }
         };
 
-        Log.d("Device id", android_id);
+        String deviceId = this.getDeviceId();
+        Log.d("Device ID", deviceId);
+
     }
 
     @Override
@@ -360,6 +360,24 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
             mAuthTask = null;
             showProgress(false);
         }
+    }
+
+
+    private String getDeviceId()
+    {
+        String deviceId = "";
+        try {
+            deviceId = (String) AuthorizationManager.getInstance().getDeviceIdentity().get("id");
+            Log.d("Device ID", "MFPPush:computeRegId() - DeviceId obtained from AuthorizationManager object id field is : " + deviceId);
+            if(deviceId == null) {
+                deviceId = (String)AuthorizationManager.getInstance().getDeviceIdentity().get("deviceId");
+                Log.d("Device ID", "MFPPush:computeRegId() - DeviceId obtained from AuthorizationManager object deviceId field is : " + deviceId);
+            }
+        } catch (JSONException var2) {
+            var2.printStackTrace();
+        }
+
+        return deviceId;
     }
 }
 
