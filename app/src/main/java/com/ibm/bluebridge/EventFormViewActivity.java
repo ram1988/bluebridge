@@ -14,6 +14,7 @@ import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.valueobject.Event;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 public class EventFormViewActivity extends EventMasterActivity {
@@ -63,24 +64,27 @@ public class EventFormViewActivity extends EventMasterActivity {
     private void populateControls(final Event event,int mode) {
         Button actionButton = (Button) findViewById(R.id.action_button);
         Button cancelButton = (Button) findViewById(R.id.cancel_button);
+        Button showRegButton = (Button) findViewById(R.id.list_parents_button);
         final EventsAdapter eventsAdapter = new EventsAdapter(this);
 
         if(mode == 0) {
             actionButton.setText("Add");
             cancelButton.setVisibility(View.INVISIBLE);
+            showRegButton.setVisibility(View.INVISIBLE);
+
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Event newEvent = new Event();
                     newEvent =  setEvent(newEvent);
-                    eventsAdapter.addEvent(newEvent);
+                    eventsAdapter.addEvent(newEvent,adminId);
 
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(1500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    Intent intent = new Intent(ctxt, EventAdminHomeActivity.class);
+                    Intent intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
                     intent.putExtra("user_id", adminId);
                     intent.putExtra("message","Event Added!!!");
 
@@ -102,6 +106,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             EditText teacherInCharge = (EditText) findViewById(R.id.teacher_in_charge_edit);
             EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_text);
             cancelButton.setVisibility(View.VISIBLE);
+            showRegButton.setVisibility(View.VISIBLE);
 
             eventTitle.setText(event.getEventName());
 
@@ -117,12 +122,22 @@ public class EventFormViewActivity extends EventMasterActivity {
             int minute = startTime[1];
             startTimePicker.setCurrentHour(hour);
             startTimePicker.setCurrentMinute(minute);
+            Calendar startTimeCal = Calendar.getInstance();
+            startTimeCal.set(year,month,day,hour,minute);
 
             int[] endTime = Utils.splitTime(event.getEndTime());
             hour = endTime[0];
             minute = endTime[1];
             endTimePicker.setCurrentHour(hour);
             endTimePicker.setCurrentMinute(minute);
+            Calendar endTimeCal = Calendar.getInstance();
+            endTimeCal.set(year, month, day, hour, minute);
+
+            //startTime > endTime validation to be done
+
+            double mToHourConverter = 3600000;
+            double duration = ((double)(endTimeCal.getTimeInMillis()-startTimeCal.getTimeInMillis()))/mToHourConverter;
+            eventDuration.setText(String.valueOf(new DecimalFormat("0.0").format(duration)));
 
             int[] briefTime = Utils.splitTime(event.getBriefingTime());
             hour = briefTime[0];
@@ -135,28 +150,38 @@ public class EventFormViewActivity extends EventMasterActivity {
             venue.setText(event.getVenue());
             briefLocation.setText(event.getBriefingPlace());
             teacherInCharge.setText(event.getTeacherInCharge());
-            //maxVolunteers.setText(event.getMaxVolunteers());
+            maxVolunteers.setText(String.valueOf(event.getMaxVolunteers()));
 
             actionButton.setText("Update");
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Event result = setEvent(event);
-                    eventsAdapter.updateEvent(result);
+                    eventsAdapter.updateEvent(result, adminId);
+                }
+            });
+
+            showRegButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(ctxt, EventRegisteredParentActivity.class);
+                    intent.putExtra("event_id", event.getEventId());
+
+                    startActivity(intent);
                 }
             });
 
             cancelButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Event result = setEvent(event);
-                    eventsAdapter.deleteEvent(result);
+                    eventsAdapter.deleteEvent(result,adminId);
 
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(1500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    Intent intent = new Intent(ctxt, EventAdminHomeActivity.class);
+                    Intent intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
                     intent.putExtra("user_id", adminId);
                     intent.putExtra("message","Event Deleted!!!");
 
@@ -199,7 +224,7 @@ public class EventFormViewActivity extends EventMasterActivity {
 
         newEvent.setBriefingPlace(briefLocation.getText().toString());
         newEvent.setTeacherInCharge(teacherInCharge.getText().toString());
-        //newEvent.setMaxVolunteers(Integer.parseInt(maxVolunteers.getText().toString()));
+        newEvent.setMaxVolunteers(Integer.parseInt(maxVolunteers.getText().toString()));
 
         return newEvent;
     }

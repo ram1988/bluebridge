@@ -47,7 +47,7 @@ import com.ibm.bluebridge.valueobject.Event;
 public class EventsAdapter {
 
     private List<Event> eventsList;
-    private static final String BASE_RESTURI = "http://school-volunteer-bluebridge.eu-gb.mybluemix.net/api";
+    private static final String BASE_RESTURI = "http://school-volunteer-bluebridge.mybluemix.net/api";
     private HttpURLConnection restConnection;
     private Context ctxt;
     private JSONObject respJsonObj;
@@ -114,17 +114,104 @@ public class EventsAdapter {
         finally {
             // restConnection.disconnect();
         }
-
-
-
         return eventsList;
     }
 
+    public List<Event> getAdminCompletedEventsList(String admin_id) {
+        String allEventsAPI = BASE_RESTURI + "/admin_list_events?past_years=2&admin_id="+admin_id;
+        eventsList = new ArrayList<Event>();
 
+        try {
+            System.out.println("Admin URI--->" + allEventsAPI);
+            getResponse(allEventsAPI);
+            Object response = respJsonObj.get("response");
 
-    public void addEvent(Event event) {
+            if(response != null ) {
+                JSONArray list = (JSONArray) response;
+                int contentLength = list.length();
 
-        String addEventsAPI = BASE_RESTURI + "/admin_add_event?admin_id=A000000E";
+                if (contentLength > 0) {
+                    for (int i = 0; i < list.length(); i++) {
+                        JSONObject item = list.getJSONObject(i);
+
+                        Event event = new Event();
+                        event.setEventId(item.getString("id"));
+                        event.setEventName(item.getString("name"));
+                        event.setEventDescription(item.getString("duty"));
+                        event.setEventDate(item.getString("date"));
+                        event.setStartTime(item.getString("start_time"));
+                        event.setEndTime(item.getString("end_time"));
+                        event.setVenue(item.getString("venue"));
+                        event.setTeacherInCharge(item.getString("teacher_in_charge"));
+                        event.setBriefingTime(item.getString("briefing_time"));
+                        event.setBriefingPlace(item.getString("briefing_place"));
+                        event.setMaxVolunteers(item.getInt("max_volunteers"));
+                        event.setVacancy(item.getInt("event_vacancy"));
+                        // event.setCategory(item.getString("category"));
+
+                        eventsList.add(event);
+
+                        //System.out.println("jsonobj--->" + item.get("name"));
+                    }
+                } else {
+
+                }
+            }
+
+        }
+        catch(JSONException excep) {
+            excep.printStackTrace();
+        }
+        catch(Exception excep){
+            excep.printStackTrace();
+        }
+        finally {
+            // restConnection.disconnect();
+        }
+        return eventsList;
+    }
+
+    public List<String> getRegisteredParentsList(String event_id) {
+        String registeredParentsAPI = BASE_RESTURI + "/admin_event_list_registration?event_id="+event_id;
+        List<String> parentsList = new ArrayList<String>();
+
+        try {
+            System.out.println("Admin URI--->" + registeredParentsAPI);
+            getResponse(registeredParentsAPI);
+            Object response = respJsonObj.get("response");
+
+            if(response != null ) {
+                JSONArray list = (JSONArray) response;
+                int contentLength = list.length();
+
+                if (contentLength > 0) {
+                    for (int i = 0; i < contentLength; i++) {
+                        JSONObject item = list.getJSONObject(i);
+                        parentsList.add(item.getString("firstname")+" "+item.getString("lastname"));
+
+                        System.out.println("jsonobj--->" + item.getString("firstname")+" "+item.getString("lastname"));
+                    }
+                } else {
+
+                }
+            }
+
+        }
+        catch(JSONException excep) {
+            excep.printStackTrace();
+        }
+        catch(Exception excep){
+            excep.printStackTrace();
+        }
+        finally {
+            // restConnection.disconnect();
+        }
+        return parentsList;
+    }
+
+    public void addEvent(Event event,String admin_id) {
+
+        String addEventsAPI = BASE_RESTURI + "/admin_add_event?admin_id="+admin_id;
 
         JSONObject eventObj = new JSONObject();
 
@@ -151,9 +238,9 @@ public class EventsAdapter {
         }
     }
 
-    public void updateEvent(Event event) {
+    public void updateEvent(Event event,String admin_id) {
 
-        String updateEventsAPI = BASE_RESTURI + "/admin_add_event?admin_id=A000000E&event_id="+event.getEventId();
+        String updateEventsAPI = BASE_RESTURI + "/admin_update_event?admin_id="+admin_id+"&event_id="+event.getEventId();
 
         JSONObject eventObj = new JSONObject();
 
@@ -180,9 +267,9 @@ public class EventsAdapter {
         }
     }
 
-    public void deleteEvent(Event event) {
+    public void deleteEvent(Event event,String admin_id) {
 
-        String deleteEventsAPI = BASE_RESTURI + "/admin_cancel_event?admin_id=A000000E&event_id="+event.getEventId();
+        String deleteEventsAPI = BASE_RESTURI + "/admin_cancel_event?admin_id="+admin_id+"&event_id="+event.getEventId();
 
         try {
             postResponse(deleteEventsAPI,null,"delete");
@@ -366,8 +453,6 @@ public class EventsAdapter {
                         httpRequest.setHeader("Content-Type", "application/json");
 
                         HttpResponse httpResponse = httpClient.execute(httpRequest);
-                        Toast.makeText(ctxt, "Event Details Updated!!!",
-                                Toast.LENGTH_LONG).show();
                     }
                     else if(httpMethod.equals("delete")) {
                         HttpDelete httpRequest = new HttpDelete(requestUrl);

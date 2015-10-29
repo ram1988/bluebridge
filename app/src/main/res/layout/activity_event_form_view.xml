@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:text="Event Duration"
+            android:text="Event Duration (in hrs)"
             android:layout_below="@id/end_time"/>
 
         <EditText android:id="@+id/event_duration"
@@ -189,6 +189,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Delete"
+            android:layout_below="@+id/max_volunteers_text"
+            android:layout_toRightOf="@+id/action_button" />
+
+        <Button
+            android:id="@+id/list_parents_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Show Registered Parents"
             android:layout_below="@+id/max_volunteers_text"
             android:layout_toRightOf="@+id/action_button" />
 
