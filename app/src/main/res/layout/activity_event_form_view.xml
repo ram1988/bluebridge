@@ -198,7 +198,7 @@
             android:layout_height="wrap_content"
             android:text="Show Registered Parents"
             android:layout_below="@+id/max_volunteers_text"
-            android:layout_toRightOf="@+id/action_button" />
+            android:layout_toRightOf="@+id/cancel_button" />
 
     </RelativeLayout >
 </ScrollView>

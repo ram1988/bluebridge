@@ -111,4 +111,5 @@
     <string name="title_activity_event_form_view">EventFormViewActivity</string>
     <string name="title_activity_event_admin_home_tab">EventAdminHomeTabActivity</string>
     <string name="title_activity_event_registered_parent">EventRegisteredParentActivity</string>
+    <string name="title_activity_event_parent_details">EventParentDetailsActivity</string>
 </resources>

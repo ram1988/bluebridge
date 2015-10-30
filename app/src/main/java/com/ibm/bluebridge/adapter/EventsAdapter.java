@@ -40,6 +40,7 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 
 import com.ibm.bluebridge.valueobject.Event;
+import com.ibm.bluebridge.valueobject.Parent;
 
 /**
  * Created by manirm on 10/10/2015.
@@ -171,9 +172,9 @@ public class EventsAdapter {
         return eventsList;
     }
 
-    public List<String> getRegisteredParentsList(String event_id) {
+    public List<Parent> getRegisteredParentsList(String event_id) {
         String registeredParentsAPI = BASE_RESTURI + "/admin_event_list_registration?event_id="+event_id;
-        List<String> parentsList = new ArrayList<String>();
+        List<Parent> parentsList = new ArrayList<Parent>();
 
         try {
             System.out.println("Admin URI--->" + registeredParentsAPI);
@@ -187,8 +188,22 @@ public class EventsAdapter {
                 if (contentLength > 0) {
                     for (int i = 0; i < contentLength; i++) {
                         JSONObject item = list.getJSONObject(i);
-                        parentsList.add(item.getString("firstname")+" "+item.getString("lastname"));
+                        Parent parent = new Parent();
+                        parent.setId(item.getString("id"));
+                        parent.setFirstname(item.getString("firstname"));
+                        parent.setLastname(item.getString("lastname"));
+                        parent.setGender(item.getString("gender"));
+                        parent.setContact(item.getString("contact"));
+                        parent.setEmail(item.getString("email"));
 
+                        JSONArray children = (JSONArray) item.getJSONArray("children");
+                        String[] childrenArr = new String[children.length()];
+                        for(int j=0;j<children.length();j++) {
+                            childrenArr[j] = children.getString(j);
+                        }
+                        parent.setChildren(childrenArr);
+
+                        parentsList.add(parent);
                         System.out.println("jsonobj--->" + item.getString("firstname")+" "+item.getString("lastname"));
                     }
                 } else {
