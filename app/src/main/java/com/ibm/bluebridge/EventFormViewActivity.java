@@ -163,8 +163,9 @@ public class EventFormViewActivity extends EventMasterActivity {
             showRegButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    Intent intent = new Intent(ctxt, EventRegisteredParentActivity.class);
+                    Intent intent = new Intent(ctxt, ManageParentsActivity.class);
                     intent.putExtra("event_id", event.getEventId());
+                    intent.putExtra("event_name", event.getEventName());
 
                     startActivity(intent);
                 }
