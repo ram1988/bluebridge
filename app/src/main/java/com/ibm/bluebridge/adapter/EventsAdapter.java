@@ -204,6 +204,58 @@ public class EventsAdapter {
                         parent.setChildren(childrenArr);
 
                         parentsList.add(parent);
+                        System.out.println("jsonobj--->" + item.getString("firstname") + " " + item.getString("lastname"));
+                    }
+                } else {
+
+                }
+            }
+
+        }
+        catch(JSONException excep) {
+            excep.printStackTrace();
+        }
+        catch(Exception excep){
+            excep.printStackTrace();
+        }
+        finally {
+            // restConnection.disconnect();
+        }
+        return parentsList;
+    }
+
+    public List<Parent> getRegisterParentsList(String event_id) {
+        String registeredParentsAPI = BASE_RESTURI + "/admin_event_list_registration?event_id="+event_id;
+        List<Parent> parentsList = new ArrayList<Parent>();
+
+        try {
+            System.out.println("Admin URI--->" + registeredParentsAPI);
+            getResponse(registeredParentsAPI);
+            Object response = respJsonObj.get("response");
+
+            if(response != null ) {
+                JSONArray list = (JSONArray) response;
+                int contentLength = list.length();
+
+                if (contentLength > 0) {
+                    for (int i = 0; i < contentLength; i++) {
+                        JSONObject item = list.getJSONObject(i);
+                        Parent parent = new Parent();
+                        parent.setId(item.getString("id"));
+                        parent.setFirstname(item.getString("firstname"));
+                        parent.setLastname(item.getString("lastname"));
+                        parent.setGender(item.getString("gender"));
+                        parent.setContact(item.getString("contact"));
+                        parent.setEmail(item.getString("email"));
+
+                        JSONArray children = (JSONArray) item.getJSONArray("children");
+                        String[] childrenArr = new String[children.length()];
+                        for(int j=0;j<children.length();j++) {
+                            childrenArr[j] = children.getString(j);
+                        }
+                        parent.setChildren(childrenArr);
+
+                        parentsList.add(parent);
                         System.out.println("jsonobj--->" + item.getString("firstname")+" "+item.getString("lastname"));
                     }
                 } else {

@@ -79,9 +79,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
         </activity>
         <activity
-            android:name=".ManageParentsActivity"
-            android:label="@string/title_activity_manage_parents"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+            android:name=".EventManageParentsActivity"
+            android:label="@string/title_activity_event_manage_parents"
+            android:theme="@style/NoActionBar" >
         </activity>
     </application>
 

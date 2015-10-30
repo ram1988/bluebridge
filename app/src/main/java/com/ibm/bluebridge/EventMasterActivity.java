@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.ibm.bluebridge.R;
@@ -64,14 +65,16 @@ public class EventMasterActivity extends ActionBarActivity {
 
     private static class ParentListItemAdapter<T> extends ArrayAdapter<Parent>  {
 
+        private ParentModes parentMode;
         private class ViewHolder {
             private TextView txtView;
+            private CheckBox chkBox;
         }
 
         public ParentListItemAdapter(Context context,
-                                     List<Parent> objects) {
+                                     List<Parent> objects, ParentModes mode) {
             super(context, 0, objects);
-            System.out.println("Size-->" + objects.size());
+            parentMode = mode;
         }
 
         @Override
@@ -85,6 +88,13 @@ public class EventMasterActivity extends ActionBarActivity {
 
                 viewHolder = new ViewHolder();
                 viewHolder.txtView = (TextView) convertView.findViewById(R.id.parent_name);
+                viewHolder.chkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+
+                if(parentMode == ParentModes.PARENT_ATTENDED) {
+                    viewHolder.chkBox.setVisibility(View.VISIBLE);
+                } else {
+                    viewHolder.chkBox.setVisibility(View.INVISIBLE);
+                }
 
                 convertView.setTag(viewHolder);
             } else {
@@ -107,7 +117,11 @@ public class EventMasterActivity extends ActionBarActivity {
         return new EventListItemAdapter<Event>(ctxt,events);
     }
 
-    protected static ArrayAdapter<Parent> getParentListItemAdapter(Context ctxt,List<Parent> parents) {
-        return new ParentListItemAdapter(ctxt, parents);
+    protected static ArrayAdapter<Parent> getParentListItemAdapter(Context ctxt,List<Parent> parents,ParentModes mode) {
+        return new ParentListItemAdapter(ctxt, parents, mode);
+    }
+
+    protected enum ParentModes {
+        PARENT_REGISTERED, PARENT_ATTENDED
     }
 }

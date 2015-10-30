@@ -32,7 +32,7 @@ import org.w3c.dom.Text;
 
 import java.util.List;
 
-public class ManageParentsActivity extends EventMasterActivity {
+public class EventManageParentsActivity extends EventMasterActivity {
     private static Context selfCtxt;
     private static EventsAdapter eventsAdapter ;
     private static String event_id;
@@ -179,7 +179,7 @@ public class ManageParentsActivity extends EventMasterActivity {
                     ListView listView = (ListView)rootView.findViewById(R.id.listview);
 
                     // specify an adapter (see also next example)
-                    ArrayAdapter<Parent> mAdapter = getParentListItemAdapter(selfCtxt, parentList);
+                    ArrayAdapter<Parent> mAdapter = getParentListItemAdapter(selfCtxt, parentList, ParentModes.PARENT_REGISTERED);
                     listView.setAdapter(mAdapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -196,6 +196,35 @@ public class ManageParentsActivity extends EventMasterActivity {
                     });
                 }
             }
+            else if(tabNumber == 2){
+                System.out.println("Tab2 clicked");
+                List<Parent> parentList = eventsAdapter.getRegisteredParentsList(event_id);
+
+                if(parentList.isEmpty()){
+                    noRegMsg.setVisibility(View.VISIBLE);
+                } else {
+                    noRegMsg.setVisibility(View.INVISIBLE);
+                    ListView listView = (ListView)rootView.findViewById(R.id.listview);
+
+                    // specify an adapter (see also next example)
+                    ArrayAdapter<Parent> mAdapter = getParentListItemAdapter(selfCtxt, parentList, ParentModes.PARENT_ATTENDED);
+                    listView.setAdapter(mAdapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, final View view,
+                                                int position, long id) {
+                            Parent item = (Parent) parent.getItemAtPosition(position);
+
+                            Intent intent = new Intent(selfCtxt, EventParentDetailsActivity.class);
+                            intent.putExtra("ParentObj", item);
+
+                            startActivity(intent);
+                        }
+                    });
+                }
+            }
+
 
             return rootView;
         }
