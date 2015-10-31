@@ -69,18 +69,13 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
-            android:name=".EventRegisteredParentActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
-        <activity
-            android:name=".EventParentDetailsActivity"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
-        </activity>
-        <activity
             android:name=".EventManageParentsActivity"
-            android:label="@string/title_activity_event_manage_parents"
+            android:label="@string/app_name"
+            android:theme="@style/NoActionBar" >
+        </activity>
+        <activity
+            android:name=".EventParentDetailActivity"
+            android:label="@string/app_name"
             android:theme="@style/NoActionBar" >
         </activity>
     </application>

@@ -456,8 +456,8 @@ public class EventsAdapter {
                 boolean isConnFine = getConnection(requestUrl);
                 if(isConnFine) {
                     synchronized(respJsonObj) {
-                        restConnection.setReadTimeout(10000);
-                        restConnection.setConnectTimeout(15000);
+                        restConnection.setReadTimeout(5000);
+                        restConnection.setConnectTimeout(6000);
                         BufferedReader in = new BufferedReader(new InputStreamReader(restConnection.getInputStream()));
                         StringBuffer jsonStr = new StringBuffer();
                         String line = null;

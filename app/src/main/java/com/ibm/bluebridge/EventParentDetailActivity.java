@@ -12,12 +12,12 @@ import android.widget.TextView;
 import com.ibm.bluebridge.valueobject.Event;
 import com.ibm.bluebridge.valueobject.Parent;
 
-public class EventParentDetailsActivity extends AppCompatActivity {
+public class EventParentDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event_parent_details);
+        setContentView(R.layout.activity_event_parent_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

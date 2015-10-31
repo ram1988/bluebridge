@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.valueobject.Event;
 
 import java.util.HashMap;
@@ -70,8 +71,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
 
 
         if(message!=null && !message.equals("") ) {
-            Toast.makeText(this, message,
-                    Toast.LENGTH_LONG).show();
+            Utils.showAlertDialog(message, this);
         }
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_fab);
@@ -141,10 +141,6 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }

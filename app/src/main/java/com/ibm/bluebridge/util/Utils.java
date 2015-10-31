@@ -1,5 +1,8 @@
 package com.ibm.bluebridge.util;
 
+import android.app.AlertDialog;
+import android.content.Context;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,5 +47,23 @@ public class Utils {
 
         //0-year,1-month,2-date
         return splitTime;
+    }
+
+    public static void showAlertDialog(String msg, Context ctxt) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(ctxt);
+
+        // set title
+        alertDialogBuilder.setTitle("Message");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK",null);
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
     }
 }

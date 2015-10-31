@@ -54,7 +54,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_parents);
+        setContentView(R.layout.activity_event_manage_parents);
 
         selfCtxt = this;
         eventsAdapter = new EventsAdapter(selfCtxt);
@@ -91,10 +91,6 @@ public class EventManageParentsActivity extends EventMasterActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -163,14 +159,14 @@ public class EventManageParentsActivity extends EventMasterActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_manage_parents, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_event_manage_parents, container, false);
             int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 
             TextView noRegMsg = (TextView)rootView.findViewById(R.id.no_registration);
+            List<Parent> parentList = eventsAdapter.getRegisteredParentsList(event_id);
 
             if(tabNumber == 1 ) {
                 System.out.println("Tab1 clicked");
-                List<Parent> parentList = eventsAdapter.getRegisteredParentsList(event_id);
 
                 if(parentList.isEmpty()){
                     noRegMsg.setVisibility(View.VISIBLE);
@@ -188,7 +184,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
                                                 int position, long id) {
                             Parent item = (Parent) parent.getItemAtPosition(position);
 
-                            Intent intent = new Intent(selfCtxt, EventParentDetailsActivity.class);
+                            Intent intent = new Intent(selfCtxt, EventParentDetailActivity.class);
                             intent.putExtra("ParentObj", item);
 
                             startActivity(intent);
@@ -198,7 +194,6 @@ public class EventManageParentsActivity extends EventMasterActivity {
             }
             else if(tabNumber == 2){
                 System.out.println("Tab2 clicked");
-                List<Parent> parentList = eventsAdapter.getRegisteredParentsList(event_id);
 
                 if(parentList.isEmpty()){
                     noRegMsg.setVisibility(View.VISIBLE);
@@ -216,7 +211,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
                                                 int position, long id) {
                             Parent item = (Parent) parent.getItemAtPosition(position);
 
-                            Intent intent = new Intent(selfCtxt, EventParentDetailsActivity.class);
+                            Intent intent = new Intent(selfCtxt, EventParentDetailActivity.class);
                             intent.putExtra("ParentObj", item);
 
                             startActivity(intent);

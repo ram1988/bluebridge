@@ -10,7 +10,7 @@
     tools:showIn="@layout/activity_event_parent_details"
     tools:context="com.ibm.bluebridge.EventParentDetailsActivity">
 
-<!--Children details yet to be displayed -->
+    <!--Children details yet to be displayed -->
 
     <TextView
         android:layout_width="wrap_content"

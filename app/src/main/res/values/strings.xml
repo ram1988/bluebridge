@@ -115,4 +115,5 @@
     <string name="title_activity_manage_parents">ManageParentsActivity</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_event_manage_parents">EventManageParentsActivity</string>
+    <string name="title_activity_event_parent_detail">EventParentDetailActivity</string>
 </resources>

@@ -1,6 +1,8 @@
 package com.ibm.bluebridge;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +11,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.util.Utils;
+import com.ibm.bluebridge.util.Validator;
 import com.ibm.bluebridge.valueobject.Event;
 
 import java.text.DecimalFormat;
@@ -76,7 +80,15 @@ public class EventFormViewActivity extends EventMasterActivity {
                 public void onClick(View v) {
                     Event newEvent = new Event();
                     newEvent =  setEvent(newEvent);
-                    eventsAdapter.addEvent(newEvent,adminId);
+
+                    Event result = setEvent(event);
+                    String resCode = Validator.validate(result);
+                    if (resCode.equals("")) {
+                        eventsAdapter.addEvent(newEvent,adminId);
+                    } else {
+                        Utils.showAlertDialog(resCode, ctxt);
+                        return;
+                    }
 
                     try {
                         Thread.sleep(1500);
@@ -156,7 +168,15 @@ public class EventFormViewActivity extends EventMasterActivity {
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Event result = setEvent(event);
-                    eventsAdapter.updateEvent(result, adminId);
+                    String resCode = Validator.validate(result);
+                    if (resCode.equals("")) {
+                        eventsAdapter.updateEvent(result, adminId);
+                        Utils.showAlertDialog("Event Updated!!!", ctxt);
+                    } else {
+                        System.out.println("error");
+                        Utils.showAlertDialog(resCode, ctxt);
+                        return;
+                    }
                 }
             });
 
@@ -229,8 +249,4 @@ public class EventFormViewActivity extends EventMasterActivity {
 
         return newEvent;
     }
-
-
-
-
 }
