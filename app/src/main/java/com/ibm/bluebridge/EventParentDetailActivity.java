@@ -24,10 +24,13 @@ public class EventParentDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Parent parent = (Parent)intent.getSerializableExtra("ParentObj");
 
+
         populateParentDetails(parent);
     }
 
     private void populateParentDetails(Parent parent) {
+
+        this.setTitle(parent.getFirstname()+" "+parent.getLastname());
 
         TextView nricView = (TextView) findViewById(R.id.nric_text);
         TextView fnameView = (TextView) findViewById(R.id.fname_text);

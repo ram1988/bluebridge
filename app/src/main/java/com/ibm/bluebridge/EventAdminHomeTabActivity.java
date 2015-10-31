@@ -122,7 +122,8 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-
+        //To display username
+        this.setTitle("Hi Event Administrator!!!");
 
     }
 

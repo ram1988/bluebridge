@@ -36,6 +36,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
     private static Context selfCtxt;
     private static EventsAdapter eventsAdapter ;
     private static String event_id;
+    private static String event_name;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -74,6 +75,9 @@ public class EventManageParentsActivity extends EventMasterActivity {
 
         Intent intent = getIntent();
         event_id = intent.getStringExtra("event_id");
+        event_name = intent.getStringExtra("event_name");
+
+        this.setTitle("For the Event "+ event_name);
     }
 
 
