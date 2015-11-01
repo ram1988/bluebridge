@@ -26,7 +26,8 @@ public class EventMasterActivity extends ActionBarActivity {
     private static class EventListItemAdapter<T> extends ArrayAdapter<Event>  {
 
         private class ViewHolder {
-            private TextView txtView;
+            private TextView eventNameView;
+            private TextView maxRegView;
         }
 
         public EventListItemAdapter(Context context,
@@ -44,7 +45,8 @@ public class EventMasterActivity extends ActionBarActivity {
                         .inflate(R.layout.event_list_item, parent, false);
 
                 viewHolder = new ViewHolder();
-                viewHolder.txtView = (TextView) convertView.findViewById(R.id.event_name);
+                viewHolder.eventNameView = (TextView) convertView.findViewById(R.id.event_name);
+                viewHolder.maxRegView = (TextView) convertView.findViewById(R.id.max_registered);
 
                 convertView.setTag(viewHolder);
             } else {
@@ -55,7 +57,8 @@ public class EventMasterActivity extends ActionBarActivity {
             if (item!= null) {
                 // My layout has only one TextView
                 // do whatever you want with your string and long
-                viewHolder.txtView.setText(String.format("%s", item.getEventName()));
+                viewHolder.eventNameView.setText(String.format("%s", item.getEventName()));
+                viewHolder.maxRegView.setText("Registered: "+ String.format("%s", item.getMaxVolunteers()));
             }
 
             return convertView;
