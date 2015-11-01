@@ -11,41 +11,89 @@
         android:orientation="vertical"
         tools:context=".EventAdminViewActivity">
 
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+                <TextView android:id="@+id/event_title_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:textSize="18sp"
+                    android:text="Event Name"/>
+
+                <EditText android:id="@+id/event_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_title_label"
+                    android:layout_alignLeft="@+id/event_title_label"
+                    android:layout_weight="1"
+                    android:width="220sp"/>
+
+                </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
         <!--This activity to be editable for admin to update the details -->
-        <TextView android:id="@+id/event_title_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="Event Name"/>
 
-        <EditText android:id="@+id/event_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/event_title_label"
-            android:layout_alignLeft="@+id/event_desc_label" />
 
-        <TextView android:id="@+id/event_desc_label"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cardView1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:layout_below="@+id/event_title"
-            android:text="Event Description"/>
+            android:layout_below="@id/cardView">
 
-        <EditText
-            android:id="@+id/event_desc_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/event_desc_label"
-            android:layout_alignLeft="@+id/event_desc_label">
-        </EditText>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
 
+                <TextView android:id="@+id/event_desc_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:textSize="18sp"
+                    android:text="Event Description"/>
+
+                <EditText
+                    android:id="@+id/event_desc_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/event_desc_label"
+                    android:layout_alignLeft="@+id/event_desc_label"
+                    android:layout_weight="1"
+                    android:width="320sp">
+                </EditText>
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView1">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <TextView android:id="@+id/event_date_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
             android:layout_margin="@dimen/text_margin"
             android:text="Event Date"
-            android:layout_below="@id/event_desc_edit"/>
+            />
 
         <DatePicker
             android:layout_width="250dp"
@@ -53,44 +101,87 @@
             android:id="@+id/event_date_picker"
             android:spinnersShown="true"
             android:calendarViewShown="false"
-            android:layout_below="@+id/event_date_label" />
+            android:layout_below="@+id/event_date_label"
+            android:layout_alignLeft="@+id/event_date_label"/>
+
+        </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
 
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView2">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <TextView android:id="@+id/start_time_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="Start Time"
-            android:layout_below="@id/event_date_picker" />
+            android:textSize="18sp"  />
 
         <TimePicker
             android:id="@+id/start_time"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/start_time_label"/>
+            android:layout_below="@id/start_time_label"
+            android:layout_alignLeft="@+id/start_time_label"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView3">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
         <TextView android:id="@+id/end_time_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="End Time"
-            android:layout_below="@id/start_time"/>
+            android:textSize="18sp"/>
 
         <TimePicker
             android:id="@+id/end_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/end_time_label"/>
+            android:layout_below="@id/end_time_label"
+            android:layout_alignLeft="@+id/end_time_label"/>
+    </RelativeLayout>
+   </android.support.v7.widget.CardView>
 
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView4">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <TextView android:id="@+id/event_duration_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:text="Event Duration (in hrs)"
-            android:layout_below="@id/end_time"/>
+            android:textSize="18sp"
+            android:text="Event Duration (in hrs)" />
 
         <EditText android:id="@+id/event_duration"
             android:layout_width="wrap_content"
@@ -98,98 +189,180 @@
             android:layout_below="@id/event_duration_label"
             android:layout_marginTop="@dimen/text_margin"
             android:layout_marginBottom="@dimen/text_margin"
-            android:layout_alignRight="@+id/venue_edit"
-            android:layout_alignLeft="@+id/event_duration_label" />
+            android:layout_alignLeft="@+id/event_duration_label"
+            android:layout_weight="1"
+            android:width="70sp"/>
+    </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView5">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
         <TextView android:id="@+id/venue_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="Venue"
-            android:layout_below="@id/event_duration"/>
+            android:textSize="18sp"/>
 
         <EditText android:id="@+id/venue_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/venue_label"
-            android:layout_alignRight="@+id/brief_location_label"
-            android:layout_alignLeft="@+id/brief_time_label" />
+            android:layout_alignLeft="@+id/venue_label"
+            android:layout_weight="1"
+            android:width="120sp"/>
+   </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
 
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView7"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView6">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
         <TextView android:id="@+id/brief_time_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:layout_below="@id/venue_edit"
-            android:text="Brief Time"/>
+            android:text="Brief Time"
+            android:textSize="18sp"/>
 
         <TimePicker
             android:id="@+id/brief_time_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/brief_time_label"/>
+            android:layout_below="@id/brief_time_label"
+            android:layout_alignLeft="@+id/brief_time_label"/>
+      </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView7">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
         <TextView android:id="@+id/brief_location_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="Place of Briefing"
-            android:layout_below="@id/brief_time_picker"/>
+            android:textSize="18sp"/>
 
         <EditText android:id = "@+id/brief_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/brief_location_label"
-            android:layout_marginTop="@dimen/text_margin"
-            android:layout_marginBottom="@dimen/text_margin"
-            android:layout_alignRight="@+id/max_volunteers_label"
-            android:layout_alignLeft="@+id/teacher_in_charge_label" />
+            android:layout_weight="1"
+            android:width="120sp"
+            android:layout_alignLeft="@+id/brief_location_label"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView8">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
         <TextView android:id="@+id/teacher_in_charge_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="Teacher in Charge"
-            android:layout_below="@id/brief_location"/>
+            android:textSize="18sp"  />
 
         <EditText android:id = "@+id/teacher_in_charge_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:width="120sp"
             android:layout_below="@id/teacher_in_charge_label"
-            android:layout_marginLeft="@dimen/text_margin"
-            android:layout_marginTop="@dimen/text_margin"
-            android:layout_marginBottom="@dimen/text_margin" />
+            android:layout_alignLeft="@+id/teacher_in_charge_label"/>
+    </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView9">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
 
         <TextView android:id="@+id/max_volunteers_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:text="Max no. of volunteers"
-            android:layout_below="@id/teacher_in_charge_edit"/>
+            android:textSize="18sp"
+            android:text="Max no. of volunteers" />
 
         <EditText
             android:id="@+id/max_volunteers_text"
+            android:width="70sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
+            android:layout_weight="1"
             android:layout_below="@+id/max_volunteers_label"
-            android:layout_alignRight="@+id/teacher_in_charge_label"
             android:layout_alignLeft="@+id/max_volunteers_label">
         </EditText>
+      </RelativeLayout>
+      </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardView11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardView10">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
         <Button
             android:id="@+id/action_button"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/max_volunteers_text" />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Delete"
-            android:layout_below="@+id/max_volunteers_text"
             android:layout_toRightOf="@+id/action_button" />
 
         <Button
@@ -197,8 +370,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Show Registered Parents"
-            android:layout_below="@+id/max_volunteers_text"
             android:layout_toRightOf="@+id/cancel_button" />
-
+      </RelativeLayout>
+    </android.support.v7.widget.CardView>
     </RelativeLayout >
 </ScrollView>

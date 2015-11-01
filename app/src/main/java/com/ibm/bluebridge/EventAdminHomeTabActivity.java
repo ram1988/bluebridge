@@ -278,9 +278,6 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
                 });
             }
 
-
-
-
             return rootView;
         }
     }
