@@ -5,14 +5,14 @@
     <TextView android:id="@+id/event_name"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:textSize="25sp"
+        android:textSize="15sp"
         android:text="Event name goes here"
         />
 
     <TextView android:id="@+id/max_registered"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:text="Max registered"
         android:layout_marginTop="35sp"/>
 
