@@ -81,8 +81,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                     Event newEvent = new Event();
                     newEvent =  setEvent(newEvent);
 
-                    Event result = setEvent(event);
-                    String resCode = Validator.validate(result);
+                    String resCode = Validator.validate(newEvent);
                     if (resCode.equals("")) {
                         eventsAdapter.addEvent(newEvent,adminId);
                     } else {
@@ -224,7 +223,6 @@ public class EventFormViewActivity extends EventMasterActivity {
         EditText briefLocation = (EditText) findViewById(R.id.brief_location);
         EditText teacherInCharge = (EditText) findViewById(R.id.teacher_in_charge_edit);
         EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_text);
-
 
         newEvent.setEventName(eventTitle.getText().toString());
         newEvent.setEventDescription(duty.getText().toString());

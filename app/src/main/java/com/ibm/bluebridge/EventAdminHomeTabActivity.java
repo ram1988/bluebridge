@@ -72,6 +72,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
 
         if(message!=null && !message.equals("") ) {
             Utils.showAlertDialog(message, this);
+            intent.removeExtra("message");
         }
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_fab);

@@ -1,5 +1,7 @@
 package com.ibm.bluebridge.valueobject;
 
+import java.util.List;
+
 /**
  * Created by manirm on 10/30/2015.
  */
@@ -11,10 +13,18 @@ public class Parent extends BlueBridgeVO {
     private String gender;
     private String contact;
     private String email;
-    private String[]children;
+    private List<Children> children;
     private String job;
     private String address;
+    private boolean hasAttended;
 
+    public boolean isAttended() {
+        return hasAttended;
+    }
+
+    public void setHasAttended(boolean hasAttended) {
+        this.hasAttended = hasAttended;
+    }
 
     public String getFirstname() {
         return firstname;
@@ -56,11 +66,11 @@ public class Parent extends BlueBridgeVO {
         this.email = email;
     }
 
-    public String[] getChildren() {
+    public List<Children> getChildren() {
         return children;
     }
 
-    public void setChildren(String[] children) {
+    public void setChildren(List<Children> children) {
         this.children = children;
     }
 

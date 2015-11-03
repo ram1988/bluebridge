@@ -1,19 +1,28 @@
 package com.ibm.bluebridge;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ibm.bluebridge.valueobject.Children;
+import com.ibm.bluebridge.valueobject.Event;
 import com.ibm.bluebridge.valueobject.Parent;
 
-public class EventParentDetailActivity extends AppCompatActivity {
+public class EventParentDetailActivity extends EventMasterActivity {
+
+    private Context ctxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_parent_detail);
+
+        this.ctxt = this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -36,6 +45,7 @@ public class EventParentDetailActivity extends AppCompatActivity {
         TextView emailView = (TextView) findViewById(R.id.email_text);
         TextView jobView = (TextView) findViewById(R.id.job_text);
         TextView addressView = (TextView) findViewById(R.id.address_text);
+        ListView childrenView = (ListView) findViewById(R.id.childrenlist);
 
         nricView.setText(parent.getId());
         fnameView.setText(parent.getFirstname());
@@ -45,6 +55,9 @@ public class EventParentDetailActivity extends AppCompatActivity {
         emailView.setText(parent.getEmail());
         jobView.setText(parent.getJob());
         addressView.setText(parent.getAddress());
+
+        ArrayAdapter<Children> mAdapter = getChildrenListItemAdapter(ctxt, parent.getChildren());
+        childrenView.setAdapter(mAdapter);
     }
 
 }

@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.ibm.bluebridge.R;
+import com.ibm.bluebridge.valueobject.Children;
 import com.ibm.bluebridge.valueobject.Event;
 import com.ibm.bluebridge.valueobject.Parent;
 
@@ -116,12 +117,56 @@ public class EventMasterActivity extends ActionBarActivity {
         }
     }
 
+    private static class ChildrenListItemAdapter<T> extends ArrayAdapter<Children>  {
+
+        private class ViewHolder {
+            private TextView txtView;
+        }
+
+        public ChildrenListItemAdapter(Context context,
+                                     List<Children> objects) {
+            super(context, 0, objects);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            ViewHolder viewHolder = null;
+
+            if (convertView == null) {
+                convertView = LayoutInflater.from(this.getContext())
+                        .inflate(R.layout.children_list_view, parent, false);
+
+                viewHolder = new ViewHolder();
+                viewHolder.txtView = (TextView) convertView.findViewById(R.id.child_detail);
+
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            Children item = getItem(position);
+            if (item!= null) {
+                // My layout has only one TextView
+                // do whatever you want with your string and long
+                viewHolder.txtView.setText(String.format("%s", item.getName()));
+            }
+
+            return convertView;
+
+        }
+    }
+
     protected static ArrayAdapter<Event> getEventArrayAdapter(Context ctxt,List<Event> events) {
         return new EventListItemAdapter<Event>(ctxt,events);
     }
 
     protected static ArrayAdapter<Parent> getParentListItemAdapter(Context ctxt,List<Parent> parents,ParentModes mode) {
-        return new ParentListItemAdapter(ctxt, parents, mode);
+        return new ParentListItemAdapter<Parent>(ctxt, parents, mode);
+    }
+
+    protected static ArrayAdapter<Children> getChildrenListItemAdapter(Context ctxt,List<Children> children) {
+        return new ChildrenListItemAdapter<Children>(ctxt, children);
     }
 
     protected enum ParentModes {

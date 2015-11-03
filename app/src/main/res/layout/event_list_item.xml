@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="80sp">
+    android:layout_width="fill_parent" android:layout_height="60sp">
 
     <TextView android:id="@+id/event_name"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:textSize="25sp"
+        android:textSize="19sp"
         android:text="Event name goes here"
-        />
+        android:layout_alignParentBottom="true" />
 
     <TextView android:id="@+id/max_registered"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textSize="20sp"
+        android:textSize="12sp"
         android:text="Max registered"
         android:layout_marginTop="35sp"/>
 

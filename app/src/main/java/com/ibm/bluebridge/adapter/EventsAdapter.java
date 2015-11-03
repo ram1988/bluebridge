@@ -39,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+import com.ibm.bluebridge.valueobject.Children;
 import com.ibm.bluebridge.valueobject.Event;
 import com.ibm.bluebridge.valueobject.Parent;
 
@@ -64,6 +65,39 @@ public class EventsAdapter {
     }
 
     /*******Admin Methods**********/
+    public String checkLogin(String nric,String password, String device_id) {
+        String loginAPI = BASE_RESTURI + "/login";
+        String role = null;
+
+        JSONObject loginInfo = new JSONObject();
+
+        try {
+            loginInfo.put("nric", nric);
+            loginInfo.put("password",password);
+            loginInfo.put("device_id", device_id);
+
+            postResponse(loginAPI, loginInfo, "post");
+            Object response = respJsonObj.get("response");
+
+            if(response != null ) {
+                JSONObject item = (JSONObject) response;
+
+                if (item!=null) {
+                    role = item.getString("role");
+                    System.out.println("Role--->"+role);
+                }
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return role;
+    }
     public List<Event> getAdminEventsList(String admin_id) {
         String allEventsAPI = BASE_RESTURI + "/admin_list_events?admin_id="+admin_id;
         eventsList = new ArrayList<Event>();
@@ -195,16 +229,31 @@ public class EventsAdapter {
                         parent.setGender(item.getString("gender"));
                         parent.setContact(item.getString("contact"));
                         parent.setEmail(item.getString("email"));
+                        parent.setJob(item.getString("job"));
+                        parent.setAddress(item.getString("address"));
+                        parent.setHasAttended(item.getBoolean("attended_flag"));
 
-                        JSONArray children = (JSONArray) item.getJSONArray("children");
-                        String[] childrenArr = new String[children.length()];
-                        for(int j=0;j<children.length();j++) {
-                            childrenArr[j] = children.getString(j);
+                        JSONArray childrenJsonArr = (JSONArray) item.getJSONArray("children");
+                        List<Children> childrenArr = new ArrayList<>(childrenJsonArr.length());
+                        for(int j=0;j<childrenJsonArr.length();j++) {
+                            JSONObject child = childrenJsonArr.getJSONObject(i);
+                            Children children = new Children();
+
+                            System.out.println("children--->" +child);
+                            children.setId(child.getString("id"));
+                            children.setName(child.getString("name"));
+                            children.setGender(child.getString("gender"));
+                            children.setBirthDate(child.getString("birth_date"));
+                            children.setRegistrationYear(child.getString("registration_year"));
+
+
+
+                            childrenArr.add(children);
                         }
                         parent.setChildren(childrenArr);
 
                         parentsList.add(parent);
-                        System.out.println("jsonobj--->" + item.getString("firstname") + " " + item.getString("lastname"));
+
                     }
                 } else {
 
@@ -224,57 +273,7 @@ public class EventsAdapter {
         return parentsList;
     }
 
-    public List<Parent> getRegisterParentsList(String event_id) {
-        String registeredParentsAPI = BASE_RESTURI + "/admin_event_list_registration?event_id="+event_id;
-        List<Parent> parentsList = new ArrayList<Parent>();
 
-        try {
-            System.out.println("Admin URI--->" + registeredParentsAPI);
-            getResponse(registeredParentsAPI);
-            Object response = respJsonObj.get("response");
-
-            if(response != null ) {
-                JSONArray list = (JSONArray) response;
-                int contentLength = list.length();
-
-                if (contentLength > 0) {
-                    for (int i = 0; i < contentLength; i++) {
-                        JSONObject item = list.getJSONObject(i);
-                        Parent parent = new Parent();
-                        parent.setId(item.getString("id"));
-                        parent.setFirstname(item.getString("firstname"));
-                        parent.setLastname(item.getString("lastname"));
-                        parent.setGender(item.getString("gender"));
-                        parent.setContact(item.getString("contact"));
-                        parent.setEmail(item.getString("email"));
-
-                        JSONArray children = (JSONArray) item.getJSONArray("children");
-                        String[] childrenArr = new String[children.length()];
-                        for(int j=0;j<children.length();j++) {
-                            childrenArr[j] = children.getString(j);
-                        }
-                        parent.setChildren(childrenArr);
-
-                        parentsList.add(parent);
-                        System.out.println("jsonobj--->" + item.getString("firstname")+" "+item.getString("lastname"));
-                    }
-                } else {
-
-                }
-            }
-
-        }
-        catch(JSONException excep) {
-            excep.printStackTrace();
-        }
-        catch(Exception excep){
-            excep.printStackTrace();
-        }
-        finally {
-            // restConnection.disconnect();
-        }
-        return parentsList;
-    }
 
     public void addEvent(Event event,String admin_id) {
 
@@ -440,8 +439,17 @@ public class EventsAdapter {
     }
 
     private void postResponse(String url,JSONObject input, String method) {
-            PostResponseTask postRespObj = new PostResponseTask(url,input,method);
-            postRespObj.start();
+
+            synchronized (respJsonObj) {
+                PostResponseTask postRespObj = new PostResponseTask(url,input,method);
+                postRespObj.start();
+                try {
+                    System.out.println("Main Thread Waiting for response...");
+                    respJsonObj.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
     }
 
     private class GetResponseTask extends Thread {
@@ -509,9 +517,11 @@ public class EventsAdapter {
 
         public void run() {
 
-            HttpClient httpClient = new DefaultHttpClient();
             try {
-                    if(httpMethod.equals("post")) {
+                synchronized(respJsonObj) {
+                    HttpClient httpClient = new DefaultHttpClient();
+
+                    if (httpMethod.equals("post")) {
                         HttpPost httpRequest = new HttpPost(requestUrl);
                         StringEntity se = new StringEntity(input.toString());
 
@@ -519,15 +529,35 @@ public class EventsAdapter {
                         httpRequest.setHeader("Accept", "application/json");
                         httpRequest.setHeader("Content-Type", "application/json");
 
+
                         HttpResponse httpResponse = httpClient.execute(httpRequest);
-                    }
-                    else if(httpMethod.equals("delete")) {
+
+                        int statusCode = httpResponse.getStatusLine().getStatusCode();
+
+                        if (statusCode == 200) {
+                            BufferedReader rd = new BufferedReader(
+                                    new InputStreamReader(httpResponse.getEntity().getContent()));
+
+                            StringBuffer result = new StringBuffer();
+                            String line = "";
+                            while ((line = rd.readLine()) != null) {
+                                result.append(line);
+                            }
+
+                            if (result.length() > 0) {
+                                respJsonObj.put("response", new JSONObject(result.toString()));
+                            }
+                        }
+                    } else if (httpMethod.equals("delete")) {
                         HttpDelete httpRequest = new HttpDelete(requestUrl);
                         HttpResponse httpResponse = httpClient.execute(httpRequest);
                     }
+                    respJsonObj.notifyAll();
+                }
 
                     System.out.println("action successful for " + requestUrl);
                     isPostSubmitted = true;
+
             } catch (Exception e ) {
                 isPostSubmitted = false;
                 System.out.println("issue in connection");
