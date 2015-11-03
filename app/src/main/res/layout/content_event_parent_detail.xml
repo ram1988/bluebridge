@@ -155,6 +155,7 @@
         android:id="@+id/address_text"
         android:layout_below="@+id/textView16"
         android:text="ss"
+        android:layout_alignParentStart="true"
         android:layout_alignEnd="@+id/job_text" />
 
     <RelativeLayout
