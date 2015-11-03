@@ -67,10 +67,6 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
     private View mLoginFormView;
     private Context ctxt;
 
-    // Push Notification
-    MFPPush push;
-    MFPPushResponseListener notificationListener;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,41 +99,10 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
         mProgressView = findViewById(R.id.login_progress);
         ctxt = this;
 
-        // Initialize IBM Bluemix Push Notification SDK
-        try {
-            // Initialize the SDK for Java (Android) with IBM Bluemix GUID and route
-            BMSClient.getInstance().initialize(getApplicationContext(), "http://school-volunteer-bluebridge.mybluemix.net", "c5328838-1f5f-4221-8845-7872da171306");
-        }catch(MalformedURLException e){
-            Log.d("BMSClient", "Malformed Bluemix route URL");
-        }
-        //Initializing client Push SDK
-        MFPPush.getInstance().initialize(getApplicationContext());
-        push = MFPPush.getInstance();
-
-        //For Java (Android)
-        notificationListener = new MFPPushResponseListener<String>() {
-            @Override
-            public void onSuccess(String s) {
-                Log.d("MFPPushResponseListener", "Device registration succeeded.");
-            }
-
-            @Override
-            public void onFailure(MFPPushException e) {
-                Log.d("MFPPushResponseListener", "Device registration failed.");
-            }
-        };
 
         String deviceId = this.getDeviceId();
         Log.d("Device ID", deviceId);
 
-    }
-
-    @Override
-    protected void onResume(){
-        super.onResume();
-        if (push != null) {
-            push.register(notificationListener);
-        }
     }
 
     private void populateAutoComplete() {

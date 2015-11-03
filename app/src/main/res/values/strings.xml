@@ -116,4 +116,5 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_event_manage_parents">EventManageParentsActivity</string>
     <string name="title_activity_event_parent_detail">EventParentDetailActivity</string>
+    <string name="splash_logo_description">Splash logo</string>
 </resources>
