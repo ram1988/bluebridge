@@ -58,7 +58,7 @@ public class EventMasterActivity extends ActionBarActivity {
                 // My layout has only one TextView
                 // do whatever you want with your string and long
                 viewHolder.eventNameView.setText(String.format("%s", item.getEventName()));
-                viewHolder.maxRegView.setText("Registered: "+ String.format("%s", item.getMaxVolunteers()));
+                viewHolder.maxRegView.setText("Registered: "+ String.format("%s", item.getMaxVolunteers()-item.getVacancy()) + "    Vacancies: "+ String.format("%s", item.getVacancy()));
             }
 
             return convertView;
