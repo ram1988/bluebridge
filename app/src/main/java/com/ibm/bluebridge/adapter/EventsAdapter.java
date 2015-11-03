@@ -400,6 +400,115 @@ public class EventsAdapter {
         return eventsList;
     }
 
+    public List<Event> getAllJoinedEventsList(String parent_id) {
+        String joinedEventsAPI = BASE_RESTURI + "/parent_joined_events?parent_id=" + parent_id;
+        eventsList = new ArrayList<Event>();
+
+        try {
+            getResponse(joinedEventsAPI);
+            Object response = respJsonObj.get("response");
+
+            if(response != null ) {
+                JSONArray list = (JSONArray) response;
+                int contentLength = list.length();
+
+                if (contentLength > 0) {
+                    for (int i = 0; i < list.length(); i++) {
+                        JSONObject item = list.getJSONObject(i);
+
+                        Event event = new Event();
+                        event.setEventId(item.getString("id"));
+                        event.setEventName(item.getString("name"));
+                        event.setEventDescription(item.getString("duty"));
+                        event.setEventDate(item.getString("date"));
+                        event.setStartTime(item.getString("start_time"));
+                        event.setEndTime(item.getString("end_time"));
+                        event.setVenue(item.getString("venue"));
+                        event.setTeacherInCharge(item.getString("teacher_in_charge"));
+                        event.setBriefingTime(item.getString("briefing_time"));
+                        event.setBriefingPlace(item.getString("briefing_place"));
+                        event.setMaxVolunteers(item.getInt("max_volunteers"));
+                        event.setVacancy(-100);
+                        event.setCategory(item.getString("category"));
+
+                        eventsList.add(event);
+
+                    }
+                } else {
+
+                }
+            }
+
+        }
+        catch(JSONException excep) {
+            excep.printStackTrace();
+        }
+        catch(Exception excep){
+            excep.printStackTrace();
+        }
+        finally {
+            // restConnection.disconnect();
+        }
+
+
+
+        return eventsList;
+    }
+
+    public List<Event> getAllAttendedEventsList(String parent_id) {
+        String attendedEventsAPI = BASE_RESTURI + "/parent_attended_events?parent_id=" + parent_id;
+        eventsList = new ArrayList<Event>();
+
+        try {
+            getResponse(attendedEventsAPI);
+            Object response = respJsonObj.get("response");
+
+            if(response != null ) {
+                JSONArray list = (JSONArray) response;
+                int contentLength = list.length();
+
+                if (contentLength > 0) {
+                    for (int i = 0; i < list.length(); i++) {
+                        JSONObject item = list.getJSONObject(i);
+
+                        Event event = new Event();
+                        event.setEventId(item.getString("id"));
+                        event.setEventName(item.getString("name"));
+                        event.setEventDescription(item.getString("duty"));
+                        event.setEventDate(item.getString("date"));
+                        event.setStartTime(item.getString("start_time"));
+                        event.setEndTime(item.getString("end_time"));
+                        event.setVenue(item.getString("venue"));
+                        event.setTeacherInCharge(item.getString("teacher_in_charge"));
+                        event.setBriefingTime(item.getString("briefing_time"));
+                        event.setBriefingPlace(item.getString("briefing_place"));
+                        event.setMaxVolunteers(item.getInt("max_volunteers"));
+                        event.setVacancy(-100);
+                        event.setCategory(item.getString("category"));
+
+                        eventsList.add(event);
+                    }
+                } else {
+
+                }
+            }
+
+        }
+        catch(JSONException excep) {
+            excep.printStackTrace();
+        }
+        catch(Exception excep){
+            excep.printStackTrace();
+        }
+        finally {
+            // restConnection.disconnect();
+        }
+
+
+
+        return eventsList;
+    }
+
     private boolean getConnection(String urlStr) {
 
 

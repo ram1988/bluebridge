@@ -43,6 +43,7 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
      */
     private ViewPager mViewPager;
     private static Context selfCtxt;
+    private static String parent_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,8 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                             .setTabListener(this));
         }
 
+        Intent intent = getIntent();
+        parent_id = intent.getStringExtra("user_id");
     }
 
 
@@ -152,11 +155,11 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "All Events";
+                    return "All \nEvents";
                 case 1:
-                    return "Joined Events";
+                    return "Joined \nEvents";
                 case 2:
-                    return "Completed Events";
+                    return "Completed \nEvents";
             }
             return null;
         }
@@ -212,7 +215,7 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                         final Event item = (Event) parent.getItemAtPosition(position);
 
                         Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                        intent.putExtra("EventAction", "edit");
+                        intent.putExtra("EventAction", 0);
                         intent.putExtra("EventDesc", item);
 
                         startActivity(intent);
@@ -221,18 +224,38 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
             }
             //For joined events
             else if(tabNumber == 2) {
-                final ArrayAdapter<Event> adapter = new ArrayAdapter<Event>(selfCtxt,
-                        android.R.layout.simple_list_item_1, eventsAdapter.getAllEventsList());
+                List<Event> eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
+                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, final View view,
                                             int position, long id) {
-                        final String item = (String) parent.getItemAtPosition(position);
+                        final Event item = (Event) parent.getItemAtPosition(position);
 
                         Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                        intent.putExtra("EventAction", "edit");
+                        intent.putExtra("EventAction", 0);
+                        intent.putExtra("EventDesc", item);
+
+                        startActivity(intent);
+                    }
+                });
+            }
+            //For attended events
+            else if(tabNumber == 3) {
+                List<Event> eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
+                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, final View view,
+                                            int position, long id) {
+                        final Event item = (Event) parent.getItemAtPosition(position);
+
+                        Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
+                        intent.putExtra("EventAction", 0);
                         intent.putExtra("EventDesc", item);
 
                         startActivity(intent);

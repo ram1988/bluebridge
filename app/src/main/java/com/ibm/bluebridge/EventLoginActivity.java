@@ -30,7 +30,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPush;
 import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushException;
@@ -132,7 +131,6 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
         boolean cancel = false;
         View focusView = null;
 
-        /*
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
@@ -151,7 +149,6 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
             cancel = true;
         }
 
-
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -163,12 +160,6 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
-        */
-
-        mAuthTask = new UserLoginTask(email, password);
-        mAuthTask.execute((Void) null);
-
-
     }
 
     private boolean isEmailValid(String email) {
@@ -275,44 +266,49 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, String> {
+    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String nric;
+        private final String mEmail;
         private final String mPassword;
 
-        UserLoginTask(String nric, String password) {
-            this.nric = nric;
-            this.mPassword = password;
+        UserLoginTask(String email, String password) {
+            mEmail = email;
+            mPassword = password;
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
             try {
                 // Simulate network access.
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
-                return null;
+                return false;
             }
 
-            EventsAdapter adapter = new EventsAdapter();
-            String role = adapter.checkLogin(nric,mPassword,getDeviceId());
+            for (String credential : DUMMY_CREDENTIALS) {
+                String[] pieces = credential.split(":");
+                if (pieces[0].equals(mEmail)) {
+                    // Account exists, return true if the password matches.
+                    return pieces[1].equals(mPassword);
+                }
+            }
 
             // TODO: register the new account here.
-            return role;
+            return true;
         }
 
         @Override
-        protected void onPostExecute(final String role) {
+        protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
             showProgress(false);
 
-            if (role!=null) {
+            if (success) {
                 Intent intent = null;
-                if(role.equals("admin")) {
+                if(mEmail.equals("admin@school.com")) {
                     intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
-                    intent.putExtra("user_id", nric);
+                    intent.putExtra("user_id","A000000E");
                 } /*else {
                     intent = new Intent(ctxt, EventParentViewActivity.class);
                     intent.putExtra("user_id","A000000E");
