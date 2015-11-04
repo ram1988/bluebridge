@@ -663,9 +663,10 @@ public class EventsAdapter {
 
                     if (httpMethod.equals("post")) {
                         HttpPost httpRequest = new HttpPost(requestUrl);
-                        StringEntity se = new StringEntity(input.toString());
-
-                        httpRequest.setEntity(se);
+                        if (input != null) {
+                            StringEntity se = new StringEntity(input.toString());
+                            httpRequest.setEntity(se);
+                        }
                         httpRequest.setHeader("Accept", "application/json");
                         httpRequest.setHeader("Content-Type", "application/json");
 

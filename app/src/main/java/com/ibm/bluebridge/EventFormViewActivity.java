@@ -268,32 +268,16 @@ public class EventFormViewActivity extends EventMasterActivity {
             actionButton.setText("Join");
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Event result = setEvent(event);
-                    String resCode = Validator.validate(result);
-                    if (resCode.equals("")) {
-                        eventsAdapter.joinEvent(result, parentId);
-                        Utils.showAlertDialog("You have joined this event!!!", ctxt);
-                    } else {
-                        System.out.println("error");
-                        Utils.showAlertDialog(resCode, ctxt);
-                        return;
-                    }
+                    eventsAdapter.joinEvent(event, parentId);
+                    Utils.showAlertDialog("You have joined this event!!!", ctxt);
                 }
             });
 
             cancelButton.setText("unJoin");
             cancelButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Event result = setEvent(event);
-                    String resCode = Validator.validate(result);
-                    if (resCode.equals("")) {
-                        eventsAdapter.unjoinEvent(result, parentId);
-                        Utils.showAlertDialog("You have unjoined this event!!!", ctxt);
-                    } else {
-                        System.out.println("error");
-                        Utils.showAlertDialog(resCode, ctxt);
-                        return;
-                    }
+                    eventsAdapter.unjoinEvent(event, parentId);
+                    Utils.showAlertDialog("You have unjoined this event!!!", ctxt);
                 }
             });
 
