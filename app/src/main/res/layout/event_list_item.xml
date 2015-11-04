@@ -5,7 +5,7 @@
     <TextView android:id="@+id/event_name"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:textSize="19sp"
+        android:textSize="16sp"
         android:text="Event name goes here"
         android:layout_alignParentBottom="true" />
 

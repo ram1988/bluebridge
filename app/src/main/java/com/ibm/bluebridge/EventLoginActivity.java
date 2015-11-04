@@ -279,11 +279,10 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
                 Intent intent = null;
                 if(role.equals("admin")) {
                     intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
-                    intent.putExtra("user_id",nric);
-                } /*else {
+                } else {
                     intent = new Intent(ctxt, EventParentViewActivity.class);
-                    intent.putExtra("user_id","A000000E");
-                }*/
+                }
+                intent.putExtra("user_id",nric);
                 startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
