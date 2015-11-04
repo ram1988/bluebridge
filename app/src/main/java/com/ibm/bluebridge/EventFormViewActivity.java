@@ -148,23 +148,22 @@ public class EventFormViewActivity extends EventMasterActivity {
             int minute = startTime[1];
             startTimePicker.setCurrentHour(hour);
             startTimePicker.setCurrentMinute(minute);
-            //Calendar startTimeCal = Calendar.getInstance();
-            //startTimeCal.set(year,month,day,hour,minute);
+            Calendar startTimeCal = Calendar.getInstance();
+            startTimeCal.set(year,month,day,hour,minute);
 
             int[] endTime = Utils.splitTime(event.getEndTime());
             hour = endTime[0];
             minute = endTime[1];
             endTimePicker.setCurrentHour(hour);
             endTimePicker.setCurrentMinute(minute);
-            //Calendar endTimeCal = Calendar.getInstance();
-            //endTimeCal.set(year, month, day, hour, minute);
+            Calendar endTimeCal = Calendar.getInstance();
+            endTimeCal.set(year, month, day, hour, minute);
 
             //startTime > endTime validation to be done
 
-            //double mToHourConverter = 3600000;
-            //double duration = ((double)(endTimeCal.getTimeInMillis()-startTimeCal.getTimeInMillis()))/mToHourConverter;
-            //eventDuration.setText(String.valueOf(new DecimalFormat("0.0").format(duration)));
-            eventDuration.setText(event.getDuration());
+            double mToHourConverter = 3600000;
+            double duration = ((double)(endTimeCal.getTimeInMillis()-startTimeCal.getTimeInMillis()))/mToHourConverter;
+            eventDuration.setText(String.valueOf(new DecimalFormat("0.0").format(duration)));
 
             int[] briefTime = Utils.splitTime(event.getBriefingTime());
             hour = briefTime[0];
@@ -173,7 +172,6 @@ public class EventFormViewActivity extends EventMasterActivity {
             briefTimePicker.setCurrentMinute(minute);
 
             duty.setText(event.getEventDescription());
-            //eventDuration.setText(event.get()); //to be computed here
             venue.setText(event.getVenue());
             briefLocation.setText(event.getBriefingPlace());
             teacherInCharge.setText(event.getTeacherInCharge());

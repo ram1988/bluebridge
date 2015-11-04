@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.util.Utils;
 import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPush;
 import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushException;
@@ -258,7 +259,7 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
             }
 
             EventsAdapter adapter = new EventsAdapter();
-            String role = adapter.checkLogin(nric,mPassword,getDeviceId());
+            String role = adapter.checkLogin(nric,mPassword, Utils.getDeviceId());
 
 
             // TODO: register the new account here.
