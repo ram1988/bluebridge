@@ -38,6 +38,8 @@ public class EventFormViewActivity extends EventMasterActivity {
             // 1: edit event
             setContentView(R.layout.activity_event_form_view);
         } else if (mode == 2) {
+            //admin:
+            //  view event, allow to view show registered parents
             //parent:
             // list events, allow join and unjoin new event
             // list registered events, allow unjoin registered event
