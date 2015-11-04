@@ -29,8 +29,9 @@ public class EventParentDetailActivity extends EventMasterActivity {
         Intent intent = getIntent();
         Parent parent = (Parent)intent.getSerializableExtra("ParentObj");
 
-
-        populateParentDetails(parent);
+        if(parent != null) {
+            populateParentDetails(parent);
+        }
     }
 
     private void populateParentDetails(Parent parent) {

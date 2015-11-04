@@ -99,11 +99,6 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         ctxt = this;
-
-
-        String deviceId = this.getDeviceId();
-        Log.d("Device ID", deviceId);
-
     }
 
     private void populateAutoComplete() {
@@ -297,22 +292,5 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
         }
     }
 
-
-    private String getDeviceId()
-    {
-        String deviceId = "";
-        try {
-            deviceId = (String) AuthorizationManager.getInstance().getDeviceIdentity().get("id");
-            Log.d("Device ID", "MFPPush:computeRegId() - DeviceId obtained from AuthorizationManager object id field is : " + deviceId);
-            if(deviceId == null) {
-                deviceId = (String)AuthorizationManager.getInstance().getDeviceIdentity().get("deviceId");
-                Log.d("Device ID", "MFPPush:computeRegId() - DeviceId obtained from AuthorizationManager object deviceId field is : " + deviceId);
-            }
-        } catch (JSONException var2) {
-            var2.printStackTrace();
-        }
-
-        return deviceId;
-    }
 }
 
