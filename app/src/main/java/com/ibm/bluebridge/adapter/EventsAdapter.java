@@ -344,8 +344,8 @@ public class EventsAdapter {
         }
     }
     /*******Parent methods*********/
-    public List<Event> getAllEventsList() {
-        String allEventsAPI = BASE_RESTURI + "/parent_list_events";
+    public List<Event> getAllEventsList(String parent_id) {
+        String allEventsAPI = BASE_RESTURI + "/parent_list_events?parent_id=" + parent_id;
         eventsList = new ArrayList<Event>();
 
         try {
@@ -374,6 +374,9 @@ public class EventsAdapter {
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(item.getInt("event_vacancy"));
                         event.setCategory(item.getString("category"));
+                        event.setDuration(item.getString("duration_in_hour"));
+                        event.setRegistered(item.getBoolean("registered"));
+                        event.setAttended(item.getBoolean("attended"));
 
                         eventsList.add(event);
 
@@ -430,6 +433,9 @@ public class EventsAdapter {
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(-100);
                         event.setCategory(item.getString("category"));
+                        event.setDuration(item.getString("duration_in_hour"));
+                        event.setRegistered(item.getBoolean("registered"));
+                        event.setAttended(item.getBoolean("attended"));
 
                         eventsList.add(event);
 
@@ -485,6 +491,9 @@ public class EventsAdapter {
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(-100);
                         event.setCategory(item.getString("category"));
+                        event.setDuration(item.getString("duration_in_hour"));
+                        event.setRegistered(item.getBoolean("registered"));
+                        event.setAttended(item.getBoolean("attended"));
 
                         eventsList.add(event);
                     }
@@ -507,6 +516,28 @@ public class EventsAdapter {
 
 
         return eventsList;
+    }
+
+    public void joinEvent(Event event,String parent_id) {
+
+        String joinEventsAPI = BASE_RESTURI + "/parent_register_event?parent_id="+parent_id+"&event_id="+event.getEventId();
+
+        try {
+            postResponse(joinEventsAPI,null,"post");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void unjoinEvent(Event event,String parent_id) {
+
+        String unjoinEventsAPI = BASE_RESTURI + "/parent_unjoin_event?parent_id="+parent_id+"&event_id="+event.getEventId();
+
+        try {
+            postResponse(unjoinEventsAPI,null,"post");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private boolean getConnection(String urlStr) {
