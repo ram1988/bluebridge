@@ -204,7 +204,7 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
 
             //For all events
             if(tabNumber == 1 ) {
-                List<Event> eventList = eventsAdapter.getAllEventsList();
+                List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
                 final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -215,9 +215,9 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                         final Event item = (Event) parent.getItemAtPosition(position);
 
                         Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                        intent.putExtra("EventAction", 0);
-                        intent.putExtra("EventDesc", item);
-
+                        intent.putExtra("EventAction", 2);
+                        intent.putExtra("EventObj", item);
+                        intent.putExtra("parent_id", parent_id);
                         startActivity(intent);
                     }
                 });
@@ -235,9 +235,9 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                         final Event item = (Event) parent.getItemAtPosition(position);
 
                         Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                        intent.putExtra("EventAction", 0);
-                        intent.putExtra("EventDesc", item);
-
+                        intent.putExtra("EventAction", 2);
+                        intent.putExtra("EventObj", item);
+                        intent.putExtra("parent_id", parent_id);
                         startActivity(intent);
                     }
                 });
@@ -255,9 +255,9 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                         final Event item = (Event) parent.getItemAtPosition(position);
 
                         Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                        intent.putExtra("EventAction", 0);
-                        intent.putExtra("EventDesc", item);
-
+                        intent.putExtra("EventAction", 2);
+                        intent.putExtra("EventObj", item);
+                        intent.putExtra("parent_id", parent_id);
                         startActivity(intent);
                     }
                 });

@@ -10,12 +10,14 @@ import org.json.JSONException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by manirm on 10/26/2015.
  */
 public class Utils {
+    public static final String CATEGORIES[] = {"Education", "Sports", "Charity", "Culture", "Others"};
 
     //Cannot be called before the push notification api is called
     public static String getDeviceId()
