@@ -167,7 +167,11 @@ public class EventMasterActivity extends ActionBarActivity {
             if (item!= null) {
                 // My layout has only one TextView
                 // do whatever you want with your string and long
-                viewHolder.txtView.setText(item.getName() + " (reg on year " + item.getRegistrationYear() + ")");
+                viewHolder.txtView.setTextSize(15);
+                viewHolder.txtView.setText(item.getName() + " (" + item.getId() + ")"
+                        + "\n   Gender:                      " + item.getGender()
+                        + "\n   DOB:                           " + item.getBirthDate()
+                        + "\n   Registration Year:    " + item.getRegistrationYear());
             }
 
             return convertView;
