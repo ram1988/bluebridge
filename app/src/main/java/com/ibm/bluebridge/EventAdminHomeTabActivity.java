@@ -288,7 +288,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
                 final List<Event> completedEventsList = eventsAdapter.getAdminCompletedEventsList(admin_id);
 
                 final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt, completedEventsList);
-                arrayAdapterMap.put(tabNumber-1,adapter);
+                arrayAdapterMap.put(tabNumber - 1, adapter);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -299,7 +299,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
 
                         //to be in read mode
                         Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                        intent.putExtra("EventAction", 1);
+                        intent.putExtra("EventAction", 2);
                         intent.putExtra("EventObj", item);
                         intent.putExtra("admin_id", admin_id);
 
@@ -314,7 +314,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
     }
 
     private static void showCalendarBox(List<Event> eventList) {
-        EventCalendarView caldroidFragment = new EventCalendarView(selfCtxt, admin_id, eventList);
+        EventCalendarView caldroidFragment = new EventCalendarView(selfCtxt, admin_id, eventList, EventCalendarView.UserType.ADMIN);
         caldroidFragment.show(fragmentManager, "Tag");
     }
 }

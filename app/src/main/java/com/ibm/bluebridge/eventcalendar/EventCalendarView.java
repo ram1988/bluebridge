@@ -29,15 +29,17 @@ public class EventCalendarView extends CaldroidFragment {
     private Context ctxt;
     private List<Event> eventList;
     private String keyId;
+    private UserType userType;
 
     public EventCalendarView() {
 
     }
 
-    public EventCalendarView(Context ctxt,String id, List<Event> eventList ) {
+    public EventCalendarView(Context ctxt,String id, List<Event> eventList, UserType type) {
         this.ctxt = ctxt;
         this.eventList = eventList;
         this.keyId = id;
+        this.userType = type;
         this.setCaldroidListener(new EventCalendarListener());
 
         Bundle args = new Bundle();
@@ -82,13 +84,21 @@ public class EventCalendarView extends CaldroidFragment {
             if(obj!=null) {
                 //to implement mode based activity
                 Event event = (Event)obj;
-                Intent intent = new Intent(ctxt, EventFormViewActivity.class);
-                intent.putExtra("EventAction", 1);
+                Intent intent = intent = new Intent(ctxt, EventFormViewActivity.class);;
+                if(userType == UserType.ADMIN) {
+                    intent.putExtra("EventAction", 1);
+                } else {
+                    intent.putExtra("EventAction", 2);
+                }
                 intent.putExtra("EventObj", event);
                 intent.putExtra("admin_id", keyId);
 
                 startActivity(intent);
             }
         }
+    }
+
+    public enum UserType {
+        ADMIN,PARENT
     }
 }
