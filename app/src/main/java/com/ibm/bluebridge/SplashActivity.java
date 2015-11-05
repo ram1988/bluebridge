@@ -51,6 +51,8 @@ public class SplashActivity extends AppCompatActivity {
             public void onSuccess(String s) {
                 Log.d("MFPPushResponseListener", "Device registration succeeded.");
 
+                // finish the splash activity so it can't be returned to
+                SplashActivity.this.finish();
                 Intent i = new Intent(SplashActivity.this, EventLoginActivity.class);
                 startActivity(i);
             }
@@ -58,18 +60,16 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onFailure(MFPPushException e) {
                 Log.d("MFPPushResponseListener", "Device registration failed.");
+
+                // finish the splash activity so it can't be returned to
+                SplashActivity.this.finish();
+                Intent i = new Intent(SplashActivity.this, EventLoginActivity.class);
+                startActivity(i);
             }
         });
 
         String deviceId = Utils.getDeviceId();
         Log.d("Device ID", deviceId);
-
-        //notificationListener = new MFPPushNotificationListener() {
-        //    @Override
-        //    public void onReceive(final MFPSimplePushNotification message) {
-        //        Log.d("Notification Received", message.toString());
-        //    }
-        //};
 
         //new Handler().postDelayed(new Runnable() {
         //    @Override
@@ -82,12 +82,9 @@ public class SplashActivity extends AppCompatActivity {
         //}, SPLASH_TIME_OUT);
     }
 
-    //@Override
-    //protected void onResume() {
-    //    super.onResume();
-    //    if (push != null) {
-    //        push.listen(notificationListener);
-    //    }
-    //}
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("SplashActivity", "onResume method called.");
+    }
 }
