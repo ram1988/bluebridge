@@ -237,6 +237,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             TextView briefLocation = (TextView) findViewById(R.id.brief_location);
             TextView teacherInCharge = (TextView) findViewById(R.id.teacher_in_charge_edit);
             TextView maxVolunteers = (TextView) findViewById(R.id.max_volunteers_text);
+            TextView category = (TextView) findViewById(R.id.category_text);
 
             actionButton.setVisibility(View.INVISIBLE);
             showRegButton.setVisibility(View.INVISIBLE);
@@ -268,6 +269,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             briefLocation.setText(event.getBriefingPlace());
             teacherInCharge.setText(event.getTeacherInCharge());
             maxVolunteers.setText(String.valueOf(event.getMaxVolunteers()));
+            category.setText(event.getCategory());
 
             actionButton.setText("Join");
             actionButton.setOnClickListener(new View.OnClickListener() {
