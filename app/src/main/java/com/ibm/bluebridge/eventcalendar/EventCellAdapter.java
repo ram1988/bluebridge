@@ -40,12 +40,9 @@ public class EventCellAdapter extends CaldroidGridAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View cellView = convertView;
 
-        // For reuse
-       // if (convertView == null) {
-            cellView = inflater.inflate(R.layout.calendar_cell_view, null);
-        //}
+        View cellView = inflater.inflate(R.layout.calendar_cell_view, null);
+
 
         int topPadding = cellView.getPaddingTop();
         int leftPadding = cellView.getPaddingLeft();
