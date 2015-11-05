@@ -179,7 +179,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
                     ListView listView = (ListView)rootView.findViewById(R.id.listview);
 
                     // specify an adapter (see also next example)
-                    ArrayAdapter<Parent> mAdapter = getParentListItemAdapter(selfCtxt, parentList, ParentModes.PARENT_REGISTERED);
+                    ArrayAdapter<Parent> mAdapter = getParentListItemAdapter(selfCtxt, parentList, ParentModes.PARENT_REGISTERED, event_id);
                     listView.setAdapter(mAdapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -206,7 +206,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
                     ListView listView = (ListView)rootView.findViewById(R.id.listview);
 
                     // specify an adapter (see also next example)
-                    ArrayAdapter<Parent> mAdapter = getParentListItemAdapter(selfCtxt, parentList, ParentModes.PARENT_ATTENDED);
+                    ArrayAdapter<Parent> mAdapter = getParentListItemAdapter(selfCtxt, parentList, ParentModes.PARENT_ATTENDED, event_id);
                     listView.setAdapter(mAdapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

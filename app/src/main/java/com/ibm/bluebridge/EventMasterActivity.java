@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.ibm.bluebridge.R;
+import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.valueobject.Children;
 import com.ibm.bluebridge.valueobject.Event;
 import com.ibm.bluebridge.valueobject.Parent;
@@ -74,15 +75,17 @@ public class EventMasterActivity extends ActionBarActivity {
     private static class ParentListItemAdapter<T> extends ArrayAdapter<Parent>  {
 
         private ParentModes parentMode;
+        private String event_id;
         private class ViewHolder {
             private TextView txtView;
             private CheckBox chkBox;
         }
 
         public ParentListItemAdapter(Context context,
-                                     List<Parent> objects, ParentModes mode) {
+                                     List<Parent> objects, ParentModes mode,String event_id) {
             super(context, 0, objects);
             parentMode = mode;
+            this.event_id = event_id;
         }
 
         @Override
@@ -98,22 +101,33 @@ public class EventMasterActivity extends ActionBarActivity {
                 viewHolder.txtView = (TextView) convertView.findViewById(R.id.parent_name);
                 viewHolder.chkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
 
-                if(parentMode == ParentModes.PARENT_ATTENDED) {
-                    viewHolder.chkBox.setVisibility(View.VISIBLE);
-                } else {
-                    viewHolder.chkBox.setVisibility(View.INVISIBLE);
-                }
-
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            Parent item = getItem(position);
+            final Parent item = getItem(position);
             if (item!= null) {
                 // My layout has only one TextView
                 // do whatever you want with your string and long
                 viewHolder.txtView.setText(String.format("%s", item.getFirstname()+" "+item.getLastname()));
+
+                if(parentMode == ParentModes.PARENT_ATTENDED) {
+                    viewHolder.chkBox.setVisibility(View.VISIBLE);
+                    viewHolder.chkBox.setChecked(item.isAttended());
+                    viewHolder.chkBox.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            //is chkIos checked?
+                            EventsAdapter eventsAdapter = new EventsAdapter();
+                            eventsAdapter.markAttendance(event_id, item.getId());
+                        }
+                    });
+                } else {
+                    viewHolder.chkBox.setVisibility(View.INVISIBLE);
+                }
+
             }
 
             return convertView;
@@ -165,8 +179,8 @@ public class EventMasterActivity extends ActionBarActivity {
         return new EventListItemAdapter<Event>(ctxt,events);
     }
 
-    protected static ArrayAdapter<Parent> getParentListItemAdapter(Context ctxt,List<Parent> parents,ParentModes mode) {
-        return new ParentListItemAdapter<Parent>(ctxt, parents, mode);
+    protected static ArrayAdapter<Parent> getParentListItemAdapter(Context ctxt,List<Parent> parents,ParentModes mode, String event_id) {
+        return new ParentListItemAdapter<Parent>(ctxt, parents, mode, event_id);
     }
 
     protected static ArrayAdapter<Children> getChildrenListItemAdapter(Context ctxt,List<Children> children) {
