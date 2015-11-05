@@ -17,7 +17,9 @@ public class Event extends BlueBridgeVO{
     private int maxVolunteers;
     private int vacancy;
     private String category;
-
+    private String duration;
+    private boolean registered;
+    private boolean attended;
 
     public String getEventId() {
         return eventId;
@@ -123,8 +125,26 @@ public class Event extends BlueBridgeVO{
         this.startTime = startTime;
     }
 
+    public String getDuration() {
+        return duration;
+    }
 
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
 
+    public boolean getRegistered() { return registered; }
 
+    public void setRegistered(boolean registered) {
+        this.registered = registered;
+    }
+
+    public boolean getAttended() {
+        return attended;
+    }
+
+    public void setAttended(boolean attended) {
+        this.attended = attended;
+    }
 
 }
