@@ -98,6 +98,20 @@ public class EventsAdapter {
 
         return role;
     }
+
+
+    public void markAttendance(String event_id,String parent_id) {
+        String markAttendanceAPI = BASE_RESTURI + "/admin_mark_attendance?event_id="+event_id+"&parent_id="+parent_id;
+
+        try {
+            asyncPostResponse(markAttendanceAPI, null, "post");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
     public List<Event> getAdminEventsList(String admin_id) {
         String allEventsAPI = BASE_RESTURI + "/admin_list_events?admin_id="+admin_id;
         eventsList = new ArrayList<Event>();
@@ -374,10 +388,10 @@ public class EventsAdapter {
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(item.getInt("event_vacancy"));
                         event.setCategory(item.getString("category"));
-                        event.setDuration(item.getString("duration_in_hour"));
+                       /* event.setDuration(item.getString("duration_in_hour"));
                         event.setRegistered(item.getBoolean("registered"));
                         event.setAttended(item.getBoolean("attended"));
-
+*/
                         eventsList.add(event);
 
                         //System.out.println("jsonobj--->" + item.get("name"));
@@ -433,10 +447,10 @@ public class EventsAdapter {
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(-100);
                         event.setCategory(item.getString("category"));
-                        event.setDuration(item.getString("duration_in_hour"));
+                        /*event.setDuration(item.getString("duration_in_hour"));
                         event.setRegistered(item.getBoolean("registered"));
                         event.setAttended(item.getBoolean("attended"));
-
+*/
                         eventsList.add(event);
 
                     }
@@ -491,10 +505,10 @@ public class EventsAdapter {
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(-100);
                         event.setCategory(item.getString("category"));
-                        event.setDuration(item.getString("duration_in_hour"));
+                        /*event.setDuration(item.getString("duration_in_hour"));
                         event.setRegistered(item.getBoolean("registered"));
                         event.setAttended(item.getBoolean("attended"));
-
+*/
                         eventsList.add(event);
                     }
                 } else {
@@ -589,6 +603,17 @@ public class EventsAdapter {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            }
+    }
+
+    private void asyncPostResponse(String url,JSONObject input, String method) {
+
+            PostResponseTask postRespObj = new PostResponseTask(url,input,method);
+            postRespObj.start();
+            try {
+                System.out.println("Main Thread Waiting for response...");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
     }
 
