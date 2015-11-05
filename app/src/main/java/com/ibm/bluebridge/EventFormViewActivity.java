@@ -242,7 +242,6 @@ public class EventFormViewActivity extends EventMasterActivity {
             showRegButton.setVisibility(View.INVISIBLE);
             cancelButton.setVisibility(View.INVISIBLE);
 
-            /*
             actionButton.setVisibility(View.INVISIBLE);
             showRegButton.setVisibility(View.INVISIBLE);
             cancelButton.setVisibility(View.INVISIBLE);
@@ -256,12 +255,12 @@ public class EventFormViewActivity extends EventMasterActivity {
             } else {
                 showRegButton.setVisibility(View.VISIBLE);
             }
-*/
+
             eventTitle.setText(event.getEventName());
             eventDate.setText(event.getEventDate());
             startTime.setText(event.getStartTime());
             endTime.setText(event.getEndTime());
-           // eventDuration.setText(event.getDuration());
+            eventDuration.setText(event.getDuration());
             briefTime.setText(event.getBriefingTime());
 
             duty.setText(event.getEventDescription());
