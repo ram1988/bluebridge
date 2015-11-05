@@ -3,6 +3,7 @@ package com.ibm.bluebridge.eventcalendar;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.RelativeLayout;
@@ -38,6 +39,10 @@ public class EventCalendarView extends CaldroidFragment {
         this.eventList = eventList;
         this.keyId = id;
         this.setCaldroidListener(new EventCalendarListener());
+
+        Bundle args = new Bundle();
+        args.putString(DIALOG_TITLE, "Event Calendar");
+        setArguments(args);
     }
 
     private HashMap<String,Object> prepareEventMap() {

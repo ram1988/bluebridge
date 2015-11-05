@@ -48,7 +48,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
     private static Map<Integer,ArrayAdapter<Event>> arrayAdapterMap;
     private static EventsAdapter eventsAdapter ;
     private static FragmentManager fragmentManager;
-
+    private static Button viewCalendarButton;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -86,8 +86,8 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
         }
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_fab);
+        viewCalendarButton = (Button) findViewById(R.id.calendar_view);
         fab.setVisibility(View.VISIBLE);
-
         fab.setOnClickListener(new View.OnClickListener() {
 
             private int count = 0;
@@ -117,10 +117,24 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
                 System.out.println("Position clicked-->" + position);
                 if (position == 0) {
                     eventList = eventsAdapter.getAdminEventsList(admin_id);
+                    final List<Event> finalEventList = eventList;
                     fab.setVisibility(View.VISIBLE);
+
+                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            showCalendarBox(finalEventList);
+                        }
+                    });
                 } else if (position == 1) {
                     eventList = eventsAdapter.getAdminCompletedEventsList(admin_id);
+                    final List<Event> finalCompletedEventList = eventList;
                     fab.setVisibility(View.INVISIBLE);
+
+                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            showCalendarBox(finalCompletedEventList);
+                        }
+                    });
                 }
 
                 ArrayAdapter<Event> eventArrayAdapter = arrayAdapterMap.get(position);
@@ -262,23 +276,18 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
 
                 }
 
-                Button viewCalendarButton = (Button) rootView.findViewById(R.id.calendar_view);
                 viewCalendarButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-
-                        EventCalendarView caldroidFragment = new EventCalendarView(selfCtxt,admin_id,eventList);
-                        caldroidFragment.show(fragmentManager,"Tag");
-
+                        showCalendarBox(eventList);
                     }
                 });
-
             }
             //For joined events
             else if(tabNumber == 2) {
                 System.out.println("Tab2 clicked");
-                List<Event> eventList = eventsAdapter.getAdminCompletedEventsList(admin_id);
+                final List<Event> completedEventsList = eventsAdapter.getAdminCompletedEventsList(admin_id);
 
-                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt, eventList);
+                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt, completedEventsList);
                 arrayAdapterMap.put(tabNumber-1,adapter);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -297,9 +306,15 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
                         startActivity(intent);
                     }
                 });
+
             }
 
             return rootView;
         }
+    }
+
+    private static void showCalendarBox(List<Event> eventList) {
+        EventCalendarView caldroidFragment = new EventCalendarView(selfCtxt, admin_id, eventList);
+        caldroidFragment.show(fragmentManager, "Tag");
     }
 }

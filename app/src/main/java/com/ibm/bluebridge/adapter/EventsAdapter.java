@@ -142,7 +142,7 @@ public class EventsAdapter {
                         event.setBriefingPlace(item.getString("briefing_place"));
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(item.getInt("event_vacancy"));
-                       // event.setCategory(item.getString("category"));
+                        event.setCategory(item.getString("category"));
 
                         eventsList.add(event);
 
@@ -196,7 +196,7 @@ public class EventsAdapter {
                         event.setBriefingPlace(item.getString("briefing_place"));
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(item.getInt("event_vacancy"));
-                        // event.setCategory(item.getString("category"));
+                        event.setCategory(item.getString("category"));
 
                         eventsList.add(event);
 
@@ -259,8 +259,6 @@ public class EventsAdapter {
                             children.setGender(child.getString("gender"));
                             children.setBirthDate(child.getString("birth_date"));
                             children.setRegistrationYear(child.getString("registration_year"));
-
-
 
                             childrenArr.add(children);
                         }
@@ -711,7 +709,12 @@ public class EventsAdapter {
                             }
 
                             if (result.length() > 0) {
-                                respJsonObj.put("response", new JSONObject(result.toString()));
+                                try {
+                                    respJsonObj.put("response", new JSONObject(result.toString()));
+                                }
+                                catch(JSONException excep) {
+                                    System.out.println("json exception. ignored and passed");
+                                }
                             }
                         }
                     } else if (httpMethod.equals("delete")) {

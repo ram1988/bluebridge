@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -19,7 +20,10 @@ import com.ibm.bluebridge.util.Validator;
 import com.ibm.bluebridge.valueobject.Event;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class EventFormViewActivity extends EventMasterActivity {
 
@@ -131,6 +135,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             EditText briefLocation = (EditText) findViewById(R.id.brief_location);
             EditText teacherInCharge = (EditText) findViewById(R.id.teacher_in_charge_edit);
             EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_text);
+            Spinner categoryVal = (Spinner)findViewById(R.id.category_value);
             cancelButton.setVisibility(View.VISIBLE);
             showRegButton.setVisibility(View.VISIBLE);
 
@@ -141,7 +146,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             int year = eventDate[0];
             int month = eventDate[1];
             int day = eventDate[2];
-            eventDatePicker.updateDate(year, month, day);
+            eventDatePicker.updateDate(year, month-1, day);
 
             //DB will store the time in 24 hrs format
             int[] startTime = Utils.splitTime(event.getStartTime());
@@ -177,6 +182,9 @@ public class EventFormViewActivity extends EventMasterActivity {
             briefLocation.setText(event.getBriefingPlace());
             teacherInCharge.setText(event.getTeacherInCharge());
             maxVolunteers.setText(String.valueOf(event.getMaxVolunteers()));
+
+            List<String> categoryList = Arrays.asList(getResources().getStringArray(R.array.category_values));
+            categoryVal.setSelection(categoryList.indexOf(event.getCategory()));
 
             actionButton.setText("Update");
             actionButton.setOnClickListener(new View.OnClickListener() {
@@ -314,11 +322,12 @@ public class EventFormViewActivity extends EventMasterActivity {
         EditText briefLocation = (EditText) findViewById(R.id.brief_location);
         EditText teacherInCharge = (EditText) findViewById(R.id.teacher_in_charge_edit);
         EditText maxVolunteers = (EditText) findViewById(R.id.max_volunteers_text);
+        Spinner categoryVal = (Spinner)findViewById(R.id.category_value);
 
         newEvent.setEventName(eventTitle.getText().toString());
         newEvent.setEventDescription(duty.getText().toString());
 
-        String eventDate = eventDatePicker.getYear()+"/"+eventDatePicker.getMonth()+"/"+eventDatePicker.getDayOfMonth();
+        String eventDate = eventDatePicker.getYear()+"/"+(eventDatePicker.getMonth()+1)+"/"+eventDatePicker.getDayOfMonth();
         newEvent.setEventDate(eventDate);
 
         String startTime = startTimePicker.getCurrentHour()+":"+startTimePicker.getCurrentMinute();
@@ -335,6 +344,7 @@ public class EventFormViewActivity extends EventMasterActivity {
         newEvent.setBriefingPlace(briefLocation.getText().toString());
         newEvent.setTeacherInCharge(teacherInCharge.getText().toString());
         newEvent.setMaxVolunteers(Integer.parseInt(maxVolunteers.getText().toString()));
+        newEvent.setCategory(categoryVal.getSelectedItem().toString());
 
         return newEvent;
     }
