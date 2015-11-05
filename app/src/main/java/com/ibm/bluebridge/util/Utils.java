@@ -62,6 +62,7 @@ public class Utils {
         return splitDate;
     }
 
+
     public static int[] splitTime(String time) {
         String[] splittedTime = time.split(":");
         int[] splitTime = new int[splittedTime.length];

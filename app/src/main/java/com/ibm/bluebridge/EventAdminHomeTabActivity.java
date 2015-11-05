@@ -1,6 +1,7 @@
 package com.ibm.bluebridge;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
@@ -10,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,14 +22,20 @@ import android.view.ViewGroup;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.eventcalendar.EventCalendarView;
 import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.valueobject.Event;
+import com.roomorama.caldroid.CaldroidFragment;
 
+
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +47,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
     private static String admin_id;
     private static Map<Integer,ArrayAdapter<Event>> arrayAdapterMap;
     private static EventsAdapter eventsAdapter ;
+    private static FragmentManager fragmentManager;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -61,6 +70,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
         setContentView(R.layout.activity_event_admin_home_tab);
 
         selfCtxt = selfActivity = this;
+        fragmentManager  = getSupportFragmentManager();
         final Activity localRef = this;
         eventsAdapter = new EventsAdapter(selfCtxt);
 
@@ -123,8 +133,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        //To display username
-        this.setTitle("Hi Event Administrator!!!");
+
 
     }
 
@@ -225,7 +234,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
             //For all events
             if(tabNumber == 1 ) {
                 System.out.println("Tab1 clicked");
-                List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
+                final List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
 
                 if(eventList.isEmpty()){
                     noEventsMsg.setVisibility(View.VISIBLE);
@@ -252,6 +261,17 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
                     });
 
                 }
+
+                Button viewCalendarButton = (Button) rootView.findViewById(R.id.calendar_view);
+                viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+
+                        EventCalendarView caldroidFragment = new EventCalendarView(selfCtxt,admin_id,eventList);
+                        caldroidFragment.show(fragmentManager,"Tag");
+
+                    }
+                });
+
             }
             //For joined events
             else if(tabNumber == 2) {

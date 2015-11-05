@@ -41,4 +41,7 @@ dependencies {
 
     //MP Android Chart
     compile "com.github.PhilJay:MPAndroidChart:v2.1.6"
+
+    //Calendar
+    compile 'com.roomorama:caldroid:2.2.1'
 }

@@ -136,6 +136,7 @@ public class EventFormViewActivity extends EventMasterActivity {
 
             eventTitle.setText(event.getEventName());
 
+
             int[] eventDate = Utils.splitDate(event.getEventDate());
             int year = eventDate[0];
             int month = eventDate[1];

@@ -250,7 +250,7 @@ public class EventsAdapter {
                         JSONArray childrenJsonArr = (JSONArray) item.getJSONArray("children");
                         List<Children> childrenArr = new ArrayList<>(childrenJsonArr.length());
                         for(int j=0;j<childrenJsonArr.length();j++) {
-                            JSONObject child = childrenJsonArr.getJSONObject(i);
+                            JSONObject child = childrenJsonArr.getJSONObject(j);
                             Children children = new Children();
 
                             System.out.println("children--->" +child);
