@@ -1,5 +1,6 @@
 package com.ibm.bluebridge;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ibm.bluebridge.valueobject.Children;
 import com.ibm.bluebridge.valueobject.Event;
@@ -30,6 +32,9 @@ import java.net.URL;
 public class EventParentDetailActivity extends EventMasterActivity {
 
     private Context ctxt;
+    private ProgressDialog pDialog;
+    private Bitmap bitmap;
+    private ImageView photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +48,12 @@ public class EventParentDetailActivity extends EventMasterActivity {
         Intent intent = getIntent();
         Parent parent = (Parent)intent.getSerializableExtra("ParentObj");
 
+        photo = (ImageView) findViewById(R.id.photo);
+        String imageURL = "http://school-volunteer-bluebridge.mybluemix.net/api/view_user_image?user_id=" + parent.getId();
+        new LoadImage().execute(imageURL);
+
         if(parent != null) {
             populateParentDetails(parent);
-            //ImageView imgView =(ImageView)findViewById(R.id.imageView);
-            //Drawable drawable = LoadImageFromWebOperations("http://school-volunteer-bluebridge.mybluemix.net/api/view_user_image?user_id=" + parent.getId());
-            //imgView.setImageDrawable(drawable);
         }
     }
 
@@ -63,26 +69,48 @@ public class EventParentDetailActivity extends EventMasterActivity {
         TextView addressView = (TextView) findViewById(R.id.address_text);
         ListView childrenView = (ListView) findViewById(R.id.childrenlist);
 
-        nricView.setText(parent.getId());
-        genderView.setText(parent.getGender());
-        contactView.setText(parent.getContact());
-        emailView.setText(parent.getEmail());
-        jobView.setText(parent.getJob());
-        addressView.setText(parent.getAddress());
+        nricView.setText(   "NRIC:           " + parent.getId());
+        genderView.setText( "Gender:        " + parent.getGender());
+        contactView.setText("Contact:       " + parent.getContact());
+        emailView.setText(  "Email:          " + parent.getEmail());
+        jobView.setText(    "Job:              " + parent.getJob());
+        addressView.setText("Address:      " + parent.getAddress());
 
         ArrayAdapter<Children> mAdapter = getChildrenListItemAdapter(ctxt, parent.getChildren());
         childrenView.setAdapter(mAdapter);
     }
 
-    private Drawable LoadImageFromWebOperations(String url)
-    {
-        try{
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
-            return d;
-        }catch (Exception e) {
-            System.out.println("Exc="+e);
-            return null;
+    private class LoadImage extends AsyncTask<String, String, Bitmap> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(EventParentDetailActivity.this);
+            pDialog.setMessage("Loading Image ....");
+            pDialog.show();
+
+        }
+        protected Bitmap doInBackground(String... args) {
+            try {
+                bitmap = BitmapFactory.decodeStream((InputStream)new URL(args[0]).getContent());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        protected void onPostExecute(Bitmap image) {
+
+            if(image != null){
+                photo.setImageBitmap(image);
+                pDialog.dismiss();
+            }else{
+                pDialog.dismiss();
+                Toast.makeText(EventParentDetailActivity.this, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
+
+            }
         }
     }
 }
+
+

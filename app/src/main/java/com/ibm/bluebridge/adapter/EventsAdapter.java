@@ -250,7 +250,7 @@ public class EventsAdapter {
                         JSONArray childrenJsonArr = (JSONArray) item.getJSONArray("children");
                         List<Children> childrenArr = new ArrayList<>(childrenJsonArr.length());
                         for(int j=0;j<childrenJsonArr.length();j++) {
-                            JSONObject child = childrenJsonArr.getJSONObject(i);
+                            JSONObject child = childrenJsonArr.getJSONObject(j);
                             Children children = new Children();
 
                             System.out.println("children--->" +child);
@@ -388,10 +388,10 @@ public class EventsAdapter {
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(item.getInt("event_vacancy"));
                         event.setCategory(item.getString("category"));
-                       /* event.setDuration(item.getString("duration_in_hour"));
+                        event.setDuration(item.getString("duration_in_hour"));
                         event.setRegistered(item.getBoolean("registered"));
                         event.setAttended(item.getBoolean("attended"));
-*/
+
                         eventsList.add(event);
 
                         //System.out.println("jsonobj--->" + item.get("name"));
@@ -447,10 +447,10 @@ public class EventsAdapter {
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(-100);
                         event.setCategory(item.getString("category"));
-                        /*event.setDuration(item.getString("duration_in_hour"));
+                        event.setDuration(item.getString("duration_in_hour"));
                         event.setRegistered(item.getBoolean("registered"));
                         event.setAttended(item.getBoolean("attended"));
-*/
+
                         eventsList.add(event);
 
                     }
@@ -505,10 +505,10 @@ public class EventsAdapter {
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(-100);
                         event.setCategory(item.getString("category"));
-                        /*event.setDuration(item.getString("duration_in_hour"));
+                        event.setDuration(item.getString("duration_in_hour"));
                         event.setRegistered(item.getBoolean("registered"));
                         event.setAttended(item.getBoolean("attended"));
-*/
+
                         eventsList.add(event);
                     }
                 } else {
