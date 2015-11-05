@@ -157,7 +157,7 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                 case 0:
                     return "All \nEvents";
                 case 1:
-                    return "Joined \nEvents";
+                    return "Registered \nEvents";
                 case 2:
                     return "Completed \nEvents";
             }
