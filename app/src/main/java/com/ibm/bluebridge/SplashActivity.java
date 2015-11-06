@@ -40,8 +40,14 @@ public class SplashActivity extends AppCompatActivity {
         /*
          * Initialize everything app needs
          */
-        initializePushNotification();
-        initializeSDCardDirectory();
+        try {
+            initializePushNotification();
+            initializeSDCardDirectory();
+        }catch(Exception e){
+            Log.e("SplashActivity", "Excetion while initializing app");
+            Log.e("SplashActivity", e.getMessage());
+            e.printStackTrace();
+        }
 
         String deviceId = Utils.getDeviceId();
         Log.d("Device ID", deviceId);

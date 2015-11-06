@@ -1,5 +1,7 @@
 package com.ibm.bluebridge.util;
 
+import android.util.Log;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -135,10 +137,9 @@ public class RESTApi {
                 } catch (JSONException e1) {
                     e1.printStackTrace();
                 }
-                System.out.println("issue in connection");
+                Log.e("RESTApi", "issue in connection");
+                Log.e("RESTApi", e.getMessage());
                 e.printStackTrace();
-                //System.out.println(e.getMessage());
-                //Log Exception
             }
             finally {
                 restConnection.disconnect();

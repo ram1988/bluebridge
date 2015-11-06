@@ -25,6 +25,8 @@ public class SessionManager {
     private String userGenderKey = "gender";
     private String userFirstNameKey = "firstname";
     private String userLastNameKey = "lastname";
+    private String userEmailKey = "email";
+    private String userContactKey = "contact";
     private String userJobKey = "job";
     private String userAddrKey = "address";
     private String userChildrenKey = "children";
@@ -42,8 +44,11 @@ public class SessionManager {
     private String userId = "";
     private String userRole = "";
     private String userGender = "";
+    private String userContact = "";
+    private String userEmail = "";
     private String userJob = "";
     private String userAddr = "";
+
 
     private String childId = "";
     private String childName = "";
@@ -87,17 +92,22 @@ public class SessionManager {
                 setFirstname(item.getString(userFirstNameKey));
                 setLastname(item.getString(userLastNameKey));
                 setUserGender(item.getString(userGenderKey));
-                setUserJob(item.getString(userJobKey));
-                setUserAddr(item.getString(userAddrKey));
+                setUserEmail(item.getString(userEmailKey));
+                setUserContact(item.getString(userContactKey));
 
-                JSONArray children = item.getJSONArray(userChildrenKey);
-                JSONObject child = children.getJSONObject(0);  //For now, we assume only 1 child.
+                if(userRole.equals("parent")){
+                    setUserJob(item.getString(userJobKey));
+                    setUserAddr(item.getString(userAddrKey));
 
-                setChildId(child.getString(userChildIdKey));
-                setChildName(child.getString(userChildNameKey));
-                setChildGender(child.getString(userChildGenderKey));
-                setChildRegistrationYear(child.getString(userChildRegistrationYearKey));
-                setChildBirthDate(child.getString(userChildBirthDateKey));
+                    JSONArray children = item.getJSONArray(userChildrenKey);
+                    JSONObject child = children.getJSONObject(0);  //For now, we assume only 1 child.
+
+                    setChildId(child.getString(userChildIdKey));
+                    setChildName(child.getString(userChildNameKey));
+                    setChildGender(child.getString(userChildGenderKey));
+                    setChildRegistrationYear(child.getString(userChildRegistrationYearKey));
+                    setChildBirthDate(child.getString(userChildBirthDateKey));
+                }
 
                 Log.d("SessionManager", "Role--->" + userRole);
                 isLoggedIn = true;
@@ -234,5 +244,23 @@ public class SessionManager {
     public void setChildBirthDate(String childBirthDate) {
         this.childBirthDate = childBirthDate;
         editor.putString(userChildBirthDateKey, childBirthDate);
+    }
+
+    public String getUserContact() {
+        return userContact;
+    }
+
+    public void setUserContact(String userContact) {
+        this.userContact = userContact;
+        editor.putString(userContactKey, userContact);
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+        editor.putString(userEmailKey, userEmail);
     }
 }
