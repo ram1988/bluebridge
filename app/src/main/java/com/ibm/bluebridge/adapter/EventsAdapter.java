@@ -3,6 +3,7 @@ package com.ibm.bluebridge.adapter;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.text.style.ReplacementSpan;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -39,6 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+import com.ibm.bluebridge.util.RESTApi;
 import com.ibm.bluebridge.valueobject.Children;
 import com.ibm.bluebridge.valueobject.Event;
 import com.ibm.bluebridge.valueobject.Parent;
@@ -47,37 +49,35 @@ import com.ibm.bluebridge.valueobject.Parent;
  * Created by manirm on 10/10/2015.
  */
 public class EventsAdapter {
-
     private List<Event> eventsList;
-    private static final String BASE_RESTURI = "http://school-volunteer-bluebridge.mybluemix.net/api";
-    private HttpURLConnection restConnection;
     private Context ctxt;
-    private JSONObject respJsonObj;
-    private Boolean isPostSubmitted = false;
+    private RESTApi REST_API;
+
+
 
     public EventsAdapter() {
-        this.respJsonObj = new JSONObject();
+        this.REST_API = new RESTApi();
     }
 
     public EventsAdapter(Context ctxt) {
-        this.respJsonObj = new JSONObject();
+        this.REST_API = new RESTApi();
         this.ctxt = ctxt;
     }
 
     /*******Admin Methods**********/
     public String checkLogin(String nric,String password, String device_id) {
-        String loginAPI = BASE_RESTURI + "/login";
+        String loginAPI = REST_API.getBaseRestURL() + "/login";
         String role = null;
 
         JSONObject loginInfo = new JSONObject();
 
         try {
             loginInfo.put("nric", nric);
-            loginInfo.put("password",password);
+            loginInfo.put("password", password);
             loginInfo.put("device_id", device_id);
 
-            postResponse(loginAPI, loginInfo, "post");
-            Object response = respJsonObj.get("response");
+            REST_API.postResponse(loginAPI, loginInfo, "post");
+            Object response = REST_API.getRespObj().get("response");
 
             if(response != null ) {
                 JSONObject item = (JSONObject) response;
@@ -101,10 +101,10 @@ public class EventsAdapter {
 
 
     public void markAttendance(String event_id,String parent_id) {
-        String markAttendanceAPI = BASE_RESTURI + "/admin_mark_attendance?event_id="+event_id+"&parent_id="+parent_id;
+        String markAttendanceAPI = REST_API.getBaseRestURL() + "/admin_mark_attendance?event_id="+event_id+"&parent_id="+parent_id;
 
         try {
-            asyncPostResponse(markAttendanceAPI, null, "post");
+            REST_API.asyncPostResponse(markAttendanceAPI, null, "post");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -113,13 +113,13 @@ public class EventsAdapter {
 
 
     public List<Event> getAdminEventsList(String admin_id) {
-        String allEventsAPI = BASE_RESTURI + "/admin_list_events?admin_id="+admin_id;
+        String allEventsAPI = REST_API.getBaseRestURL() + "/admin_list_events?admin_id="+admin_id;
         eventsList = new ArrayList<Event>();
 
         try {
             System.out.println("Admin URI--->" + allEventsAPI);
-            getResponse(allEventsAPI);
-            Object response = respJsonObj.get("response");
+            REST_API.getResponse(allEventsAPI);
+            Object response = REST_API.getRespObj().get("response");
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -167,13 +167,13 @@ public class EventsAdapter {
     }
 
     public List<Event> getAdminCompletedEventsList(String admin_id) {
-        String allEventsAPI = BASE_RESTURI + "/admin_list_events?past_years=2&admin_id="+admin_id;
+        String allEventsAPI = REST_API.getBaseRestURL() + "/admin_list_events?past_years=2&admin_id="+admin_id;
         eventsList = new ArrayList<Event>();
 
         try {
             System.out.println("Admin URI--->" + allEventsAPI);
-            getResponse(allEventsAPI);
-            Object response = respJsonObj.get("response");
+            REST_API.getResponse(allEventsAPI);
+            Object response = REST_API.getRespObj().get("response");
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -221,13 +221,13 @@ public class EventsAdapter {
     }
 
     public List<Parent> getRegisteredParentsList(String event_id) {
-        String registeredParentsAPI = BASE_RESTURI + "/admin_event_list_registration?event_id="+event_id;
+        String registeredParentsAPI = REST_API.getBaseRestURL() + "/admin_event_list_registration?event_id="+event_id;
         List<Parent> parentsList = new ArrayList<Parent>();
 
         try {
             System.out.println("Admin URI--->" + registeredParentsAPI);
-            getResponse(registeredParentsAPI);
-            Object response = respJsonObj.get("response");
+            REST_API.getResponse(registeredParentsAPI);
+            Object response = REST_API.getRespObj().get("response");
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -291,7 +291,7 @@ public class EventsAdapter {
 
     public void addEvent(Event event,String admin_id) {
 
-        String addEventsAPI = BASE_RESTURI + "/admin_add_event?admin_id="+admin_id;
+        String addEventsAPI = REST_API.getBaseRestURL() + "/admin_add_event?admin_id="+admin_id;
 
         JSONObject eventObj = new JSONObject();
 
@@ -309,7 +309,7 @@ public class EventsAdapter {
             eventObj.put("event_vacancy",event.getVacancy());
             eventObj.put("category", event.getCategory());
 
-            postResponse(addEventsAPI,eventObj,"post");
+            REST_API.postResponse(addEventsAPI, eventObj, "post");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -320,7 +320,7 @@ public class EventsAdapter {
 
     public void updateEvent(Event event,String admin_id) {
 
-        String updateEventsAPI = BASE_RESTURI + "/admin_update_event?admin_id="+admin_id+"&event_id="+event.getEventId();
+        String updateEventsAPI = REST_API.getBaseRestURL() + "/admin_update_event?admin_id="+admin_id+"&event_id="+event.getEventId();
 
         JSONObject eventObj = new JSONObject();
 
@@ -338,7 +338,7 @@ public class EventsAdapter {
             eventObj.put("event_vacancy",event.getVacancy());
             eventObj.put("category", event.getCategory());
 
-            postResponse(updateEventsAPI,eventObj,"post");
+            REST_API.postResponse(updateEventsAPI, eventObj, "post");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -349,22 +349,22 @@ public class EventsAdapter {
 
     public void deleteEvent(Event event,String admin_id) {
 
-        String deleteEventsAPI = BASE_RESTURI + "/admin_cancel_event?admin_id="+admin_id+"&event_id="+event.getEventId();
+        String deleteEventsAPI = REST_API.getBaseRestURL() + "/admin_cancel_event?admin_id="+admin_id+"&event_id="+event.getEventId();
 
         try {
-            postResponse(deleteEventsAPI,null,"delete");
+            REST_API.postResponse(deleteEventsAPI, null, "delete");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     /*******Parent methods*********/
     public List<Event> getAllEventsList(String parent_id) {
-        String allEventsAPI = BASE_RESTURI + "/parent_list_events?parent_id=" + parent_id;
+        String allEventsAPI = REST_API.getBaseRestURL() + "/parent_list_events?parent_id=" + parent_id;
         eventsList = new ArrayList<Event>();
 
         try {
-            getResponse(allEventsAPI);
-            Object response = respJsonObj.get("response");
+            REST_API.getResponse(allEventsAPI);
+            Object response = REST_API.getRespObj().get("response");
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -418,12 +418,12 @@ public class EventsAdapter {
     }
 
     public List<Event> getAllJoinedEventsList(String parent_id) {
-        String joinedEventsAPI = BASE_RESTURI + "/parent_joined_events?parent_id=" + parent_id;
+        String joinedEventsAPI = REST_API.getBaseRestURL() + "/parent_joined_events?parent_id=" + parent_id;
         eventsList = new ArrayList<Event>();
 
         try {
-            getResponse(joinedEventsAPI);
-            Object response = respJsonObj.get("response");
+            REST_API.getResponse(joinedEventsAPI);
+            Object response = REST_API.getRespObj().get("response");
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -476,12 +476,12 @@ public class EventsAdapter {
     }
 
     public List<Event> getAllAttendedEventsList(String parent_id) {
-        String attendedEventsAPI = BASE_RESTURI + "/parent_attended_events?parent_id=" + parent_id;
+        String attendedEventsAPI = REST_API.getBaseRestURL() + "/parent_attended_events?parent_id=" + parent_id;
         eventsList = new ArrayList<Event>();
 
         try {
-            getResponse(attendedEventsAPI);
-            Object response = respJsonObj.get("response");
+            REST_API.getResponse(attendedEventsAPI);
+            Object response = REST_API.getRespObj().get("response");
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -534,10 +534,10 @@ public class EventsAdapter {
 
     public void joinEvent(Event event,String parent_id) {
 
-        String joinEventsAPI = BASE_RESTURI + "/parent_register_event?parent_id="+parent_id+"&event_id="+event.getEventId();
+        String joinEventsAPI = REST_API.getBaseRestURL() + "/parent_register_event?parent_id="+parent_id+"&event_id="+event.getEventId();
 
         try {
-            postResponse(joinEventsAPI,null,"post");
+            REST_API.postResponse(joinEventsAPI,null,"post");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -545,197 +545,12 @@ public class EventsAdapter {
 
     public void unjoinEvent(Event event,String parent_id) {
 
-        String unjoinEventsAPI = BASE_RESTURI + "/parent_unjoin_event?parent_id="+parent_id+"&event_id="+event.getEventId();
+        String unjoinEventsAPI = REST_API.getBaseRestURL() + "/parent_unjoin_event?parent_id="+parent_id+"&event_id="+event.getEventId();
 
         try {
-            postResponse(unjoinEventsAPI,null,"post");
+            REST_API.postResponse(unjoinEventsAPI, null, "post");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-    private boolean getConnection(String urlStr) {
-
-
-        boolean isConnFine = true;
-        try {
-            URL url = new URL(urlStr);
-            restConnection = (HttpURLConnection) url.openConnection();
-            System.out.println("connection established");
-        }
-        catch (MalformedURLException e) {
-            isConnFine = false;
-            //Log Exception
-            e.printStackTrace();
-        }
-        catch(Exception excep) {
-            isConnFine = false;
-            //Log Exception
-            excep.printStackTrace();
-        }
-
-        return isConnFine;
-
-    }
-
-    private void getResponse(String url) {
-
-        synchronized (respJsonObj) {
-            GetResponseTask getRespObj = new GetResponseTask(url);
-            getRespObj.start();
-            try {
-                System.out.println("Main Thread Waiting for response...");
-                respJsonObj.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private void postResponse(String url,JSONObject input, String method) {
-
-            synchronized (respJsonObj) {
-                PostResponseTask postRespObj = new PostResponseTask(url,input,method);
-                postRespObj.start();
-                try {
-                    System.out.println("Main Thread Waiting for response...");
-                    respJsonObj.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-    }
-
-    private void asyncPostResponse(String url,JSONObject input, String method) {
-
-            PostResponseTask postRespObj = new PostResponseTask(url,input,method);
-            postRespObj.start();
-            try {
-                System.out.println("Main Thread Waiting for response...");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-    }
-
-    private class GetResponseTask extends Thread {
-
-        private String requestUrl;
-
-        public GetResponseTask(String url) {
-            requestUrl = url;
-        }
-        public void run() {
-            try {
-                boolean isConnFine = getConnection(requestUrl);
-                if(isConnFine) {
-                    synchronized(respJsonObj) {
-                        restConnection.setReadTimeout(5000);
-                        restConnection.setConnectTimeout(6000);
-                        BufferedReader in = new BufferedReader(new InputStreamReader(restConnection.getInputStream()));
-                        StringBuffer jsonStr = new StringBuffer();
-                        String line = null;
-                        while ((line = in.readLine()) != null) {
-                            System.out.println("line-->" + line);
-                            jsonStr.append(line);
-                        }
-                        System.out.println("jsonStrfrom-->" + jsonStr.toString());
-                        respJsonObj.put("response", new JSONArray(jsonStr.toString()));
-                        System.out.println("jsonObj-->" + respJsonObj);
-                        respJsonObj.notifyAll();
-                    }
-                } else {
-                    //throw ApplicationException
-                    respJsonObj.put("response", null);
-                    System.out.println("issue in connection");
-                }
-            } catch (Exception e ) {
-                try {
-                    synchronized(respJsonObj) {
-                        respJsonObj.put("response", null);
-                        respJsonObj.notifyAll();
-                    }
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
-                System.out.println("issue in connection");
-                e.printStackTrace();
-                //System.out.println(e.getMessage());
-                //Log Exception
-            }
-            finally {
-                restConnection.disconnect();
-            }
-        }
-    }
-
-    private class PostResponseTask extends Thread {
-
-        private String requestUrl;
-        private JSONObject input;
-        private String httpMethod;
-
-        public PostResponseTask(String url, JSONObject input, String method) {
-            this.input = input;
-            this.requestUrl = url;
-            this.httpMethod = method;
-        }
-
-        public void run() {
-
-            try {
-                synchronized(respJsonObj) {
-                    HttpClient httpClient = new DefaultHttpClient();
-
-                    if (httpMethod.equals("post")) {
-                        HttpPost httpRequest = new HttpPost(requestUrl);
-                        if (input != null) {
-                            StringEntity se = new StringEntity(input.toString());
-                            httpRequest.setEntity(se);
-                        }
-                        httpRequest.setHeader("Accept", "application/json");
-                        httpRequest.setHeader("Content-Type", "application/json");
-
-
-                        HttpResponse httpResponse = httpClient.execute(httpRequest);
-
-                        int statusCode = httpResponse.getStatusLine().getStatusCode();
-
-                        if (statusCode == 200) {
-                            BufferedReader rd = new BufferedReader(
-                                    new InputStreamReader(httpResponse.getEntity().getContent()));
-
-                            StringBuffer result = new StringBuffer();
-                            String line = "";
-                            while ((line = rd.readLine()) != null) {
-                                result.append(line);
-                            }
-
-                            if (result.length() > 0) {
-                                respJsonObj.put("response", new JSONObject(result.toString()));
-                            }
-                        }
-                    } else if (httpMethod.equals("delete")) {
-                        HttpDelete httpRequest = new HttpDelete(requestUrl);
-                        HttpResponse httpResponse = httpClient.execute(httpRequest);
-                    }
-                    respJsonObj.notifyAll();
-                }
-
-                    System.out.println("action successful for " + requestUrl);
-                    isPostSubmitted = true;
-
-            } catch (Exception e ) {
-                isPostSubmitted = false;
-                System.out.println("issue in connection");
-                e.printStackTrace();
-                //System.out.println(e.getMessage());
-                //Log Exception
-            }
-            finally {
-
-            }
-        }
-    }
-
-
 }
