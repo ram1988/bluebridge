@@ -149,6 +149,15 @@ public class SessionManager {
         return true;
     }
 
+    public boolean isAdmin(){
+        return getUserRole().equals("admin");
+    }
+
+    public boolean isParent(){
+        return getUserRole().equals("parent");
+    }
+
+
     /*
      *  Getters and Setters
      */

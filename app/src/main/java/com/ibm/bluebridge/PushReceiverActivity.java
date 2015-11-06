@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.ibm.bluebridge.util.SessionManager;
+import com.ibm.bluebridge.util.Utils;
 import com.ibm.mobilefirstplatform.clientsdk.android.push.internal.MFPInternalPushMessage;
 
 import org.json.JSONException;
@@ -16,6 +18,7 @@ import java.util.Iterator;
 public class PushReceiverActivity extends AppCompatActivity {
     private final String KEY_PAYLOAD = "payload";
     private final String KEY_TYPE = "type";
+    SessionManager session = SessionManager.getSessionInstance(this);
 
     private enum PUSH_TYPE{
         EVENT("event"),
@@ -45,9 +48,16 @@ public class PushReceiverActivity extends AppCompatActivity {
                 String type = payload_json.getString(KEY_TYPE);
                 if(type != null) {
                     if (type.toLowerCase().equals(PUSH_TYPE.EVENT.getValue())){
-                        redirect("com.ibm.bluebridge.EventParentDetailActivity", message_json);
+                        if(session.isAdmin())
+                            redirect("com.ibm.bluebridge.EventAdminHomeTabActivity", message_json);
+                        else if(session.isParent())
+                            redirect("com.ibm.bluebridge.EventParentDetailActivity", message_json);
                     } else if (type.toLowerCase().equals(PUSH_TYPE.ALERT.getValue())) {
-                        redirect("com.ibm.bluebridge.EventParentDetailActivity", message_json);
+                        if(session.isAdmin())
+                            redirect("com.ibm.bluebridge.EventAdminHomeTabActivity", message_json);
+                        else if(session.isParent())
+                            redirect("com.ibm.bluebridge.EventParentDetailActivity", message_json);
+
                     } else {
                         Log.e("PushReceiverActivity", "Invalid payload, cannot handle. Redirecting to home page.");
                         redirect("com.ibm.bluebridge.EventLoginActivity", message_json);
