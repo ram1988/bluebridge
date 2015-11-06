@@ -20,9 +20,11 @@ import com.ibm.bluebridge.util.Validator;
 import com.ibm.bluebridge.valueobject.Event;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class EventFormViewActivity extends EventMasterActivity {
@@ -256,11 +258,15 @@ public class EventFormViewActivity extends EventMasterActivity {
             showRegButton.setVisibility(View.INVISIBLE);
             cancelButton.setVisibility(View.INVISIBLE);
             if (parentId != null) {
-                if (event.getRegistered() && !event.getAttended()) {
-                    cancelButton.setVisibility(View.VISIBLE);
-                }
-                if (!event.getRegistered() && !event.getAttended()) {
-                    actionButton.setVisibility(View.VISIBLE);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                Date event_date = new Date(event.getEventDate());
+                if (new Date().before(event_date)) {
+                    if (event.getRegistered() && !event.getAttended()) {
+                        cancelButton.setVisibility(View.VISIBLE);
+                    }
+                    if (!event.getRegistered() && !event.getAttended()) {
+                        actionButton.setVisibility(View.VISIBLE);
+                    }
                 }
             } else {
                 showRegButton.setVisibility(View.VISIBLE);
@@ -285,6 +291,9 @@ public class EventFormViewActivity extends EventMasterActivity {
                 public void onClick(View v) {
                     eventsAdapter.joinEvent(event, parentId);
                     Utils.showAlertDialog("You have joined this event!", ctxt);
+                    Intent intent = new Intent(ctxt, EventParentViewActivity.class);
+                    intent.putExtra("user_id", parentId);
+                    startActivity(intent);
                 }
             });
 
@@ -293,6 +302,9 @@ public class EventFormViewActivity extends EventMasterActivity {
                 public void onClick(View v) {
                     eventsAdapter.unjoinEvent(event, parentId);
                     Utils.showAlertDialog("You have unjoined this event!", ctxt);
+                    Intent intent = new Intent(ctxt, EventParentViewActivity.class);
+                    intent.putExtra("user_id", parentId);
+                    startActivity(intent);
                 }
             });
 
