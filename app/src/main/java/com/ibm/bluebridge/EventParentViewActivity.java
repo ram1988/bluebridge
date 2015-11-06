@@ -19,12 +19,16 @@ import android.view.ViewGroup;
 
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.eventcalendar.EventCalendarView;
 import com.ibm.bluebridge.valueobject.Event;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventParentViewActivity extends EventMasterActivity implements ActionBar.TabListener {
 
@@ -44,12 +48,19 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
     private ViewPager mViewPager;
     private static Context selfCtxt;
     private static String parent_id;
+    private static FragmentManager fragmentManager;
+    private static Button viewCalendarButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         selfCtxt = this;
         setContentView(R.layout.activity_event_parent_view);
+
+        fragmentManager  = getSupportFragmentManager();
+        Intent intent = getIntent();
+        parent_id = intent.getStringExtra("user_id");
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -84,9 +95,6 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-
-        Intent intent = getIntent();
-        parent_id = intent.getStringExtra("user_id");
     }
 
 
@@ -194,17 +202,17 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_event_parent_view, container, false);
+            viewCalendarButton = (Button) rootView.findViewById(R.id.calendar_view);
 
             int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-
             final EventsAdapter eventsAdapter = new EventsAdapter(selfCtxt);
             final ListView listView = (ListView) rootView.findViewById(R.id.listview);
 
             //For all events
             if(tabNumber == 1 ) {
-                List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
+                final List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
                 final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -219,12 +227,17 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                         intent.putExtra("EventObj", item);
                         intent.putExtra("parent_id", parent_id);
                         startActivity(intent);
+                    }
+                });
+                viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        showCalendarBox(eventList);
                     }
                 });
             }
             //For joined events
             else if(tabNumber == 2) {
-                List<Event> eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
+                final List<Event> eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
                 final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -241,10 +254,15 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                         startActivity(intent);
                     }
                 });
+                viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        showCalendarBox(eventList);
+                    }
+                });
             }
             //For attended events
             else if(tabNumber == 3) {
-                List<Event> eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
+                final List<Event> eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
                 final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -259,11 +277,21 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                         intent.putExtra("EventObj", item);
                         intent.putExtra("parent_id", parent_id);
                         startActivity(intent);
+                    }
+                });
+                viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        showCalendarBox(eventList);
                     }
                 });
             }
 
             return rootView;
         }
+    }
+
+    private static void showCalendarBox(List<Event> eventList) {
+        EventCalendarView caldroidFragment = new EventCalendarView(selfCtxt, parent_id, eventList, EventCalendarView.UserType.PARENT);
+        caldroidFragment.show(fragmentManager, "Tag");
     }
 }

@@ -87,11 +87,13 @@ public class EventCalendarView extends CaldroidFragment {
                 Intent intent = intent = new Intent(ctxt, EventFormViewActivity.class);;
                 if(userType == UserType.ADMIN) {
                     intent.putExtra("EventAction", 1);
+                    intent.putExtra("admin_id", keyId);
                 } else {
                     intent.putExtra("EventAction", 2);
+                    intent.putExtra("parent_id", keyId);
                 }
                 intent.putExtra("EventObj", event);
-                intent.putExtra("admin_id", keyId);
+
 
                 startActivity(intent);
             }
