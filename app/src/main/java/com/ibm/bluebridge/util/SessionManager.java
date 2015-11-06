@@ -107,7 +107,7 @@ public class SessionManager {
         editor.commit(); // commit changes
 
         isLoggedIn = false;
-        
+
         return true;
     }
 

@@ -73,7 +73,7 @@ public class EventsAdapter {
                         event.setBriefingPlace(item.getString("briefing_place"));
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(item.getInt("event_vacancy"));
-                       // event.setCategory(item.getString("category"));
+                        event.setCategory(item.getString("category"));
 
                         eventsList.add(event);
 
@@ -127,7 +127,7 @@ public class EventsAdapter {
                         event.setBriefingPlace(item.getString("briefing_place"));
                         event.setMaxVolunteers(item.getInt("max_volunteers"));
                         event.setVacancy(item.getInt("event_vacancy"));
-                        // event.setCategory(item.getString("category"));
+                        event.setCategory(item.getString("category"));
 
                         eventsList.add(event);
 
@@ -190,8 +190,6 @@ public class EventsAdapter {
                             children.setGender(child.getString("gender"));
                             children.setBirthDate(child.getString("birth_date"));
                             children.setRegistrationYear(child.getString("registration_year"));
-
-
 
                             childrenArr.add(children);
                         }
