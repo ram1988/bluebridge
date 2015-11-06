@@ -1,41 +1,10 @@
 package com.ibm.bluebridge.adapter;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.os.Environment;
-import android.text.style.ReplacementSpan;
-import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.channels.AsynchronousCloseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -53,8 +22,6 @@ public class EventsAdapter {
     private Context ctxt;
     private RESTApi REST_API;
 
-
-
     public EventsAdapter() {
         this.REST_API = new RESTApi();
     }
@@ -63,42 +30,6 @@ public class EventsAdapter {
         this.REST_API = new RESTApi();
         this.ctxt = ctxt;
     }
-
-    /*******Admin Methods**********/
-    public String checkLogin(String nric,String password, String device_id) {
-        String loginAPI = REST_API.getBaseRestURL() + "/login";
-        String role = null;
-
-        JSONObject loginInfo = new JSONObject();
-
-        try {
-            loginInfo.put("nric", nric);
-            loginInfo.put("password", password);
-            loginInfo.put("device_id", device_id);
-
-            REST_API.postResponse(loginAPI, loginInfo, "post");
-            Object response = REST_API.getRespObj().get("response");
-
-            if(response != null ) {
-                JSONObject item = (JSONObject) response;
-
-                if (item!=null) {
-                    role = item.getString("role");
-                    System.out.println("Role--->"+role);
-                }
-            }
-
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-
-        return role;
-    }
-
 
     public void markAttendance(String event_id,String parent_id) {
         String markAttendanceAPI = REST_API.getBaseRestURL() + "/admin_mark_attendance?event_id="+event_id+"&parent_id="+parent_id;

@@ -17,9 +17,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.Settings.Secure;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,17 +27,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
-import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
-import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPush;
-import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushException;
-import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushResponseListener;
-import com.ibm.mobilefirstplatform.clientsdk.android.security.api.AuthorizationManager;
 
-import org.json.JSONException;
-
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,11 +57,14 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
     private View mProgressView;
     private View mLoginFormView;
     private Context ctxt;
+    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_login);
+        session = SessionManager.getSessionInstance(getApplicationContext());
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -258,12 +250,10 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
                 return null;
             }
 
-            EventsAdapter adapter = new EventsAdapter();
-            String role = adapter.checkLogin(nric,mPassword, Utils.getDeviceId());
-
+            session.doLogin(nric, mPassword, Utils.getDeviceId());
 
             // TODO: register the new account here.
-            return role;
+            return session.getUserRole();
         }
 
         @Override

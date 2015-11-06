@@ -85,6 +85,10 @@ public class SplashActivity extends AppCompatActivity {
                 Log.e("MFPPushResponseListener", "Device registration failed.");
             }
         });
+
+        if (push != null) {
+            push.listen(notificationListener);
+        }
     }
 
     private void initializeSDCardDirectory(){
