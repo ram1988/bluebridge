@@ -284,7 +284,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     eventsAdapter.joinEvent(event, parentId);
-                    Utils.showAlertDialog("You have joined this event!!!", ctxt);
+                    Utils.showAlertDialog("You have joined this event!", ctxt);
                 }
             });
 
@@ -292,7 +292,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             cancelButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     eventsAdapter.unjoinEvent(event, parentId);
-                    Utils.showAlertDialog("You have unjoined this event!!!", ctxt);
+                    Utils.showAlertDialog("You have unjoined this event!", ctxt);
                 }
             });
 
