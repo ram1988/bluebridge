@@ -10,7 +10,6 @@ import org.json.JSONException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -18,6 +17,27 @@ import java.util.Date;
  */
 public class Utils {
     public static final String CATEGORIES[] = {"Education", "Sports", "Charity", "Culture", "Others"};
+    private static String SD_DIR;
+
+    private static String CHART_DIR;
+
+    public static String getSdDir() {
+        return SD_DIR;
+    }
+
+    //Should be set in Splash Page
+    public static void setSdDir(String sdDir) {
+        SD_DIR = sdDir;
+    }
+
+    public static String getChartDir() {
+        return CHART_DIR;
+    }
+
+    //Should be set in Splash Page
+    public static void setChartDir(String chartDir) {
+        CHART_DIR = chartDir;
+    }
 
     //Cannot be called before the push notification api is called
     public static String getDeviceId()

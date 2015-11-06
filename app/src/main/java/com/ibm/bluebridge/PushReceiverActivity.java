@@ -62,6 +62,9 @@ public class PushReceiverActivity extends AppCompatActivity {
     }
 
     private void redirect(String className, JSONObject message) throws JSONException{
+        //finish the redirector activity so it can't be returned to
+        PushReceiverActivity.this.finish();
+
         Intent intent = new Intent();
         intent.setClassName("com.ibm.bluebridge", className);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
