@@ -17,6 +17,7 @@ import org.json.JSONObject;
  */
 public class SessionManager {
     private static SessionManager sessionInstance;
+
     private RESTApi REST_API;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -128,6 +129,10 @@ public class SessionManager {
             return isLoggedIn;
         }
 
+        return isLoggedIn;
+    }
+
+    public boolean isLoggedIn(){
         return isLoggedIn;
     }
 
