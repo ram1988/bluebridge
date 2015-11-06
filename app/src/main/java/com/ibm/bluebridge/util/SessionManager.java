@@ -1,16 +1,10 @@
 package com.ibm.bluebridge.util;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.util.Log;
 
-import com.ibm.bluebridge.EventAdminHomeTabActivity;
-import com.ibm.bluebridge.EventParentViewActivity;
-import com.ibm.bluebridge.R;
-import com.ibm.bluebridge.adapter.EventsAdapter;
-
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,15 +20,19 @@ public class SessionManager {
     private Boolean isLoggedIn = false;
 
     // User session value KEY in Shared Preference
-    private String userIdKey = "nric";
+    private String userIdKey = "id";
     private String userRoleKey = "role";
-    private String userGenderKey = "role";
-    private String userFirstNameKey = "gender";
-    private String userLastNameKey = "gender";
-    private String userJobKey = "gender";
-    private String userAddrKey = "gender";
-    private String userChildFirstNameKey = "gender";
-    private String userChildLastNameKey = "gender";
+    private String userGenderKey = "gender";
+    private String userFirstNameKey = "firstname";
+    private String userLastNameKey = "lastname";
+    private String userJobKey = "job";
+    private String userAddrKey = "address";
+    private String userChildrenKey = "children";
+    private String userChildIdKey = "id";
+    private String userChildNameKey = "name";
+    private String userChildGenderKey = "gender";
+    private String userChildRegistrationYearKey = "registration_year";
+    private String userChildBirthDateKey = "birth_date";
 
 
 
@@ -47,8 +45,11 @@ public class SessionManager {
     private String userJob = "";
     private String userAddr = "";
 
-    private String childFirstName = "";
-    private String childLastName = "";
+    private String childId = "";
+    private String childName = "";
+    private String childGender = "";
+    private String childRegistrationYear = "";
+    private String childBirthDate = "";
 
 
     private SessionManager(Context ctxt){
@@ -89,14 +90,27 @@ public class SessionManager {
                 setUserJob(item.getString(userJobKey));
                 setUserAddr(item.getString(userAddrKey));
 
+                JSONArray children = item.getJSONArray(userChildrenKey);
+                JSONObject child = children.getJSONObject(0);  //For now, we assume only 1 child.
+
+                setChildId(child.getString(userChildIdKey));
+                setChildName(child.getString(userChildNameKey));
+                setChildGender(child.getString(userChildGenderKey));
+                setChildRegistrationYear(child.getString(userChildRegistrationYearKey));
+                setChildBirthDate(child.getString(userChildBirthDateKey));
+
                 Log.d("SessionManager", "Role--->" + userRole);
                 isLoggedIn = true;
             }
         } catch (JSONException e) {
             e.printStackTrace();
+            isLoggedIn = false;
+            return isLoggedIn;
         }
         catch(Exception e) {
             e.printStackTrace();
+            isLoggedIn = false;
+            return isLoggedIn;
         }
 
         return isLoggedIn;
@@ -147,7 +161,7 @@ public class SessionManager {
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
-        editor.putString(userFirstNameKey, userGender);
+        editor.putString(userFirstNameKey, firstname);
     }
 
     public String getLastname() {
@@ -156,7 +170,7 @@ public class SessionManager {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
-        editor.putString(userLastNameKey, userGender);
+        editor.putString(userLastNameKey, lastname);
     }
 
     public String getUserJob() {
@@ -165,7 +179,7 @@ public class SessionManager {
 
     public void setUserJob(String userJob) {
         this.userJob = userJob;
-        editor.putString(userJobKey, userGender);
+        editor.putString(userJobKey, userJob);
     }
 
     public String getUserAddr() {
@@ -174,24 +188,51 @@ public class SessionManager {
 
     public void setUserAddr(String userAddr) {
         this.userAddr = userAddr;
-        editor.putString(userAddrKey, userGender);
+        editor.putString(userAddrKey, userAddr);
     }
 
-    public String getChildFirstName() {
-        return childFirstName;
+    public String getChildName() {
+        return childName;
     }
 
-    public void setChildFirstName(String childFirstName) {
-        this.childFirstName = childFirstName;
-        editor.putString(userChildFirstNameKey, userGender);
+    public void setChildName(String childName) {
+        this.childName = childName;
+        editor.putString(userChildNameKey, childName);
     }
 
-    public String getChildLastName() {
-        return childLastName;
+    public String getChildGender() {
+        return childGender;
     }
 
-    public void setChildLastName(String childLastName) {
-        this.childLastName = childLastName;
-        editor.putString(userChildLastNameKey, userGender);
+    public void setChildGender(String childGender) {
+        this.childGender = childGender;
+        editor.putString(userChildGenderKey, childGender);
+    }
+
+    public String getChildId() {
+        return childId;
+    }
+
+    public void setChildId(String childId) {
+        this.childId = childId;
+        editor.putString(userChildIdKey, childId);
+    }
+
+    public String getChildRegistrationYear() {
+        return childRegistrationYear;
+    }
+
+    public void setChildRegistrationYear(String childRegistrationYear) {
+        this.childRegistrationYear = childRegistrationYear;
+        editor.putString(userChildRegistrationYearKey, childRegistrationYear);
+    }
+
+    public String getChildBirthDate() {
+        return childBirthDate;
+    }
+
+    public void setChildBirthDate(String childBirthDate) {
+        this.childBirthDate = childBirthDate;
+        editor.putString(userChildBirthDateKey, childBirthDate);
     }
 }
