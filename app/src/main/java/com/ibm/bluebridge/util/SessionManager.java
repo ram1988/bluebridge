@@ -1,8 +1,11 @@
 package com.ibm.bluebridge.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.ibm.bluebridge.EventLoginActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,9 +18,10 @@ import org.json.JSONObject;
 public class SessionManager {
     private static SessionManager sessionInstance;
     private RESTApi REST_API;
-    SharedPreferences pref;
-    SharedPreferences.Editor editor;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
     private Boolean isLoggedIn = false;
+    private Context ctxt;
 
     // User session value KEY in Shared Preference
     private String userIdKey = "id";
@@ -58,9 +62,10 @@ public class SessionManager {
 
 
     private SessionManager(Context ctxt){
-        REST_API = new RESTApi();
-        pref = ctxt.getSharedPreferences(CONSTANTS.PREFERENCE_NAME, 0); // 0 - for private mode
-        editor = pref.edit();
+        this.REST_API = new RESTApi();
+        this.ctxt = ctxt;
+        this.pref = ctxt.getSharedPreferences(CONSTANTS.PREFERENCE_NAME, 0); // 0 - for private mode
+        this.editor = pref.edit();
     }
 
     public static SessionManager getSessionInstance(Context ctxt){
@@ -126,11 +131,15 @@ public class SessionManager {
         return isLoggedIn;
     }
 
+    // Safe Logout
     public boolean logout(){
         editor.clear();
         editor.commit(); // commit changes
 
         isLoggedIn = false;
+
+        Intent loginPage = new Intent(ctxt, EventLoginActivity.class);
+        ctxt.startActivity(loginPage);
 
         return true;
     }
