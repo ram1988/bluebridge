@@ -21,11 +21,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp">
-                <TextView android:id="@+id/event_title_label"
+                <TextView android:textStyle="bold"
+                    android:id="@+id/event_title_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:textSize="18sp"
+                    android:textSize="25sp"
                     android:text="Event Name"/>
 
                 <EditText android:id="@+id/event_title"
@@ -58,7 +59,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:textSize="18sp"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
                     android:text="Event Description"/>
 
                 <EditText
@@ -90,8 +92,9 @@
         <TextView android:id="@+id/event_date_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="25sp"
             android:layout_margin="@dimen/text_margin"
+            android:textStyle="bold"
             android:text="Event Date"
             />
 
@@ -123,9 +126,10 @@
         <TextView android:id="@+id/start_time_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_margin="@dimen/text_margin"
             android:text="Start Time"
-            android:textSize="18sp"  />
+            android:textSize="25sp"  />
 
         <TimePicker
             android:id="@+id/start_time"
@@ -150,9 +154,10 @@
         <TextView android:id="@+id/end_time_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textStyle="bold"
             android:layout_margin="@dimen/text_margin"
             android:text="End Time"
-            android:textSize="18sp"/>
+            android:textSize="25sp"/>
 
         <TimePicker
             android:id="@+id/end_time"
@@ -180,7 +185,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textSize="25sp"
             android:text="Event Duration (in hrs)" />
 
         <EditText android:id="@+id/event_duration"
@@ -210,8 +216,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
+            android:textStyle="bold"
             android:text="Venue"
-            android:textSize="18sp"/>
+            android:textSize="25sp"/>
 
         <EditText android:id="@+id/venue_edit"
             android:layout_width="wrap_content"
@@ -239,8 +246,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
+            android:textStyle="bold"
             android:text="Brief Time"
-            android:textSize="18sp"/>
+            android:textSize="25sp"/>
 
         <TimePicker
             android:id="@+id/brief_time_picker"
@@ -268,7 +276,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="Place of Briefing"
-            android:textSize="18sp"/>
+            android:textStyle="bold"
+            android:textSize="25sp"/>
 
         <EditText android:id = "@+id/brief_location"
             android:layout_width="wrap_content"
@@ -297,7 +306,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="Teacher in Charge"
-            android:textSize="18sp"  />
+            android:textStyle="bold"
+            android:textSize="25sp"  />
 
         <EditText android:id = "@+id/teacher_in_charge_edit"
             android:layout_width="wrap_content"
@@ -326,7 +336,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:textSize="18sp"
+            android:textSize="25sp"
+            android:textStyle="bold"
             android:text="Max no. of volunteers" />
 
         <EditText
@@ -359,7 +370,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textSize="25sp"
                     android:text="Category" />
 
                 <Spinner

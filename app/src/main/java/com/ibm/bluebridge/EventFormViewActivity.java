@@ -90,12 +90,74 @@ public class EventFormViewActivity extends EventMasterActivity {
         Button actionButton = (Button) findViewById(R.id.action_button);
         Button cancelButton = (Button) findViewById(R.id.cancel_button);
         Button showRegButton = (Button) findViewById(R.id.list_parents_button);
+        TimePicker startTimePicker = (TimePicker) findViewById(R.id.start_time);
+        TimePicker endTimePicker = (TimePicker) findViewById(R.id.end_time);
+        EditText eventDuration = (EditText) findViewById(R.id.event_duration);
+        eventDuration.setKeyListener(null);
         final EventsAdapter eventsAdapter = new EventsAdapter(this);
 
+        startTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+            public void onTimeChanged(TimePicker view, int hour, int minute) {
+                DatePicker eventDatePicker = (DatePicker) findViewById(R.id.event_date_picker);
+                TimePicker endTimePicker = (TimePicker) findViewById(R.id.end_time);
+                EditText eventDuration = (EditText) findViewById(R.id.event_duration);
+                int year = eventDatePicker.getYear();
+                int month = eventDatePicker.getMonth()+1;
+                int day = eventDatePicker.getDayOfMonth();
+                int endHour = endTimePicker.getCurrentHour();
+                int endMinute = endTimePicker.getCurrentMinute();
+
+                Calendar startTimeCal = Calendar.getInstance();
+                startTimeCal.set(year,month,day,hour,minute);
+                long startTimeMillis = startTimeCal.getTimeInMillis();
+
+                Calendar endTimeCal = Calendar.getInstance();
+                endTimeCal.set(year,month,day,endHour,endMinute);
+                long endTimeMillis = endTimeCal.getTimeInMillis();
+
+                double mToHourConverter = 3600000;
+                if(endTimeMillis > startTimeMillis) {
+                    double duration = ((double) (endTimeMillis - startTimeMillis)) / mToHourConverter;
+                    eventDuration.setText(String.valueOf(new DecimalFormat("0.0").format(duration)));
+                }
+            }
+        });
+
+        endTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+
+            public void onTimeChanged(TimePicker view, int hour, int minute) {
+                DatePicker eventDatePicker = (DatePicker) findViewById(R.id.event_date_picker);
+                TimePicker startTimePicker = (TimePicker) findViewById(R.id.start_time);
+                EditText eventDuration = (EditText) findViewById(R.id.event_duration);
+                int year = eventDatePicker.getYear();
+                int month = eventDatePicker.getMonth()+1;
+                int day = eventDatePicker.getDayOfMonth();
+                int startHour = startTimePicker.getCurrentHour();
+                int startMinute = startTimePicker.getCurrentMinute();
+
+                Calendar startTimeCal = Calendar.getInstance();
+                startTimeCal.set(year,month,day,startHour,startMinute);
+                long startTimeMillis = startTimeCal.getTimeInMillis();
+
+                Calendar endTimeCal = Calendar.getInstance();
+                endTimeCal.set(year,month,day,hour,minute);
+                long endTimeMillis = endTimeCal.getTimeInMillis();
+
+                double mToHourConverter = 3600000;
+                if(endTimeMillis > startTimeMillis) {
+                    double duration = ((double) (endTimeMillis - startTimeMillis)) / mToHourConverter;
+                    eventDuration.setText(String.valueOf(new DecimalFormat("0.0").format(duration)));
+                }
+            }
+        });
+
         if(mode == 0) { //admin add event
+
             actionButton.setText("Add");
             cancelButton.setVisibility(View.INVISIBLE);
             showRegButton.setVisibility(View.INVISIBLE);
+
 
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -129,9 +191,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             EditText eventTitle = (EditText) findViewById(R.id.event_title);
             EditText duty = (EditText) findViewById(R.id.event_desc_edit);
             DatePicker eventDatePicker = (DatePicker) findViewById(R.id.event_date_picker);
-            TimePicker startTimePicker = (TimePicker) findViewById(R.id.start_time);
-            TimePicker endTimePicker = (TimePicker) findViewById(R.id.end_time);
-            EditText eventDuration = (EditText) findViewById(R.id.event_duration);
+
             EditText venue = (EditText) findViewById(R.id.venue_edit);
             TimePicker briefTimePicker = (TimePicker) findViewById(R.id.brief_time_picker);
             EditText briefLocation = (EditText) findViewById(R.id.brief_location);
@@ -242,7 +302,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             TextView eventDate = (TextView) findViewById(R.id.event_date);
             TextView startTime = (TextView) findViewById(R.id.start_time);
             TextView endTime = (TextView) findViewById(R.id.end_time);
-            TextView eventDuration = (TextView) findViewById(R.id.event_duration);
+            TextView eventDurationView = (TextView) findViewById(R.id.event_duration);
             TextView venue = (TextView) findViewById(R.id.venue_edit);
             TextView briefTime = (TextView) findViewById(R.id.brief_time);
             TextView briefLocation = (TextView) findViewById(R.id.brief_location);
@@ -276,7 +336,7 @@ public class EventFormViewActivity extends EventMasterActivity {
             eventDate.setText(event.getEventDate());
             startTime.setText(event.getStartTime());
             endTime.setText(event.getEndTime());
-            eventDuration.setText(event.getDuration());
+            eventDurationView.setText(event.getDuration());
             briefTime.setText(event.getBriefingTime());
 
             duty.setText(event.getEventDescription());
