@@ -72,41 +72,6 @@ public class EventParentViewActivity extends EventMasterActivity {
 
         viewCalendarButton = (Button) findViewById(R.id.calendar_view);
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        //mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        //mViewPager = (ViewPager) findViewById(R.id.container);
-        //mViewPager.setAdapter(mSectionsPagerAdapter);
-
-
-        // Set up the action bar.
-        //final ActionBar actionBar = getSupportActionBar();
-        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        //mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-        //    @Override
-        //    public void onPageSelected(int position) {
-        //        actionBar.setSelectedNavigationItem(position);
-        //    }
-        //});
-
-        // For each of the sections in the app, add a tab to the action bar.
-        //for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-        //    actionBar.addTab(
-        //            actionBar.newTab()
-        //                    .setText(mSectionsPagerAdapter.getPageTitle(i))
-        //                    .setTabListener(this));
-        //}
-
         arrayAdapterMap = new HashMap<Integer,ArrayAdapter<Event>>();
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -268,11 +233,12 @@ public class EventParentViewActivity extends EventMasterActivity {
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             //final EventsAdapter eventsAdapter = new EventsAdapter(selfCtxt);
             final ListView listView = (ListView) rootView.findViewById(R.id.listview);
+            ArrayAdapter<Event> adapter = null;
 
             //For all events
             if(tabNumber == 1 ) {
                 final List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
-                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
+                adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -297,7 +263,7 @@ public class EventParentViewActivity extends EventMasterActivity {
             //For joined events
             else if(tabNumber == 2) {
                 final List<Event> eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
-                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
+                adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -322,7 +288,7 @@ public class EventParentViewActivity extends EventMasterActivity {
             //For attended events
             else if(tabNumber == 3) {
                 final List<Event> eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
-                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
+                adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -344,6 +310,8 @@ public class EventParentViewActivity extends EventMasterActivity {
                     }
                 });
             }
+
+            arrayAdapterMap.put(tabNumber - 1, adapter);
 
             return rootView;
         }

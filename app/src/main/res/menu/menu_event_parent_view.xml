@@ -3,4 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ibm.bluebridge.EventParentViewActivity">
 
+    <item
+        android:id="@+id/action_statistics"
+        android:title="@string/menu_item_statistics"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_about_me"
+        android:title="@string/menu_item_about_me"
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/action_logout"
+        android:title="@string/menu_item_logout"
+        app:showAsAction="never"/>
+
 </menu>
