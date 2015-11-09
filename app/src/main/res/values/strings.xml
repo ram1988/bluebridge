@@ -34,6 +34,8 @@
         <item>Education</item>
         <item>Sports</item>
         <item>Music</item>
+        <item>Charity</item>
+        <item>Others</item>
     </string-array>
 
 </resources>

@@ -16,7 +16,6 @@ import java.util.Date;
  * Created by manirm on 10/26/2015.
  */
 public class Utils {
-    public static final String CATEGORIES[] = {"Education", "Sports", "Charity", "Culture", "Others"};
     private static String SD_DIR;
 
     private static String CHART_DIR;
