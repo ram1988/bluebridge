@@ -54,7 +54,7 @@ public class CalendarManager {
         intent.putExtra(Instances.BEGIN, startTimeCal.getTimeInMillis());
         intent.putExtra(Instances.END, endTimeCal.getTimeInMillis());
 
-        /* to add duration in event object
+        /* to add duration in event object1
         if(Integer.parseInt(event.getDuration()) >= 8) {
             intent.putExtra(Instances.ALL_DAY, true);
         }
