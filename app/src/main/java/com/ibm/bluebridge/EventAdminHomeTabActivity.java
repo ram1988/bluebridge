@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.eventcalendar.EventCalendarView;
+import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.valueobject.Event;
 import com.roomorama.caldroid.CaldroidFragment;
@@ -49,6 +51,9 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
     private static EventsAdapter eventsAdapter ;
     private static FragmentManager fragmentManager;
     private static Button viewCalendarButton;
+
+    private static SessionManager session;
+
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -68,6 +73,7 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_admin_home_tab);
+        session = SessionManager.getSessionInstance(this);
 
         selfCtxt = selfActivity = this;
         fragmentManager  = getSupportFragmentManager();
@@ -147,7 +153,8 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
     }
 
@@ -164,10 +171,24 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_about_me:
 
+                return true;
 
-        return super.onOptionsItemSelected(item);
+            case R.id.action_statistics:
+
+                return true;
+
+            case R.id.action_logout:
+                boolean status = session.logout();
+                if(status)
+                    finish();
+                return status;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 
