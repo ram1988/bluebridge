@@ -144,6 +144,7 @@ public class SessionManager {
         isLoggedIn = false;
 
         Intent loginPage = new Intent(ctxt, EventLoginActivity.class);
+        loginPage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctxt.startActivity(loginPage);
 
         return true;

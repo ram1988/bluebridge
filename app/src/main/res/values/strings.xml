@@ -30,6 +30,10 @@
     <string name="title_activity_event_parent_detail">EventParentDetailActivity</string>
     <string name="splash_logo_description">Splash logo</string>
 
+    <string name="menu_item_about_me">About Me</string>
+    <string name="menu_item_statistics">Statistics</string>
+    <string name="menu_item_logout">Logout</string>
+
     <string-array name="category_values">
         <item>Education</item>
         <item>Sports</item>

@@ -3,6 +3,7 @@ package com.ibm.bluebridge;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentTransaction;
 
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,13 +26,14 @@ import android.widget.ListView;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.eventcalendar.EventCalendarView;
+import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.valueobject.Event;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EventParentViewActivity extends EventMasterActivity implements ActionBar.TabListener {
+public class EventParentViewActivity extends EventMasterActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -41,12 +44,15 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private static Map<Integer,ArrayAdapter<Event>> arrayAdapterMap;
+    private static SessionManager session;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
     private static Context selfCtxt;
+    private static EventsAdapter eventsAdapter ;
     private static String parent_id;
     private static FragmentManager fragmentManager;
     private static Button viewCalendarButton;
@@ -56,45 +62,69 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
         super.onCreate(savedInstanceState);
         selfCtxt = this;
         setContentView(R.layout.activity_event_parent_view);
+        session = SessionManager.getSessionInstance(this);
 
         fragmentManager  = getSupportFragmentManager();
+        eventsAdapter = new EventsAdapter(selfCtxt);
+
         Intent intent = getIntent();
         parent_id = intent.getStringExtra("user_id");
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
+        viewCalendarButton = (Button) findViewById(R.id.calendar_view);
+
+        arrayAdapterMap = new HashMap<Integer,ArrayAdapter<Event>>();
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-
-        // Set up the action bar.
-        final ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // When swiping between different sections, select the corresponding
-        // tab. We can also use ActionBar.Tab#select() to do this if we have
-        // a reference to the Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
+                List<Event> eventList = null;
+                System.out.println("Position clicked-->" + position);
+                if (position == 0) {
+                    eventList = eventsAdapter.getAllEventsList(parent_id);
+                    final List<Event> finalEventList = eventList;
+
+                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            showCalendarBox(finalEventList);
+                        }
+                    });
+                } else if (position == 1) {
+                    eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
+                    final List<Event> finalJoinedEventList = eventList;
+
+                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            showCalendarBox(finalJoinedEventList);
+                        }
+                    });
+                } else if (position == 2) {
+                    eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
+                    final List<Event> finalAttendedEventList = eventList;
+
+                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            showCalendarBox(finalAttendedEventList);
+                        }
+                    });
+                }
+
+                ArrayAdapter<Event> eventArrayAdapter = arrayAdapterMap.get(position);
+                eventArrayAdapter.clear();
+                eventArrayAdapter.addAll(eventList);
+                eventArrayAdapter.notifyDataSetChanged();
             }
         });
 
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by
-            // the adapter. Also specify this Activity object, which implements
-            // the TabListener interface, as the callback (listener) for when
-            // this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
-        }
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(mViewPager);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
     }
 
 
@@ -110,31 +140,25 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_about_me:
 
-        //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
+                return true;
 
-        return super.onOptionsItemSelected(item);
+            case R.id.action_statistics:
+
+                return true;
+
+            case R.id.action_logout:
+                boolean status = session.logout();
+                if(status)
+                    finish();
+                return status;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
-
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in
-        // the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -207,13 +231,14 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
             int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            final EventsAdapter eventsAdapter = new EventsAdapter(selfCtxt);
+            //final EventsAdapter eventsAdapter = new EventsAdapter(selfCtxt);
             final ListView listView = (ListView) rootView.findViewById(R.id.listview);
+            ArrayAdapter<Event> adapter = null;
 
             //For all events
             if(tabNumber == 1 ) {
                 final List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
-                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
+                adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -238,7 +263,7 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
             //For joined events
             else if(tabNumber == 2) {
                 final List<Event> eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
-                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
+                adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -263,7 +288,7 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
             //For attended events
             else if(tabNumber == 3) {
                 final List<Event> eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
-                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt,eventList);
+                adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -285,6 +310,8 @@ public class EventParentViewActivity extends EventMasterActivity implements Acti
                     }
                 });
             }
+
+            arrayAdapterMap.put(tabNumber - 1, adapter);
 
             return rootView;
         }
