@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.eventcalendar.CalendarManager;
 import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.util.Validator;
 import com.ibm.bluebridge.valueobject.Event;
@@ -172,6 +173,8 @@ public class EventFormViewActivity extends EventMasterActivity {
                     String resCode = Validator.validate(newEvent);
                     if (resCode.equals("")) {
                         eventsAdapter.addEvent(newEvent,adminId);
+                        CalendarManager calendarManager = new CalendarManager(ctxt);
+                        calendarManager.addCalendarEvent(newEvent);
                     } else {
                         Utils.showAlertDialog(resCode, ctxt);
                         return;
@@ -182,6 +185,8 @@ public class EventFormViewActivity extends EventMasterActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
+
 
                     Intent intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
                     intent.putExtra("user_id", adminId);
