@@ -90,67 +90,72 @@ public class EventFormViewActivity extends EventMasterActivity {
         Button actionButton = (Button) findViewById(R.id.action_button);
         Button cancelButton = (Button) findViewById(R.id.cancel_button);
         Button showRegButton = (Button) findViewById(R.id.list_parents_button);
-        TimePicker startTimePicker = (TimePicker) findViewById(R.id.start_time);
-        TimePicker endTimePicker = (TimePicker) findViewById(R.id.end_time);
-        EditText eventDuration = (EditText) findViewById(R.id.event_duration);
-        eventDuration.setKeyListener(null);
         final EventsAdapter eventsAdapter = new EventsAdapter(this);
+        TimePicker startTimePicker = null;
+        TimePicker endTimePicker = null;
+        EditText eventDuration = null;
 
-        startTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+        if (mode == 0 || mode == 1) {
+            startTimePicker = (TimePicker) findViewById(R.id.start_time);
+            endTimePicker = (TimePicker) findViewById(R.id.end_time);
+            eventDuration = (EditText) findViewById(R.id.event_duration);
+            eventDuration.setKeyListener(null);
+            startTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
 
-            public void onTimeChanged(TimePicker view, int hour, int minute) {
-                DatePicker eventDatePicker = (DatePicker) findViewById(R.id.event_date_picker);
-                TimePicker endTimePicker = (TimePicker) findViewById(R.id.end_time);
-                EditText eventDuration = (EditText) findViewById(R.id.event_duration);
-                int year = eventDatePicker.getYear();
-                int month = eventDatePicker.getMonth()+1;
-                int day = eventDatePicker.getDayOfMonth();
-                int endHour = endTimePicker.getCurrentHour();
-                int endMinute = endTimePicker.getCurrentMinute();
+                public void onTimeChanged(TimePicker view, int hour, int minute) {
+                    DatePicker eventDatePicker = (DatePicker) findViewById(R.id.event_date_picker);
+                    TimePicker endTimePicker = (TimePicker) findViewById(R.id.end_time);
+                    EditText eventDuration = (EditText) findViewById(R.id.event_duration);
+                    int year = eventDatePicker.getYear();
+                    int month = eventDatePicker.getMonth() + 1;
+                    int day = eventDatePicker.getDayOfMonth();
+                    int endHour = endTimePicker.getCurrentHour();
+                    int endMinute = endTimePicker.getCurrentMinute();
 
-                Calendar startTimeCal = Calendar.getInstance();
-                startTimeCal.set(year,month,day,hour,minute);
-                long startTimeMillis = startTimeCal.getTimeInMillis();
+                    Calendar startTimeCal = Calendar.getInstance();
+                    startTimeCal.set(year, month, day, hour, minute);
+                    long startTimeMillis = startTimeCal.getTimeInMillis();
 
-                Calendar endTimeCal = Calendar.getInstance();
-                endTimeCal.set(year,month,day,endHour,endMinute);
-                long endTimeMillis = endTimeCal.getTimeInMillis();
+                    Calendar endTimeCal = Calendar.getInstance();
+                    endTimeCal.set(year, month, day, endHour, endMinute);
+                    long endTimeMillis = endTimeCal.getTimeInMillis();
 
-                double mToHourConverter = 3600000;
-                if(endTimeMillis > startTimeMillis) {
-                    double duration = ((double) (endTimeMillis - startTimeMillis)) / mToHourConverter;
-                    eventDuration.setText(String.valueOf(new DecimalFormat("0.0").format(duration)));
+                    double mToHourConverter = 3600000;
+                    if (endTimeMillis > startTimeMillis) {
+                        double duration = ((double) (endTimeMillis - startTimeMillis)) / mToHourConverter;
+                        eventDuration.setText(String.valueOf(new DecimalFormat("0.0").format(duration)));
+                    }
                 }
-            }
-        });
+            });
 
-        endTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            endTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
 
-            public void onTimeChanged(TimePicker view, int hour, int minute) {
-                DatePicker eventDatePicker = (DatePicker) findViewById(R.id.event_date_picker);
-                TimePicker startTimePicker = (TimePicker) findViewById(R.id.start_time);
-                EditText eventDuration = (EditText) findViewById(R.id.event_duration);
-                int year = eventDatePicker.getYear();
-                int month = eventDatePicker.getMonth()+1;
-                int day = eventDatePicker.getDayOfMonth();
-                int startHour = startTimePicker.getCurrentHour();
-                int startMinute = startTimePicker.getCurrentMinute();
+                public void onTimeChanged(TimePicker view, int hour, int minute) {
+                    DatePicker eventDatePicker = (DatePicker) findViewById(R.id.event_date_picker);
+                    TimePicker startTimePicker = (TimePicker) findViewById(R.id.start_time);
+                    EditText eventDuration = (EditText) findViewById(R.id.event_duration);
+                    int year = eventDatePicker.getYear();
+                    int month = eventDatePicker.getMonth() + 1;
+                    int day = eventDatePicker.getDayOfMonth();
+                    int startHour = startTimePicker.getCurrentHour();
+                    int startMinute = startTimePicker.getCurrentMinute();
 
-                Calendar startTimeCal = Calendar.getInstance();
-                startTimeCal.set(year,month,day,startHour,startMinute);
-                long startTimeMillis = startTimeCal.getTimeInMillis();
+                    Calendar startTimeCal = Calendar.getInstance();
+                    startTimeCal.set(year, month, day, startHour, startMinute);
+                    long startTimeMillis = startTimeCal.getTimeInMillis();
 
-                Calendar endTimeCal = Calendar.getInstance();
-                endTimeCal.set(year,month,day,hour,minute);
-                long endTimeMillis = endTimeCal.getTimeInMillis();
+                    Calendar endTimeCal = Calendar.getInstance();
+                    endTimeCal.set(year, month, day, hour, minute);
+                    long endTimeMillis = endTimeCal.getTimeInMillis();
 
-                double mToHourConverter = 3600000;
-                if(endTimeMillis > startTimeMillis) {
-                    double duration = ((double) (endTimeMillis - startTimeMillis)) / mToHourConverter;
-                    eventDuration.setText(String.valueOf(new DecimalFormat("0.0").format(duration)));
+                    double mToHourConverter = 3600000;
+                    if (endTimeMillis > startTimeMillis) {
+                        double duration = ((double) (endTimeMillis - startTimeMillis)) / mToHourConverter;
+                        eventDuration.setText(String.valueOf(new DecimalFormat("0.0").format(duration)));
+                    }
                 }
-            }
-        });
+            });
+        }
 
         if(mode == 0) { //admin add event
 
