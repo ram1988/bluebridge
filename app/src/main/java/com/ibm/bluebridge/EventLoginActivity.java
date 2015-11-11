@@ -267,11 +267,12 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
 
             if (role!=null) {
                 Intent intent = null;
-                if(role.equals("admin")) {
+                intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
+               /* if(role.equals("admin")) {
                     intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
                 } else {
                     intent = new Intent(ctxt, EventParentViewActivity.class);
-                }
+                }*/
                 intent.putExtra("user_id",nric);
                 startActivity(intent);
                 finish();
