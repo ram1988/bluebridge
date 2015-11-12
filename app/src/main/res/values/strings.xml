@@ -41,5 +41,9 @@
         <item>Charity</item>
         <item>Others</item>
     </string-array>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_event_manage_parents_spinner">EventManageParentsSpinnerActivity
+    </string>
+    <string name="title_activity_event_parent_home_spinner">EventParentHomeSpinnerActivity</string>
 
 </resources>

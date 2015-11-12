@@ -1,6 +1,7 @@
 package com.ibm.bluebridge.adapter;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,14 @@ public class EventsAdapter {
         try {
             System.out.println("Admin URI--->" + allEventsAPI);
             REST_API.getResponse(allEventsAPI);
-            Object response = REST_API.getRespObj().get("response");
+            Object response = null;
+
+            try {
+                response = REST_API.getRespObj().get("response");
+            }
+            catch(JSONException excep) {
+                Log.e("JSONException","Skipping the exception if no mapping found");
+            }
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -104,7 +112,14 @@ public class EventsAdapter {
         try {
             System.out.println("Admin URI--->" + allEventsAPI);
             REST_API.getResponse(allEventsAPI);
-            Object response = REST_API.getRespObj().get("response");
+            Object response = null;
+
+            try {
+                response = REST_API.getRespObj().get("response");
+            }
+            catch(JSONException excep) {
+                Log.e("JSONException","Skipping the exception if no mapping found");
+            }
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -158,7 +173,14 @@ public class EventsAdapter {
         try {
             System.out.println("Admin URI--->" + registeredParentsAPI);
             REST_API.getResponse(registeredParentsAPI);
-            Object response = REST_API.getRespObj().get("response");
+            Object response = null;
+
+            try {
+                response = REST_API.getRespObj().get("response");
+            }
+            catch(JSONException excep) {
+                Log.e("JSONException","Skipping the exception if no mapping found");
+            }
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -287,13 +309,20 @@ public class EventsAdapter {
         }
     }
     /*******Parent methods*********/
-    public List<Event> getAllEventsList(String parent_id) {
-        String allEventsAPI = REST_API.getBaseRestURL() + "/parent_list_events?parent_id=" + parent_id;
+    public List<Event> getAllEventsList() {
+        String allEventsAPI = REST_API.getBaseRestURL() + "/parent_list_events";
         eventsList = new ArrayList<Event>();
 
         try {
             REST_API.getResponse(allEventsAPI);
-            Object response = REST_API.getRespObj().get("response");
+            Object response = null;
+
+            try {
+                response = REST_API.getRespObj().get("response");
+            }
+            catch(JSONException excep) {
+                Log.e("JSONException","Skipping the exception if no mapping found");
+            }
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -352,7 +381,14 @@ public class EventsAdapter {
 
         try {
             REST_API.getResponse(joinedEventsAPI);
-            Object response = REST_API.getRespObj().get("response");
+            Object response = null;
+
+            try {
+                response = REST_API.getRespObj().get("response");
+            }
+            catch(JSONException excep) {
+                Log.e("JSONException","Skipping the exception if no mapping found");
+            }
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
@@ -410,7 +446,14 @@ public class EventsAdapter {
 
         try {
             REST_API.getResponse(attendedEventsAPI);
-            Object response = REST_API.getRespObj().get("response");
+            Object response = null;
+
+            try {
+                response = REST_API.getRespObj().get("response");
+            }
+            catch(JSONException excep) {
+                Log.e("JSONException","Skipping the exception if no mapping found");
+            }
 
             if(response != null ) {
                 JSONArray list = (JSONArray) response;
