@@ -39,7 +39,7 @@
         <activity
             android:name=".EventFormViewActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
         </activity>
 
         <!-- Push Settings Start -->
@@ -64,7 +64,7 @@
 
         <activity
             android:name=".EventAdminHomeTabActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name=".EventManageParentsActivity"
@@ -89,6 +89,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".charts.LineActivity" >
+        </activity>
+        <activity
+            android:name=".AdminStatisticsActivity"
+            android:label="@string/app_name"
+            android:theme="@style/NoActionBar" >
         </activity>
     </application>
 

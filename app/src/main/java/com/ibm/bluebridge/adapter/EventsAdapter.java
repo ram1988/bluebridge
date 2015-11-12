@@ -295,7 +295,7 @@ public class EventsAdapter {
             REST_API.getResponse(allEventsAPI);
             Object response = REST_API.getRespObj().get("response");
 
-            if(response != null ) {
+            if( !response.equals("") ) {
                 JSONArray list = (JSONArray) response;
                 int contentLength = list.length();
 

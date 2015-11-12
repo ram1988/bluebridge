@@ -129,17 +129,18 @@ public class RESTApi {
                     System.out.println("issue in connection");
                 }
             } catch (Exception e ) {
+                Log.e("RESTApi", "issue in connection, stacktrace below:");
+                e.printStackTrace();
+                Log.e("RESTApi", "--------------------------------------");
+
                 try {
                     synchronized(respJsonObj) {
-                        respJsonObj.put("response", null);
+                        respJsonObj.put("response", "");
                         respJsonObj.notifyAll();
                     }
                 } catch (JSONException e1) {
                     e1.printStackTrace();
                 }
-                Log.e("RESTApi", "issue in connection");
-                Log.e("RESTApi", e.getMessage());
-                e.printStackTrace();
             }
             finally {
                 restConnection.disconnect();
