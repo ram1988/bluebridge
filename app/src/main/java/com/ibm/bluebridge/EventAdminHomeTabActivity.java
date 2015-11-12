@@ -184,6 +184,8 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
                 return true;
 
             case R.id.action_statistics:
+                Intent statisticsPage = new Intent(this, AdminStatisticsActivity.class);
+                startActivity(statisticsPage);
 
                 return true;
 
