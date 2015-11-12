@@ -190,8 +190,14 @@ public class RESTApi {
                                 result.append(line);
                             }
 
-                            if (result.length() > 0) {
-                                respJsonObj.put("response", new JSONObject(result.toString()));
+                            if (result.length() > 0 ) {
+                                try {
+                                    respJsonObj.put("response", new JSONObject(result.toString()));
+                                }
+                                catch(JSONException excep) {
+                                    System.out.println("json exception. ignored and passed");
+                                }
+                                //respJsonObj.put("response", new JSONObject(result.toString()));
                             }
                         }
                     } else if (httpMethod.equals("delete")) {

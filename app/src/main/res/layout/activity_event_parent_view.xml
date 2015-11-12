@@ -29,13 +29,13 @@
         android:layout_width="match_parent" android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <Button
+    <!--Button
         android:id="@+id/calendar_view"
         android:text="View in Calendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="450sp"
         android:layout_marginLeft="100sp"
-        />
+        /-->
 
 </android.support.design.widget.CoordinatorLayout>

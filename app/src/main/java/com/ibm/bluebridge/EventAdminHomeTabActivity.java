@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.eventcalendar.CalendarManager;
 import com.ibm.bluebridge.eventcalendar.EventCalendarView;
 import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
@@ -125,6 +126,12 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
                     eventList = eventsAdapter.getAdminEventsList(admin_id);
                     final List<Event> finalEventList = eventList;
                     fab.setVisibility(View.VISIBLE);
+
+                    CalendarManager calendarManager = new CalendarManager(selfCtxt);
+
+                    for(Event event:eventList) {
+                        calendarManager.addCalendarEvent(event);
+                    }
 
                     viewCalendarButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -272,6 +279,11 @@ public class EventAdminHomeTabActivity extends EventMasterActivity {
             if(tabNumber == 1 ) {
                 System.out.println("Tab1 clicked");
                 final List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
+                CalendarManager calendarManager = new CalendarManager(selfCtxt);
+
+                for(Event event:eventList) {
+                    calendarManager.addCalendarEvent(event);
+                }
 
                 if(eventList.isEmpty()){
                     noEventsMsg.setVisibility(View.VISIBLE);

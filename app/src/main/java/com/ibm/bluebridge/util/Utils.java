@@ -1,7 +1,9 @@
 package com.ibm.bluebridge.util;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.provider.CalendarContract;
 import android.util.Log;
 
 import com.ibm.mobilefirstplatform.clientsdk.android.security.api.AuthorizationManager;
@@ -10,7 +12,9 @@ import org.json.JSONException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by manirm on 10/26/2015.
@@ -109,5 +113,12 @@ public class Utils {
         AlertDialog alertDialog = alertDialogBuilder.create();
         // show it
         alertDialog.show();
+    }
+
+    public static long getDateInMillis(int year, int month, int day, int hour, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, hour, minute);
+
+        return calendar.getTimeInMillis();
     }
 }

@@ -15,6 +15,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.eventcalendar.CalendarManager;
 import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.util.Validator;
 import com.ibm.bluebridge.valueobject.Event;
@@ -183,6 +184,8 @@ public class EventFormViewActivity extends EventMasterActivity {
                         e.printStackTrace();
                     }
 
+
+
                     Intent intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
                     intent.putExtra("user_id", adminId);
                     intent.putExtra("message","Event Added!!!");
@@ -256,11 +259,15 @@ public class EventFormViewActivity extends EventMasterActivity {
             actionButton.setText("Update");
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Event result = setEvent(event);
-                    String resCode = Validator.validate(result);
+                    Event oldEvent = event;
+                    Event newEvent = setEvent(new Event());
+                    String resCode = Validator.validate(newEvent);
                     if (resCode.equals("")) {
-                        eventsAdapter.updateEvent(result, adminId);
+                        eventsAdapter.updateEvent(newEvent, adminId);
+                        CalendarManager calendarManager = new CalendarManager(ctxt);
+                        calendarManager.updateCalendarEvent(oldEvent,newEvent);
                         Utils.showAlertDialog("Event Updated!!!", ctxt);
+
                     } else {
                         System.out.println("error");
                         Utils.showAlertDialog(resCode, ctxt);
@@ -285,13 +292,19 @@ public class EventFormViewActivity extends EventMasterActivity {
             cancelButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Event result = setEvent(event);
-                    eventsAdapter.deleteEvent(result,adminId);
+                    eventsAdapter.deleteEvent(result, adminId);
+
+                    CalendarManager calendarManager = new CalendarManager(ctxt);
+                    calendarManager.deleteCalendarEvent(result);
+
 
                     try {
                         Thread.sleep(1500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
+
 
                     Intent intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
                     intent.putExtra("user_id", adminId);
@@ -405,6 +418,7 @@ public class EventFormViewActivity extends EventMasterActivity {
         newEvent.setEventDescription(duty.getText().toString());
 
         String eventDate = eventDatePicker.getYear()+"/"+(eventDatePicker.getMonth()+1)+"/"+eventDatePicker.getDayOfMonth();
+        System.out.print("Selected month-----)))"+eventDatePicker.getMonth());
         newEvent.setEventDate(eventDate);
 
         String startTime = startTimePicker.getCurrentHour()+":"+startTimePicker.getCurrentMinute();
