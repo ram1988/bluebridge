@@ -11,13 +11,13 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <!--<Button
+    <Button
         android:id="@+id/calendar_view"
         android:text="View in Calendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="400sp"
         android:layout_marginLeft="100sp"
-        />-->
+        />
 
 </RelativeLayout>
