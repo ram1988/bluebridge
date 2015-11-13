@@ -379,6 +379,8 @@ public class EventFormViewActivity extends EventMasterActivity {
             cancelButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     eventsAdapter.unjoinEvent(event, parentId);
+                    CalendarManager calendarManager = new CalendarManager(ctxt);
+                    calendarManager.deleteCalendarEvent(event);
                     Utils.showAlertDialog("You have unjoined this event!", ctxt);
                     Intent intent = new Intent(ctxt, EventParentViewActivity.class);
                     intent.putExtra("user_id", parentId);

@@ -108,9 +108,10 @@ public class RESTApi {
             try {
                 boolean isConnFine = getConnection(requestUrl);
                 if(isConnFine) {
+                    System.out.println("URL--> " + requestUrl);
                     synchronized(respJsonObj) {
-                        restConnection.setReadTimeout(5000);
-                        restConnection.setConnectTimeout(6000);
+                        restConnection.setReadTimeout(15000);
+                        restConnection.setConnectTimeout(16000);
                         BufferedReader in = new BufferedReader(new InputStreamReader(restConnection.getInputStream()));
                         StringBuffer jsonStr = new StringBuffer();
                         String line = null;

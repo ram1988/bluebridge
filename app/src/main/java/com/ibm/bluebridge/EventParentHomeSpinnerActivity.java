@@ -29,6 +29,7 @@ import android.content.res.Resources.Theme;
 import android.widget.TextView;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.eventcalendar.CalendarManager;
 import com.ibm.bluebridge.eventcalendar.EventCalendarView;
 import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.valueobject.Event;
@@ -83,6 +84,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
         selfCtxt = this;
         session = SessionManager.getSessionInstance(this);
         parent_id = session.getUserId();
+        System.out.println("Parent-->"+parent_id);
 
         fragmentManager  = getSupportFragmentManager();
         eventsAdapter = new EventsAdapter(selfCtxt);
@@ -214,6 +216,13 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
             else if(tabNumber == 2) {
                 final List<Event> eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
 
+                CalendarManager calendarManager = new CalendarManager(selfCtxt);
+
+                for(Event event:eventList) {
+                    calendarManager.addCalendarEvent(event);
+                }
+
+
                 if(eventList.isEmpty()){
                     noEventsMsg.setVisibility(View.VISIBLE);
                 } else {
@@ -243,6 +252,12 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
             //For attended events
             else if(tabNumber == 3) {
                 final List<Event> eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
+
+                CalendarManager calendarManager = new CalendarManager(selfCtxt);
+
+                for(Event event:eventList) {
+                    calendarManager.addCalendarEvent(event);
+                }
 
                 if(eventList.isEmpty()){
                     noEventsMsg.setVisibility(View.VISIBLE);
