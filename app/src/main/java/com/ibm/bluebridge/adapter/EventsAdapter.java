@@ -106,7 +106,7 @@ public class EventsAdapter {
     }
 
     public List<Event> getAdminCompletedEventsList(String admin_id) {
-        String allEventsAPI = REST_API.getBaseRestURL() + "/admin_list_events?past_years=2&admin_id="+admin_id;
+        String allEventsAPI = REST_API.getBaseRestURL() + "/admin_list_completed_events?past_years=2&admin_id="+admin_id;
         eventsList = new ArrayList<Event>();
 
         try {
