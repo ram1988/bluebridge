@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -264,14 +265,15 @@ public class EventLoginActivity extends ActionBarActivity implements LoaderCallb
         protected void onPostExecute(final String role) {
             mAuthTask = null;
             showProgress(false);
-
+            System.out.println("User Role-->"+role);
             if (role!=null) {
                 Intent intent = null;
-                //intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
+                //intent = new Intent(ctxt, EventAdminHomeSpinnerActivity.class);
+                Log.i("User Role", role);
                 if(role.equals("admin")) {
-                    intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
+                    intent = new Intent(ctxt, EventAdminHomeSpinnerActivity.class);
                 } else {
-                    intent = new Intent(ctxt, EventParentViewActivity.class);
+                    intent = new Intent(ctxt, EventParentHomeSpinnerActivity.class);
                 }
                 intent.putExtra("user_id",nric);
                 startActivity(intent);
