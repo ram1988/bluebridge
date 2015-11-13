@@ -309,8 +309,8 @@ public class EventsAdapter {
         }
     }
     /*******Parent methods*********/
-    public List<Event> getAllEventsList() {
-        String allEventsAPI = REST_API.getBaseRestURL() + "/parent_list_events";
+    public List<Event> getAllEventsList(String parent_id) {
+        String allEventsAPI = REST_API.getBaseRestURL() + "/parent_get_events?parent_id=" + parent_id;
         eventsList = new ArrayList<Event>();
 
         try {
