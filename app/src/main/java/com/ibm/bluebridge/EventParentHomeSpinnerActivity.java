@@ -181,7 +181,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
 
             //For all events
             if(tabNumber == 1 ) {
-                final List<Event> eventList = eventsAdapter.getAllEventsList();
+                final List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
 
                 if(eventList.isEmpty()){
                     noEventsMsg.setVisibility(View.VISIBLE);

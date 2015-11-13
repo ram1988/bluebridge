@@ -84,7 +84,7 @@ public class EventParentViewActivity extends EventMasterActivity {
                 List<Event> eventList = null;
                 System.out.println("Position clicked-->" + position);
                 if (position == 0) {
-                    eventList = eventsAdapter.getAllEventsList();
+                    eventList = eventsAdapter.getAllEventsList(parent_id);
                     final List<Event> finalEventList = eventList;
 
                     viewCalendarButton.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +237,7 @@ public class EventParentViewActivity extends EventMasterActivity {
 
             //For all events
             if(tabNumber == 1 ) {
-                final List<Event> eventList = eventsAdapter.getAllEventsList();
+                final List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
                 adapter = getEventArrayAdapter(selfCtxt,eventList);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
