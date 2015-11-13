@@ -81,9 +81,6 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
             }
         });
 
-
-
-
         session = SessionManager.getSessionInstance(this);
         admin_id = session.getUserId();
 

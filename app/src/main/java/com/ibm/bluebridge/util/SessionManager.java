@@ -44,28 +44,28 @@ public class SessionManager {
 
 
     // User session fields
-    private String firstname = "";
-    private String lastname = "";
-    private String userId = "";
-    private String userRole = "";
-    private String userGender = "";
-    private String userContact = "";
-    private String userEmail = "";
-    private String userJob = "";
-    private String userAddr = "";
+    private String firstname = null;
+    private String lastname = null;
+    private String userId = null;
+    private String userRole = null;
+    private String userGender = null;
+    private String userContact = null;
+    private String userEmail = null;
+    private String userJob = null;
+    private String userAddr = null;
 
 
-    private String childId = "";
-    private String childName = "";
-    private String childGender = "";
-    private String childRegistrationYear = "";
-    private String childBirthDate = "";
+    private String childId = null;
+    private String childName = null;
+    private String childGender = null;
+    private String childRegistrationYear = null;
+    private String childBirthDate = null;
 
 
     private SessionManager(Context ctxt){
         this.REST_API = new RESTApi();
         this.ctxt = ctxt;
-        this.pref = ctxt.getSharedPreferences(CONSTANTS.PREFERENCE_NAME, 0); // 0 - for private mode
+        this.pref = ctxt.getSharedPreferences(CONSTANTS.PREFERENCE_NAME, Context.MODE_PRIVATE);
         this.editor = pref.edit();
     }
 
@@ -133,11 +133,13 @@ public class SessionManager {
     }
 
     public boolean isLoggedIn(){
-        return isLoggedIn;
+        return isLoggedIn && userId != null;
     }
 
     // Safe Logout
     public boolean logout(){
+        Log.d("SessionManager", "Going to logout.");
+
         editor.clear();
         editor.commit(); // commit changes
 
@@ -163,12 +165,18 @@ public class SessionManager {
      *  Getters and Setters
      */
     public String getUserId() {
+        if(!this.isLoggedIn()){
+            Log.d("SessionManager", "Invalid session: not logged in.");
+            this.logout();
+        }
+
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
         editor.putString(userIdKey, userId);
+        editor.commit();
     }
 
     public String getUserRole() {
@@ -178,6 +186,7 @@ public class SessionManager {
     public void setUserRole(String userRole) {
         this.userRole = userRole;
         editor.putString(userRoleKey, userRole);
+        editor.commit();
     }
 
     public String getUserGender() {
@@ -187,6 +196,7 @@ public class SessionManager {
     public void setUserGender(String userGender) {
         this.userGender = userGender;
         editor.putString(userGenderKey, userGender);
+        editor.commit();
     }
 
     public String getFirstname() {
@@ -196,6 +206,7 @@ public class SessionManager {
     public void setFirstname(String firstname) {
         this.firstname = firstname;
         editor.putString(userFirstNameKey, firstname);
+        editor.commit();
     }
 
     public String getLastname() {
@@ -205,6 +216,7 @@ public class SessionManager {
     public void setLastname(String lastname) {
         this.lastname = lastname;
         editor.putString(userLastNameKey, lastname);
+        editor.commit();
     }
 
     public String getUserJob() {
@@ -214,6 +226,7 @@ public class SessionManager {
     public void setUserJob(String userJob) {
         this.userJob = userJob;
         editor.putString(userJobKey, userJob);
+        editor.commit();
     }
 
     public String getUserAddr() {
@@ -223,6 +236,7 @@ public class SessionManager {
     public void setUserAddr(String userAddr) {
         this.userAddr = userAddr;
         editor.putString(userAddrKey, userAddr);
+        editor.commit();
     }
 
     public String getChildName() {
@@ -232,6 +246,7 @@ public class SessionManager {
     public void setChildName(String childName) {
         this.childName = childName;
         editor.putString(userChildNameKey, childName);
+        editor.commit();
     }
 
     public String getChildGender() {
@@ -241,6 +256,7 @@ public class SessionManager {
     public void setChildGender(String childGender) {
         this.childGender = childGender;
         editor.putString(userChildGenderKey, childGender);
+        editor.commit();
     }
 
     public String getChildId() {
@@ -250,6 +266,7 @@ public class SessionManager {
     public void setChildId(String childId) {
         this.childId = childId;
         editor.putString(userChildIdKey, childId);
+        editor.commit();
     }
 
     public String getChildRegistrationYear() {
@@ -259,6 +276,7 @@ public class SessionManager {
     public void setChildRegistrationYear(String childRegistrationYear) {
         this.childRegistrationYear = childRegistrationYear;
         editor.putString(userChildRegistrationYearKey, childRegistrationYear);
+        editor.commit();
     }
 
     public String getChildBirthDate() {
@@ -268,6 +286,7 @@ public class SessionManager {
     public void setChildBirthDate(String childBirthDate) {
         this.childBirthDate = childBirthDate;
         editor.putString(userChildBirthDateKey, childBirthDate);
+        editor.commit();
     }
 
     public String getUserContact() {
@@ -277,6 +296,7 @@ public class SessionManager {
     public void setUserContact(String userContact) {
         this.userContact = userContact;
         editor.putString(userContactKey, userContact);
+        editor.commit();
     }
 
     public String getUserEmail() {
@@ -286,5 +306,6 @@ public class SessionManager {
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
         editor.putString(userEmailKey, userEmail);
+        editor.commit();
     }
 }

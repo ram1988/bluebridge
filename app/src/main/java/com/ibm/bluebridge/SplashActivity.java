@@ -42,6 +42,7 @@ public class SplashActivity extends AppCompatActivity {
         session = SessionManager.getSessionInstance(this);
 
         if(session.isLoggedIn()){
+            Log.i("SplashActivity", "already logged in");
             if(session.isParent()){
                 Intent i = new Intent(this, EventParentHomeSpinnerActivity.class);
                 startActivity(i);
@@ -50,6 +51,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(i);
             }
             finish();
+            return;
         }
 
         /*
