@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ibm.bluebridge.util.RESTApi;
 import com.ibm.bluebridge.valueobject.Children;
 import com.ibm.bluebridge.valueobject.Event;
 import com.ibm.bluebridge.valueobject.Parent;
@@ -35,6 +36,7 @@ public class EventParentDetailActivity extends EventMasterActivity {
     private ProgressDialog pDialog;
     private Bitmap bitmap;
     private ImageView photo;
+    private RESTApi REST_API;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class EventParentDetailActivity extends EventMasterActivity {
         setContentView(R.layout.activity_event_parent_detail);
 
         this.ctxt = this;
+        this.REST_API = new RESTApi();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -49,7 +52,7 @@ public class EventParentDetailActivity extends EventMasterActivity {
         Parent parent = (Parent)intent.getSerializableExtra("ParentObj");
 
         photo = (ImageView) findViewById(R.id.photo);
-        String imageURL = "http://school-volunteer-bluebridge.mybluemix.net/api/view_user_image?user_id=" + parent.getId();
+        String imageURL = REST_API.getBaseRestURL() + "/view_user_image?user_id=" + parent.getId();
         new LoadImage().execute(imageURL);
 
         if(parent != null) {
