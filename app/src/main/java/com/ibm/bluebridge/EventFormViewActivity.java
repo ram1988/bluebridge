@@ -369,7 +369,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                 public void onClick(View v) {
                     eventsAdapter.joinEvent(event, parentId);
                     Utils.showAlertDialog("You have joined this event!", ctxt);
-                    Intent intent = new Intent(ctxt, EventParentViewActivity.class);
+                    Intent intent = new Intent(ctxt, EventParentHomeSpinnerActivity.class);
                     intent.putExtra("user_id", parentId);
                     startActivity(intent);
                 }
@@ -382,7 +382,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                     CalendarManager calendarManager = new CalendarManager(ctxt);
                     calendarManager.deleteCalendarEvent(event);
                     Utils.showAlertDialog("You have unjoined this event!", ctxt);
-                    Intent intent = new Intent(ctxt, EventParentViewActivity.class);
+                    Intent intent = new Intent(ctxt, EventParentHomeSpinnerActivity.class);
                     intent.putExtra("user_id", parentId);
                     startActivity(intent);
                 }
