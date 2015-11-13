@@ -14,27 +14,34 @@
         <android.support.v7.widget.Toolbar android:id="@+id/my_toolbar"
             android:layout_width="match_parent" android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary" app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:layout_alignParentLeft="true">
 
             <Spinner android:id="@+id/spinner" app:popupTheme="@style/AppTheme.PopupOverlay"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_width="200sp" android:layout_height="match_parent"
                 android:theme="@style/MyTheme" />
+
+
+            <Button
+                android:layout_width="30sp"
+                android:layout_height="30sp"
+                android:layout_toEndOf="@id/spinner"
+                android:layout_marginLeft="125sp"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/calendar_view"
+                android:background="@mipmap/calendar"
+                style="?android:attr/borderlessButtonStyle" />
+
+
+
         </android.support.v7.widget.Toolbar>
+
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView android:id="@+id/container"
         android:layout_width="match_parent" android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    <Button
-        android:id="@+id/calendar_view"
-        android:text="View in Calendar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="450sp"
-        android:layout_marginLeft="100sp"
-        />
 
 
 </android.support.design.widget.CoordinatorLayout>
