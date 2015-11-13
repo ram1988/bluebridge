@@ -42,6 +42,7 @@ public class SplashActivity extends AppCompatActivity {
         session = SessionManager.getSessionInstance(this);
 
         if(session.isLoggedIn()){
+            Log.i("SplashActivity", "already logged in");
             if(session.isParent()){
                 Intent i = new Intent(this, EventParentHomeSpinnerActivity.class);
                 startActivity(i);
@@ -50,6 +51,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(i);
             }
             finish();
+            return;
         }
 
         /*
@@ -127,11 +129,5 @@ public class SplashActivity extends AppCompatActivity {
 
         Utils.setSdDir(sd_dir);
         Utils.setChartDir(mPath);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("SplashActivity", "onResume method called.");
     }
 }

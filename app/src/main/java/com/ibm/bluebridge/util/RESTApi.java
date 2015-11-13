@@ -44,7 +44,7 @@ public class RESTApi {
             GetResponseTask getRespObj = new GetResponseTask(url);
             getRespObj.start();
             try {
-                System.out.println("Main Thread Waiting for response...");
+                Log.d("RESTApi", "Main Thread Waiting for response...");
                 respJsonObj.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -58,7 +58,7 @@ public class RESTApi {
             PostResponseTask postRespObj = new PostResponseTask(url,input,method);
             postRespObj.start();
             try {
-                System.out.println("Main Thread Waiting for response...");
+                Log.d("RESTApi", "Main Thread Waiting for response...");
                 respJsonObj.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -71,7 +71,7 @@ public class RESTApi {
         PostResponseTask postRespObj = new PostResponseTask(url,input,method);
         postRespObj.start();
         try {
-            System.out.println("Main Thread Waiting for response...");
+            Log.d("RESTApi", "Main Thread Waiting for response...");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,7 +82,7 @@ public class RESTApi {
         try {
             URL url = new URL(urlStr);
             restConnection = (HttpURLConnection) url.openConnection();
-            System.out.println("connection established");
+            Log.d("RESTApi", "connection established");
         }
         catch (MalformedURLException e) {
             isConnFine = false;
@@ -116,17 +116,17 @@ public class RESTApi {
                         StringBuffer jsonStr = new StringBuffer();
                         String line = null;
                         while ((line = in.readLine()) != null) {
-                            System.out.println("line-->" + line);
+                            Log.d("RESTApi", "line-->" + line);
                             jsonStr.append(line);
                         }
-                        System.out.println("jsonStrfrom-->" + jsonStr.toString());
+                        Log.d("RESTApi", "jsonStrfrom-->" + jsonStr.toString());
                         respJsonObj.put("response", new JSONArray(jsonStr.toString()));
-                        System.out.println("jsonObj-->" + respJsonObj);
+                        Log.d("RESTApi", "jsonObj-->" + respJsonObj);
                         respJsonObj.notifyAll();
                     }
                 } else {
                     //throw ApplicationException
-                    System.out.println("issue in connection");
+                    Log.d("RESTApi", "issue in connection");
                 }
             } catch (Exception e ) {
                 synchronized(respJsonObj) {
@@ -188,7 +188,7 @@ public class RESTApi {
                                     respJsonObj.put("response", new JSONObject(result.toString()));
                                 }
                                 catch(JSONException excep) {
-                                    System.out.println("json exception. ignored and passed");
+                                    Log.d("RESTApi", "json exception. ignored and passed");
                                 }
                                 //respJsonObj.put("response", new JSONObject(result.toString()));
                             }
@@ -200,14 +200,14 @@ public class RESTApi {
                     respJsonObj.notifyAll();
                 }
 
-                System.out.println("action successful for " + requestUrl);
+                Log.d("RESTApi", "action successful for " + requestUrl);
                 //isPostSubmitted = true;
 
             } catch (Exception e ) {
                 //isPostSubmitted = false;
-                System.out.println("issue in connection");
+                Log.d("RESTApi", "issue in connection");
                 e.printStackTrace();
-                //System.out.println(e.getMessage());
+                //Log.d("RESTApi", e.getMessage());
                 //Log Exception
             }
             finally {

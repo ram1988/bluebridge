@@ -30,10 +30,13 @@ import android.widget.TextView;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.eventcalendar.CalendarManager;
+import com.ibm.bluebridge.adapter.StatisticsAdapter;
 import com.ibm.bluebridge.eventcalendar.EventCalendarView;
 import com.ibm.bluebridge.util.SessionManager;
+import com.ibm.bluebridge.valueobject.ChartItem;
 import com.ibm.bluebridge.valueobject.Event;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -69,6 +72,12 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if(position == 5) {  //Last item is logout
+                    session.logout();
+                    return;
+                }
+
                 // When the given dropdown item is selected, show its contents in the
                 // container view.
                 getSupportFragmentManager().beginTransaction()
@@ -284,6 +293,36 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                         }
                     });
                 }
+            }else if (tabNumber == 4){
+                //For Statistics
+                List<ChartItem> charts = new ArrayList<ChartItem>();
+
+                ChartItem chart1 = new ChartItem();
+                chart1.setCategory("Number of Participated Events by Year");
+                ChartItem chart2 = new ChartItem();
+                chart2.setCategory("Completed Hours of Participated Events by Year");
+
+                charts.add(chart1);
+                charts.add(chart2);
+
+                StatisticsAdapter sadapter = new StatisticsAdapter(selfCtxt, charts);
+
+                listView.setAdapter(sadapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, final View view,
+                                            int position, long id) {
+                        Intent chart = new Intent();
+                        chart.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.charts.LineActivity");
+
+                        startActivity(chart);
+                    }
+                });
+
+                viewCalendarButton.setVisibility(View.INVISIBLE);
+
+            }else if (tabNumber == 5){
+                //For About Me
             }
 
             return rootView;
