@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -25,12 +26,15 @@ import android.content.res.Resources.Theme;
 import android.widget.TextView;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.adapter.StatisticsAdapter;
 import com.ibm.bluebridge.eventcalendar.CalendarManager;
 import com.ibm.bluebridge.eventcalendar.EventCalendarView;
 import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
+import com.ibm.bluebridge.valueobject.ChartItem;
 import com.ibm.bluebridge.valueobject.Event;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +73,11 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(position == 4) {  //Last item is logout
+                    session.logout();
+                    return;
+                }
+
                 // When the given dropdown item is selected, show its contents in the
                 // container view.
                 getSupportFragmentManager().beginTransaction()
@@ -114,10 +123,7 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
                 startActivity(intent);
             }
         });
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -125,9 +131,6 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
         getMenuInflater().inflate(R.menu.menu_event_admin_home_spinner, menu);
         return true;
     }
-
-
-
 
     private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
         private final ThemedSpinnerAdapter.Helper mDropDownHelper;
@@ -165,7 +168,6 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
             return mDropDownHelper.getDropDownViewTheme();
         }
     }
-
 
     /**
      * A placeholder fragment containing a simple view.
@@ -208,7 +210,7 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
 
             //For all events
             if(tabNumber == 1 ) {
-                System.out.println("Tab1 clicked");
+                Log.d("EventAdminHomeSpinner", "Tab1 clicked");
                 final List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
                 CalendarManager calendarManager = new CalendarManager(selfCtxt);
 
@@ -245,14 +247,11 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
                             showCalendarBox(eventList);
                         }
                     });
-
                 }
-
-
             }
             //For joined events
             else if(tabNumber == 2) {
-                System.out.println("Tab2 clicked");
+                Log.d("EventAdminHomeSpinner", "Tab2 clicked");
                 final List<Event> completedEventsList = eventsAdapter.getAdminCompletedEventsList(admin_id);
 
                 final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt, completedEventsList);
@@ -280,6 +279,40 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
                     }
                 });
 
+            } else if (tabNumber == 3){
+                //For Statistics
+                List<ChartItem> charts = new ArrayList<ChartItem>();
+
+                ChartItem chart1 = new ChartItem();
+                chart1.setCategory("Parents' Finished Hours");
+                ChartItem chart2 = new ChartItem();
+                chart2.setCategory("Number of Parents by Child Registration Year");
+                ChartItem chart3 = new ChartItem();
+                chart3.setCategory("Percentage of Finished by child registration year");
+                ChartItem chart4 = new ChartItem();
+                chart4.setCategory("Number of Registration by Event Category");
+
+                charts.add(chart1);
+                charts.add(chart2);
+                charts.add(chart3);
+                charts.add(chart4);
+
+                StatisticsAdapter adapter = new StatisticsAdapter(selfCtxt, charts);
+
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, final View view,
+                                            int position, long id) {
+                        Intent chart = new Intent();
+                        chart.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.charts.LineActivity");
+                        startActivity(chart);
+                    }
+                });
+
+                viewCalendarButton.setVisibility(View.INVISIBLE);
+            } else if (tabNumber == 4){
+                //For About Me
             }
 
             return rootView;

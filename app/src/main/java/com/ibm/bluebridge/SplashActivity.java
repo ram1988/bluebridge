@@ -130,10 +130,4 @@ public class SplashActivity extends AppCompatActivity {
         Utils.setSdDir(sd_dir);
         Utils.setChartDir(mPath);
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("SplashActivity", "onResume method called.");
-    }
 }
