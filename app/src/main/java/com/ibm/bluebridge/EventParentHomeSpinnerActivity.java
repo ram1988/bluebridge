@@ -82,12 +82,12 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
 
         selfCtxt = this;
         session = SessionManager.getSessionInstance(this);
+        parent_id = session.getUserId();
 
         fragmentManager  = getSupportFragmentManager();
         eventsAdapter = new EventsAdapter(selfCtxt);
 
         Intent intent = getIntent();
-        parent_id = intent.getStringExtra("user_id");
 
         viewCalendarButton = (Button) findViewById(R.id.calendar_view);
 

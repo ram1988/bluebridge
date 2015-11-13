@@ -2,12 +2,14 @@ package com.ibm.bluebridge;
 
 import android.content.Intent;
 import android.os.Environment;
+import android.sax.StartElementListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.os.Handler;
 
 import com.ibm.bluebridge.charts.LineActivity;
+import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
 import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
 import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPush;
@@ -21,6 +23,7 @@ import java.net.MalformedURLException;
 public class SplashActivity extends AppCompatActivity {
     private static String APPLICATION_ROUTE = "http://school-volunteer-bluebridge.mybluemix.net";
     private static String APPLICATION_GUID = "c5328838-1f5f-4221-8845-7872da171306";
+    private SessionManager session;
 
 
     //private static String APPLICATION_ROUTE = "http://hq-mobile-test.mybluemix.net";
@@ -36,6 +39,18 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        session = SessionManager.getSessionInstance(this);
+
+        if(session.isLoggedIn()){
+            if(session.isParent()){
+                Intent i = new Intent(this, EventParentHomeSpinnerActivity.class);
+                startActivity(i);
+            }else if(session.isAdmin()){
+                Intent i = new Intent(this, EventAdminHomeSpinnerActivity.class);
+                startActivity(i);
+            }
+            finish();
+        }
 
         /*
          * Initialize everything app needs

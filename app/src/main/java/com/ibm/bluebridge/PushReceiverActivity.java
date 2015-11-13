@@ -49,14 +49,14 @@ public class PushReceiverActivity extends AppCompatActivity {
                 if(type != null) {
                     if (type.toLowerCase().equals(PUSH_TYPE.EVENT.getValue())){
                         if(session.isAdmin())
-                            redirect("com.ibm.bluebridge.EventAdminHomeTabActivity", message_json);
+                            redirect("com.ibm.bluebridge.EventAdminHomeSpinnerActivity", message_json);
                         else if(session.isParent())
-                            redirect("com.ibm.bluebridge.EventParentDetailActivity", message_json);
+                            redirect("com.ibm.bluebridge.EventParentHomeSpinnerActivity", message_json);
                     } else if (type.toLowerCase().equals(PUSH_TYPE.ALERT.getValue())) {
                         if(session.isAdmin())
-                            redirect("com.ibm.bluebridge.EventAdminHomeTabActivity", message_json);
+                            redirect("com.ibm.bluebridge.EventAdminHomeSpinnerActivity", message_json);
                         else if(session.isParent())
-                            redirect("com.ibm.bluebridge.EventParentDetailActivity", message_json);
+                            redirect("com.ibm.bluebridge.EventParentHomeSpinnerActivity", message_json);
 
                     } else {
                         Log.e("PushReceiverActivity", "Invalid payload, cannot handle. Redirecting to home page.");

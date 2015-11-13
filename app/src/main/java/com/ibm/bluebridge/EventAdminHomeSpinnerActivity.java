@@ -85,6 +85,7 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
 
 
         session = SessionManager.getSessionInstance(this);
+        admin_id = session.getUserId();
 
         selfCtxt = selfActivity = this;
         fragmentManager  = getSupportFragmentManager();
@@ -92,7 +93,6 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
         eventsAdapter = new EventsAdapter(selfCtxt);
 
         Intent intent = getIntent();
-        admin_id = intent.getStringExtra("user_id");
         String message = intent.getStringExtra("message");
 
 
