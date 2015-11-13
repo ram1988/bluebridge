@@ -115,7 +115,7 @@ public class SessionManager {
                     setChildBirthDate(child.getString(userChildBirthDateKey));
                 }
 
-                Log.d("SessionManager", "Role--->" + userRole);
+                Log.d("SessionManager", "Role1--->" + userRole);
                 isLoggedIn = true;
             }
         } catch (JSONException e) {
