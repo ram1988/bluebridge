@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -612,5 +614,23 @@ public class EventsAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public Map<String,List<Event>> categorizeEvents(List<Event> allEvents) {
+
+        Map<String,List<Event>> categorizedEventMap = new HashMap<>();
+
+        //create prefixed category entries
+        categorizedEventMap.put("Education", new ArrayList<Event>());
+        categorizedEventMap.put("Sports", new ArrayList<Event>());
+        categorizedEventMap.put("Volunteering", new ArrayList<Event>());
+
+        for(Event event:allEvents) {
+            List<Event> eventList = categorizedEventMap.get(event.getCategory());
+            eventList.add(event);
+        }
+
+        return categorizedEventMap;
     }
 }
