@@ -1,6 +1,5 @@
 package com.ibm.bluebridge;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +24,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -51,6 +51,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventParentHomeSpinnerActivity extends EventMasterActivity {
     private static Context selfCtxt;
@@ -198,6 +199,22 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_event_parent_home_spinner, container, false);
+            LinearLayout layout=(LinearLayout) rootView.findViewById(R.id.parent_list_layout);
+
+            AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> parent, final View view,
+                                        int position, long id) {
+                    final Event item = (Event) parent.getItemAtPosition(position);
+
+                    Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
+                    intent.putExtra("EventAction", 2);
+                    intent.putExtra("EventObj", item);
+                    intent.putExtra("parent_id", parent_id);
+                    startActivity(intent);
+                }
+            };
 
             int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
@@ -233,6 +250,17 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                             startActivity(intent);
                         }
                     });
+                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            showCalendarBox(eventList);
+                        }
+                    });
+                    */
+
+
+                    Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
+                    displayCategorizedListView(categorizedEventMap, selfCtxt, layout, parent_id, listItemListener);
+
                     viewCalendarButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             showCalendarBox(eventList);
@@ -275,6 +303,17 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                             showCalendarBox(eventList);
                         }
                     });
+                    */
+
+
+                    Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
+                    displayCategorizedListView(categorizedEventMap, selfCtxt, layout, parent_id, listItemListener);
+
+                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            showCalendarBox(eventList);
+                        }
+                    });
                 }
             }
             //For attended events
@@ -306,6 +345,15 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                             startActivity(intent);
                         }
                     });
+                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            showCalendarBox(eventList);
+                        }
+                    });
+                    */
+                    Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
+                    displayCategorizedListView(categorizedEventMap, selfCtxt, layout, parent_id, listItemListener);
+
                     viewCalendarButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             showCalendarBox(eventList);
