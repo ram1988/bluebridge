@@ -229,57 +229,16 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
             };
             listView.setOnItemClickListener(listItemListener);
 
-<<<<<<< HEAD
 
             //For all events
             if(tabNumber == 1 ) {
-                viewCalendarButton.setVisibility(View.VISIBLE);
-                parentDetailView.setVisibility(View.INVISIBLE);
-=======
-            int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-            //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            //final EventsAdapter eventsAdapter = new EventsAdapter(selfCtxt);
-            final ListView listView = (ListView) rootView.findViewById(R.id.listview);
-            TextView noEventsMsg = (TextView)rootView.findViewById(R.id.no_events_message);
-            View aboutmeView = inflater.inflate(R.layout.content_aboutme_parent, container, false);
-            ScrollView parentDetailView = (ScrollView)aboutmeView.findViewById(R.id.parent_details);
-            ArrayAdapter<Event> adapter = null;
-
-            //For all events
-            if(tabNumber == 1 ) {
->>>>>>> origin/master
                 final List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
 
                 if(eventList.isEmpty()){
                     noEventsMsg.setVisibility(View.VISIBLE);
                 } else {
                     noEventsMsg.setVisibility(View.INVISIBLE);
-<<<<<<< HEAD
-=======
-                    adapter = getEventArrayAdapter(selfCtxt, eventList);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, final View view,
-                                                int position, long id) {
-                            final Event item = (Event) parent.getItemAtPosition(position);
-
-                            Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                            intent.putExtra("EventAction", 2);
-                            intent.putExtra("EventObj", item);
-                            intent.putExtra("parent_id", parent_id);
-                            startActivity(intent);
-                        }
-                    });
-                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            showCalendarBox(eventList);
-                        }
-                    });
-
->>>>>>> origin/master
                     Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
                     displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
 
@@ -292,11 +251,9 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
             }
             //For joined events
             else if(tabNumber == 2) {
-<<<<<<< HEAD
+
                 viewCalendarButton.setVisibility(View.VISIBLE);
                 parentDetailView.setVisibility(View.INVISIBLE);
-=======
->>>>>>> origin/master
                 final List<Event> eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
 
                 CalendarManager calendarManager = new CalendarManager(selfCtxt);
@@ -309,31 +266,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                 if(eventList.isEmpty()){
                     noEventsMsg.setVisibility(View.VISIBLE);
                 } else {
-<<<<<<< HEAD
-=======
-                    adapter = getEventArrayAdapter(selfCtxt, eventList);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, final View view,
-                                                int position, long id) {
-                            final Event item = (Event) parent.getItemAtPosition(position);
-
-                            Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                            intent.putExtra("EventAction", 2);
-                            intent.putExtra("EventObj", item);
-                            intent.putExtra("parent_id", parent_id);
-                            startActivity(intent);
-                        }
-                    });
-                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            showCalendarBox(eventList);
-                        }
-                    });
->>>>>>> origin/master
-
+                    noEventsMsg.setVisibility(View.INVISIBLE);
                     Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
                     displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
 
@@ -346,11 +279,8 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
             }
             //For attended events
             else if(tabNumber == 3) {
-<<<<<<< HEAD
                 viewCalendarButton.setVisibility(View.VISIBLE);
                 parentDetailView.setVisibility(View.INVISIBLE);
-=======
->>>>>>> origin/master
                 final List<Event> eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
 
                 CalendarManager calendarManager = new CalendarManager(selfCtxt);
@@ -362,30 +292,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                 if(eventList.isEmpty()){
                     noEventsMsg.setVisibility(View.VISIBLE);
                 } else {
-<<<<<<< HEAD
-=======
-                    adapter = getEventArrayAdapter(selfCtxt, eventList);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, final View view,
-                                                int position, long id) {
-                            final Event item = (Event) parent.getItemAtPosition(position);
-
-                            Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                            intent.putExtra("EventAction", 2);
-                            intent.putExtra("EventObj", item);
-                            intent.putExtra("parent_id", parent_id);
-                            startActivity(intent);
-                        }
-                    });
-                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            showCalendarBox(eventList);
-                        }
-                    });
->>>>>>> origin/master
+                    noEventsMsg.setVisibility(View.INVISIBLE);
                     Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
                     displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
 
