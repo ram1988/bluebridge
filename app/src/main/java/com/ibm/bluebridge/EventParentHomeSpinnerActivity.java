@@ -205,12 +205,12 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
             //final EventsAdapter eventsAdapter = new EventsAdapter(selfCtxt);
             final ListView listView = (ListView) rootView.findViewById(R.id.listview);
             TextView noEventsMsg = (TextView)rootView.findViewById(R.id.no_events_message);
-            ScrollView parentDetailView = (ScrollView)rootView.findViewById(R.id.parent_details);
+            View aboutmeView = inflater.inflate(R.layout.content_aboutme_parent, container, false);
+            ScrollView parentDetailView = (ScrollView)aboutmeView.findViewById(R.id.parent_details);
             ArrayAdapter<Event> adapter = null;
 
             //For all events
             if(tabNumber == 1 ) {
-                parentDetailView.setVisibility(View.INVISIBLE);
                 final List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
 
                 if(eventList.isEmpty()){
@@ -242,7 +242,6 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
             }
             //For joined events
             else if(tabNumber == 2) {
-                parentDetailView.setVisibility(View.INVISIBLE);
                 final List<Event> eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
 
                 CalendarManager calendarManager = new CalendarManager(selfCtxt);
@@ -280,7 +279,6 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
             }
             //For attended events
             else if(tabNumber == 3) {
-                parentDetailView.setVisibility(View.INVISIBLE);
                 final List<Event> eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
 
                 CalendarManager calendarManager = new CalendarManager(selfCtxt);
@@ -315,7 +313,6 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                     });
                 }
             }else if (tabNumber == 4){
-                parentDetailView.setVisibility(View.INVISIBLE);
                 //For Statistics
                 List<ChartItem> charts = new ArrayList<ChartItem>();
 
@@ -372,6 +369,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
 
                 ArrayAdapter<Children> mAdapter = getChildrenListItemAdapter(selfCtxt, parent.getChildren());
                 childrenView.setAdapter(mAdapter);
+                return aboutmeView;
             }
 
             return rootView;

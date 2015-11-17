@@ -225,12 +225,12 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
 
             final ListView listView = (ListView) rootView.findViewById(R.id.listview);
             TextView noEventsMsg = (TextView)rootView.findViewById(R.id.no_events_message);
-            ScrollView adminDetailView = (ScrollView)rootView.findViewById(R.id.admin_details);
+            View aboutmeView = inflater.inflate(R.layout.content_aboutme_admin, container, false);
+            ScrollView adminDetailView = (ScrollView)aboutmeView.findViewById(R.id.admin_details);
 
             //For all events
             if(tabNumber == 1 ) {
                 Log.d("EventAdminHomeSpinner", "Tab1 clicked");
-                adminDetailView.setVisibility(View.INVISIBLE);
                 final List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
                 CalendarManager calendarManager = new CalendarManager(selfCtxt);
 
@@ -272,7 +272,6 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
             //For joined events
             else if(tabNumber == 2) {
                 Log.d("EventAdminHomeSpinner", "Tab2 clicked");
-                adminDetailView.setVisibility(View.INVISIBLE);
                 final List<Event> completedEventsList = eventsAdapter.getAdminCompletedEventsList(admin_id);
 
                 final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt, completedEventsList);
@@ -299,10 +298,8 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
                         showCalendarBox(completedEventsList);
                     }
                 });
-
             } else if (tabNumber == 3){
                 //For Statistics
-                adminDetailView.setVisibility(View.INVISIBLE);
                 List<ChartItem> charts = new ArrayList<ChartItem>();
 
                 ChartItem chart1 = new ChartItem();
@@ -354,8 +351,8 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
                 genderView.setText( "Gender:        " + admin.getGender());
                 contactView.setText("Contact:       " + admin.getContact());
                 emailView.setText("Email:          " + admin.getEmail());
+                return aboutmeView;
             }
-
             return rootView;
         }
 
