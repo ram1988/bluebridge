@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -358,18 +360,24 @@ public class EventFormViewActivity extends EventMasterActivity {
             briefTime.setText(event.getBriefingTime());
 
             duty.setText(event.getEventDescription());
-            venue.setText(event.getVenue());
+            //venue.setText(event.getVenue());
             briefLocation.setText(event.getBriefingPlace());
             teacherInCharge.setText(event.getTeacherInCharge());
             maxVolunteers.setText(String.valueOf(event.getMaxVolunteers()));
             category.setText(event.getCategory());
+
+            venue.setText(Html.fromHtml(
+                            "<a href=\"https://www.google.com.sg/maps/place/" + event.getVenue() + "\">" +
+                            event.getVenue() +
+                            "</a>"));
+            venue.setMovementMethod(LinkMovementMethod.getInstance());
 
             actionButton.setText("Join");
             actionButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     eventsAdapter.joinEvent(event, parentId);
                     Utils.showAlertDialog("You have joined this event!", ctxt);
-                    Intent intent = new Intent(ctxt, EventParentViewActivity.class);
+                    Intent intent = new Intent(ctxt, EventParentHomeSpinnerActivity.class);
                     intent.putExtra("user_id", parentId);
                     startActivity(intent);
                 }
@@ -379,8 +387,10 @@ public class EventFormViewActivity extends EventMasterActivity {
             cancelButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     eventsAdapter.unjoinEvent(event, parentId);
+                    CalendarManager calendarManager = new CalendarManager(ctxt);
+                    calendarManager.deleteCalendarEvent(event);
                     Utils.showAlertDialog("You have unjoined this event!", ctxt);
-                    Intent intent = new Intent(ctxt, EventParentViewActivity.class);
+                    Intent intent = new Intent(ctxt, EventParentHomeSpinnerActivity.class);
                     intent.putExtra("user_id", parentId);
                     startActivity(intent);
                 }

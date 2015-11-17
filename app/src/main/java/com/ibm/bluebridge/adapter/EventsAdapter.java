@@ -4,7 +4,9 @@ import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +16,7 @@ import com.ibm.bluebridge.util.RESTApi;
 import com.ibm.bluebridge.valueobject.Children;
 import com.ibm.bluebridge.valueobject.Event;
 import com.ibm.bluebridge.valueobject.Parent;
+import com.ibm.bluebridge.valueobject.User;
 
 /**
  * Created by manirm on 10/10/2015.
@@ -504,6 +507,93 @@ public class EventsAdapter {
         return eventsList;
     }
 
+    public Parent getParentDetail(String user_id) {
+        String userDetailAPI = REST_API.getBaseRestURL() + "/view_user_info?user_id=" + user_id;
+        Parent parent = new Parent();
+
+        try {
+            REST_API.getResponse(userDetailAPI);
+            Object response = null;
+
+            try {
+                response = REST_API.getRespObj().get("response");
+            }
+            catch(JSONException excep) {
+                Log.e("JSONException","Skipping the exception if no mapping found");
+            }
+
+            if(response != null ) {
+                JSONObject jsonUser = (JSONObject) response;
+                parent.setId(jsonUser.getString("id"));
+                parent.setRole(jsonUser.getString("role"));
+                parent.setFirstname(jsonUser.getString("firstname"));
+                parent.setLastname(jsonUser.getString("lastname"));
+                parent.setGender(jsonUser.getString("gender"));
+                parent.setContact(jsonUser.getString("contact"));
+                parent.setEmail(jsonUser.getString("email"));
+                parent.setJob(jsonUser.getString("job"));
+                parent.setAddress(jsonUser.getString("address"));
+                JSONArray jsonChildren = (JSONArray) jsonUser.getJSONArray("children");
+                List<Children> childrenArr = new ArrayList<>(jsonChildren.length());
+                for (int i = 0; i < jsonChildren.length(); i++) {
+                    JSONObject child = jsonChildren.getJSONObject(i);
+                    Children children = new Children();
+                    children.setId(child.getString("id"));
+                    children.setName(child.getString("name"));
+                    children.setGender(child.getString("gender"));
+                    children.setBirthDate(child.getString("birth_date"));
+                    children.setRegistrationYear(child.getString("registration_year"));
+                    childrenArr.add(children);
+                }
+                parent.setChildren(childrenArr);
+            }
+        }
+        catch(Exception excep){
+            excep.printStackTrace();
+        }
+        finally {
+            // restConnection.disconnect();
+        }
+
+        return parent;
+    }
+
+    public User getAdminDetail(String user_id) {
+        String userDetailAPI = REST_API.getBaseRestURL() + "/view_user_info?user_id=" + user_id;
+        User user = new User();
+
+        try {
+            REST_API.getResponse(userDetailAPI);
+            Object response = null;
+
+            try {
+                response = REST_API.getRespObj().get("response");
+            }
+            catch(JSONException excep) {
+                Log.e("JSONException","Skipping the exception if no mapping found");
+            }
+
+            if(response != null ) {
+                JSONObject jsonUser = (JSONObject) response;
+                user.setId(jsonUser.getString("id"));
+                user.setRole(jsonUser.getString("role"));
+                user.setFirstname(jsonUser.getString("firstname"));
+                user.setLastname(jsonUser.getString("lastname"));
+                user.setGender(jsonUser.getString("gender"));
+                user.setContact(jsonUser.getString("contact"));
+                user.setEmail(jsonUser.getString("email"));
+            }
+        }
+        catch(Exception excep){
+            excep.printStackTrace();
+        }
+        finally {
+            // restConnection.disconnect();
+        }
+
+        return user;
+    }
+
     public void joinEvent(Event event,String parent_id) {
 
         String joinEventsAPI = REST_API.getBaseRestURL() + "/parent_register_event?parent_id="+parent_id+"&event_id="+event.getEventId();
@@ -524,5 +614,23 @@ public class EventsAdapter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    public Map<String,List<Event>> categorizeEvents(List<Event> allEvents) {
+
+        Map<String,List<Event>> categorizedEventMap = new HashMap<>();
+
+        //create prefixed category entries
+        categorizedEventMap.put("Education", new ArrayList<Event>());
+        categorizedEventMap.put("Sports", new ArrayList<Event>());
+        categorizedEventMap.put("Volunteering", new ArrayList<Event>());
+
+        for(Event event:allEvents) {
+            List<Event> eventList = categorizedEventMap.get(event.getCategory());
+            eventList.add(event);
+        }
+
+        return categorizedEventMap;
     }
 }

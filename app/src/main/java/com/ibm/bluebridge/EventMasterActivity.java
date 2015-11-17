@@ -7,8 +7,11 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ibm.bluebridge.R;
@@ -19,6 +22,7 @@ import com.ibm.bluebridge.valueobject.Parent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by manirm on 10/25/2015.
@@ -189,6 +193,36 @@ public class EventMasterActivity extends ActionBarActivity {
 
     protected static ArrayAdapter<Children> getChildrenListItemAdapter(Context ctxt,List<Children> children) {
         return new ChildrenListItemAdapter<Children>(ctxt, children);
+    }
+
+    protected static void displayCategorizedListView(Map<String,List<Event>> categorizedEventMap, Context ctxt, RelativeLayout layout, String id, AdapterView.OnItemClickListener listener) {
+        TextView category1 = new TextView(ctxt);
+        category1.setText("Education");
+        TextView category2 = new TextView(ctxt);
+        category2.setText("Sports");
+        TextView category3 = new TextView(ctxt);
+        category3.setText("Volunteers");
+
+        //Have to add click item listeners
+        ListView listCat1 = new ListView(ctxt);
+        ArrayAdapter<Event> adapter = getEventArrayAdapter(ctxt, categorizedEventMap.get("Education"));
+        listCat1.setAdapter(adapter);
+        listCat1.setOnItemClickListener(listener);
+        ListView listCat2 = new ListView(ctxt);
+        adapter = getEventArrayAdapter(ctxt, categorizedEventMap.get("Sports"));
+        listCat2.setAdapter(adapter);
+        listCat2.setOnItemClickListener(listener);
+        ListView listCat3 = new ListView(ctxt);
+        adapter = getEventArrayAdapter(ctxt, categorizedEventMap.get("Volunteers"));
+        listCat3.setAdapter(adapter);
+        listCat3.setOnItemClickListener(listener);
+
+        layout.addView(category1);
+        layout.addView(listCat1);
+        layout.addView(category2);
+        layout.addView(listCat2);
+        layout.addView(category3);
+        layout.addView(listCat3);
     }
 
     protected enum ParentModes {
