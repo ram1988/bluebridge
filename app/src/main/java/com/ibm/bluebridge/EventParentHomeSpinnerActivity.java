@@ -347,7 +347,6 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                 viewCalendarButton.setVisibility(View.INVISIBLE);
                 //For About Me
                 Parent parent = eventsAdapter.getParentDetail(parent_id);
-                //this.setTitle(parent.getFirstname()+" "+parent.getLastname());
 
                 TextView nameView = (TextView) parentDetailView.findViewById(R.id.name_text);
                 TextView nricView = (TextView) parentDetailView.findViewById(R.id.nric_text);
