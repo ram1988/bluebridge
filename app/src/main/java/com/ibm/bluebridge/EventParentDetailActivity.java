@@ -11,6 +11,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -37,6 +40,7 @@ public class EventParentDetailActivity extends EventMasterActivity {
     private Bitmap bitmap;
     private ImageView photo;
     private RESTApi REST_API;
+    private Intent callIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +75,27 @@ public class EventParentDetailActivity extends EventMasterActivity {
         TextView jobView = (TextView) findViewById(R.id.job_text);
         TextView addressView = (TextView) findViewById(R.id.address_text);
         ListView childrenView = (ListView) findViewById(R.id.childrenlist);
+        callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:+" + parent.getContact().trim()));
 
-        nricView.setText(   "NRIC:           " + parent.getId());
-        genderView.setText( "Gender:        " + parent.getGender());
+        contactView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                startActivity(callIntent);
+            }
+        });
+
+        nricView.setText("NRIC:           " + parent.getId());
+        genderView.setText("Gender:        " + parent.getGender());
         contactView.setText("Contact:       " + parent.getContact());
-        emailView.setText(  "Email:          " + parent.getEmail());
+        //emailView.setText(  "Email:          " + parent.getEmail());
         jobView.setText(    "Job:              " + parent.getJob());
         addressView.setText("Address:      " + parent.getAddress());
+
+        emailView.setText(Html.fromHtml("Email:            <a href=\"mailto:" + parent.getEmail() + "\">" + parent.getEmail() + "</a>"));
+        emailView.setMovementMethod(LinkMovementMethod.getInstance());
 
         ArrayAdapter<Children> mAdapter = getChildrenListItemAdapter(ctxt, parent.getChildren());
         childrenView.setAdapter(mAdapter);
