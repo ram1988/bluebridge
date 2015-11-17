@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
@@ -199,6 +200,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_event_admin_home_tab, container, false);
+            LinearLayout layout=(LinearLayout) rootView.findViewById(R.id.admin_list_layout);
 
             int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
@@ -240,28 +242,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                     };
 
                     Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
-                    RelativeLayout layout=(RelativeLayout) rootView.findViewById(R.id.admin_list_layout);
-                    displayCategorizedListView(categorizedEventMap,selfCtxt, layout, admin_id, listItemListener);
-
-                    ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt, eventList);
-
-                    //arrayAdapterMap.put(tabNumber-1,adapter);
-                    listView.setAdapter(adapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, final View view,
-                                                int position, long id) {
-                            final Event item = (Event) parent.getItemAtPosition(position);
-
-                            Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                            intent.putExtra("EventAction", 1);
-                            intent.putExtra("EventObj", item);
-                            intent.putExtra("admin_id", admin_id);
-
-                            startActivity(intent);
-                        }
-                    });
+                    displayCategorizedListView(categorizedEventMap, selfCtxt, layout, admin_id, listItemListener);
 
                     viewCalendarButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -275,9 +256,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                 Log.d("EventAdminHomeSpinner", "Tab2 clicked");
                 final List<Event> completedEventsList = eventsAdapter.getAdminCompletedEventsList(admin_id);
 
-                final ArrayAdapter<Event> adapter = getEventArrayAdapter(selfCtxt, completedEventsList);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, final View view,
@@ -292,7 +271,10 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
 
                         startActivity(intent);
                     }
-                });
+                };
+
+                Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(completedEventsList);
+                displayCategorizedListView(categorizedEventMap, selfCtxt, layout, admin_id, listItemListener);
 
                 viewCalendarButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {

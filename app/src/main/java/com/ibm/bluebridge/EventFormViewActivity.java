@@ -188,7 +188,7 @@ public class EventFormViewActivity extends EventMasterActivity {
 
 
 
-                    Intent intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
+                    Intent intent = new Intent(ctxt, EventAdminHomeSpinnerCateActivity.class);
                     intent.putExtra("user_id", adminId);
                     intent.putExtra("message","Event Added!!!");
 
@@ -197,7 +197,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                 }
             });
         }
-        else if(mode == 1) { //admin edit event
+        else if(mode == 1) { //admin edit events
             EditText eventTitle = (EditText) findViewById(R.id.event_title);
             EditText duty = (EditText) findViewById(R.id.event_desc_edit);
             DatePicker eventDatePicker = (DatePicker) findViewById(R.id.event_date_picker);
@@ -308,7 +308,7 @@ public class EventFormViewActivity extends EventMasterActivity {
 
 
 
-                    Intent intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
+                    Intent intent = new Intent(ctxt, EventAdminHomeSpinnerCateActivity.class);
                     intent.putExtra("user_id", adminId);
                     intent.putExtra("message","Event Deleted!!!");
 

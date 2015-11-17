@@ -1,21 +1,26 @@
 package com.ibm.bluebridge;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ibm.bluebridge.R;
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.util.CONSTANTS;
 import com.ibm.bluebridge.valueobject.Children;
 import com.ibm.bluebridge.valueobject.Event;
 import com.ibm.bluebridge.valueobject.Parent;
@@ -195,34 +200,31 @@ public class EventMasterActivity extends ActionBarActivity {
         return new ChildrenListItemAdapter<Children>(ctxt, children);
     }
 
-    protected static void displayCategorizedListView(Map<String,List<Event>> categorizedEventMap, Context ctxt, RelativeLayout layout, String id, AdapterView.OnItemClickListener listener) {
-        TextView category1 = new TextView(ctxt);
-        category1.setText("Education");
-        TextView category2 = new TextView(ctxt);
-        category2.setText("Sports");
-        TextView category3 = new TextView(ctxt);
-        category3.setText("Volunteers");
+    protected static void displayCategorizedListView(Map<String,List<Event>> categorizedEventMap, Context ctxt, LinearLayout layout, String id, AdapterView.OnItemClickListener listener) {
 
-        //Have to add click item listeners
-        ListView listCat1 = new ListView(ctxt);
-        ArrayAdapter<Event> adapter = getEventArrayAdapter(ctxt, categorizedEventMap.get("Education"));
-        listCat1.setAdapter(adapter);
-        listCat1.setOnItemClickListener(listener);
-        ListView listCat2 = new ListView(ctxt);
-        adapter = getEventArrayAdapter(ctxt, categorizedEventMap.get("Sports"));
-        listCat2.setAdapter(adapter);
-        listCat2.setOnItemClickListener(listener);
-        ListView listCat3 = new ListView(ctxt);
-        adapter = getEventArrayAdapter(ctxt, categorizedEventMap.get("Volunteers"));
-        listCat3.setAdapter(adapter);
-        listCat3.setOnItemClickListener(listener);
+        for(String category : CONSTANTS.CATEGORIES) {
+            if(categorizedEventMap.containsKey(category)) {
+                TextView categoryText = new TextView(ctxt);
+                categoryText.setText(" "+category);
+                categoryText.setBackgroundColor(0xFFA6CBFF);
+                categoryText.setTypeface(null, Typeface.BOLD);
+                categoryText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
 
-        layout.addView(category1);
-        layout.addView(listCat1);
-        layout.addView(category2);
-        layout.addView(listCat2);
-        layout.addView(category3);
-        layout.addView(listCat3);
+                TextView divider = new TextView(ctxt);
+                divider.setText("      ");
+
+                ListView listCat1 = new ListView(ctxt);
+                listCat1.setLayoutParams(new ViewGroup.LayoutParams(600, 480));
+                listCat1.setVerticalScrollBarEnabled(true);
+                ArrayAdapter<Event> adapter = getEventArrayAdapter(ctxt, categorizedEventMap.get(category));
+                listCat1.setAdapter(adapter);
+                listCat1.setOnItemClickListener(listener);
+
+                layout.addView(categoryText);
+                layout.addView(divider);
+                layout.addView(listCat1);
+            }
+        }
     }
 
     protected enum ParentModes {
