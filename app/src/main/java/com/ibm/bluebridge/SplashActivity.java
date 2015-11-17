@@ -47,7 +47,7 @@ public class SplashActivity extends AppCompatActivity {
                 Intent i = new Intent(this, EventParentHomeSpinnerActivity.class);
                 startActivity(i);
             }else if(session.isAdmin()){
-                Intent i = new Intent(this, EventAdminHomeSpinnerActivity.class);
+                Intent i = new Intent(this, EventAdminHomeSpinnerCateActivity.class);
                 startActivity(i);
             }
             finish();

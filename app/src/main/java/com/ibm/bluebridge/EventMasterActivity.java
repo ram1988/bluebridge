@@ -34,15 +34,21 @@ import java.util.Map;
  */
 public class EventMasterActivity extends ActionBarActivity {
 
-    private static class EventListItemAdapter<T> extends ArrayAdapter<Event>  {
+   // private static class EventListItemAdapter<T> extends ArrayAdapter<Event>  {
+    private static class EventListItemAdapter<T> extends ArrayAdapter<Object>  {
 
         private class ViewHolder {
             private TextView eventNameView;
             private TextView maxRegView;
         }
 
-        public EventListItemAdapter(Context context,
+       /* public EventListItemAdapter(Context context,
                            List<Event> objects) {
+            super(context, 0, objects);
+        }*/
+
+        public EventListItemAdapter(Context context,
+                                    List<Object> objects) {
             super(context, 0, objects);
         }
 
@@ -64,16 +70,31 @@ public class EventMasterActivity extends ActionBarActivity {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            Event item = getItem(position);
-            if (item!= null) {
-                // My layout has only one TextView
-                // do whatever you want with your string and long
-                viewHolder.eventNameView.setText(String.format("%s", item.getEventName()));
-                if (item.getVacancy() != -100) {
-                    viewHolder.maxRegView.setText("Date: " + String.format("%s", item.getEventDate()) + "   Registered: " + String.format("%s", item.getMaxVolunteers() - item.getVacancy()) + "    Vacancies: " + String.format("%s", item.getVacancy()));
-                } else {
-                    viewHolder.maxRegView.setText("Date: " + String.format("%s", item.getEventDate()));
+            Object obj = getItem(position);
+
+            if(obj instanceof  Event) {
+                Event item = (Event) obj;
+                if (item != null) {
+                    // My layout has only one TextView
+                    // do whatever you want with your string and long
+                    viewHolder.eventNameView.setBackgroundColor(Color.WHITE);
+                    viewHolder.eventNameView.setTypeface(null, Typeface.NORMAL);
+                    viewHolder.eventNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                    viewHolder.eventNameView.setText(String.format("%s", item.getEventName()));
+                    if (item.getVacancy() != -100) {
+                        viewHolder.maxRegView.setText("Date: " + String.format("%s", item.getEventDate()) + "   Registered: " + String.format("%s", item.getMaxVolunteers() - item.getVacancy()) + "    Vacancies: " + String.format("%s", item.getVacancy()));
+                    } else {
+                        viewHolder.maxRegView.setText("Date: " + String.format("%s", item.getEventDate()));
+                    }
                 }
+            }
+            else if(obj instanceof String){
+                //CategoryTitle
+                viewHolder.eventNameView.setText(" " + obj.toString());
+                viewHolder.eventNameView.setBackgroundColor(0xFFA6CBFF);
+                viewHolder.eventNameView.setTypeface(null, Typeface.BOLD);
+                viewHolder.eventNameView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                viewHolder.maxRegView.setText("");
             }
 
             return convertView;
@@ -188,9 +209,14 @@ public class EventMasterActivity extends ActionBarActivity {
         }
     }
 
-    protected static ArrayAdapter<Event> getEventArrayAdapter(Context ctxt,List<Event> events) {
+   /* protected static ArrayAdapter<Event> getEventArrayAdapter(Context ctxt,List<Event> events) {
         return new EventListItemAdapter<Event>(ctxt,events);
     }
+*/
+    protected static ArrayAdapter<Object> getEventArrayAdapter(Context ctxt,List<Object> events) {
+        return new EventListItemAdapter<Object>(ctxt,events);
+    }
+
 
     protected static ArrayAdapter<Parent> getParentListItemAdapter(Context ctxt,List<Parent> parents,ParentModes mode, String event_id) {
         return new ParentListItemAdapter<Parent>(ctxt, parents, mode, event_id);
@@ -200,31 +226,22 @@ public class EventMasterActivity extends ActionBarActivity {
         return new ChildrenListItemAdapter<Children>(ctxt, children);
     }
 
-    protected static void displayCategorizedListView(Map<String,List<Event>> categorizedEventMap, Context ctxt, LinearLayout layout, String id, AdapterView.OnItemClickListener listener) {
+    protected static void displayCategorizedListView(Map<String,List<Event>> categorizedEventMap, Context ctxt, ListView listView) {
 
+        List<Object> eventsList = new ArrayList<>();
         for(String category : CONSTANTS.CATEGORIES) {
-            if(categorizedEventMap.containsKey(category)) {
-                TextView categoryText = new TextView(ctxt);
-                categoryText.setText(" "+category);
-                categoryText.setBackgroundColor(0xFFA6CBFF);
-                categoryText.setTypeface(null, Typeface.BOLD);
-                categoryText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
-
-                TextView divider = new TextView(ctxt);
-                divider.setText("      ");
-
-                ListView listCat1 = new ListView(ctxt);
-                listCat1.setLayoutParams(new ViewGroup.LayoutParams(600, 480));
-                listCat1.setVerticalScrollBarEnabled(true);
-                ArrayAdapter<Event> adapter = getEventArrayAdapter(ctxt, categorizedEventMap.get(category));
-                listCat1.setAdapter(adapter);
-                listCat1.setOnItemClickListener(listener);
-
-                layout.addView(categoryText);
-                layout.addView(divider);
-                layout.addView(listCat1);
+            if(categorizedEventMap.containsKey(category) && !categorizedEventMap.get(category).isEmpty()) {
+                System.out.println("Available Category:"+category);
+                eventsList.add(category);
+                List<Event> events = categorizedEventMap.get(category);
+                for (Event event : events) {
+                    eventsList.add(event);
+                }
             }
         }
+
+        ArrayAdapter<Object> adapter = getEventArrayAdapter(ctxt, eventsList);
+        listView.setAdapter(adapter);
     }
 
     protected enum ParentModes {

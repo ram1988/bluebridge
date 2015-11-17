@@ -1,9 +1,13 @@
 package com.ibm.bluebridge;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources.Theme;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -19,21 +23,28 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.adapter.StatisticsAdapter;
 import com.ibm.bluebridge.eventcalendar.CalendarManager;
 import com.ibm.bluebridge.eventcalendar.EventCalendarView;
+import com.ibm.bluebridge.util.RESTApi;
 import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.valueobject.ChartItem;
 import com.ibm.bluebridge.valueobject.Event;
+import com.ibm.bluebridge.valueobject.User;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -174,6 +185,10 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
+        private ProgressDialog pDialog;
+        private Bitmap bitmap;
+        private ImageView photo;
+        private RESTApi REST_API;
         /**
          * The fragment argument representing the section number for this
          * fragment.
@@ -208,10 +223,13 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
 
             final ListView listView = (ListView) rootView.findViewById(R.id.listview);
             TextView noEventsMsg = (TextView)rootView.findViewById(R.id.no_events_message);
+            View aboutmeView = inflater.inflate(R.layout.content_aboutme_admin, container, false);
+            ScrollView adminDetailView = (ScrollView)aboutmeView.findViewById(R.id.admin_details);
 
 
             //For all events
             if(tabNumber == 1 ) {
+                viewCalendarButton.setVisibility(View.VISIBLE);
                 Log.d("EventAdminHomeSpinner", "Tab1 clicked");
                 final List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
                 CalendarManager calendarManager = new CalendarManager(selfCtxt);
@@ -230,19 +248,25 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, final View view,
                                                 int position, long id) {
-                            final Event item = (Event) parent.getItemAtPosition(position);
+                            Object obj = parent.getItemAtPosition(position);
 
-                            Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                            intent.putExtra("EventAction", 1);
-                            intent.putExtra("EventObj", item);
-                            intent.putExtra("admin_id", admin_id);
+                            if(obj instanceof Event) {
+                                final Event item = (Event) obj;
 
-                            startActivity(intent);
+                                Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
+                                intent.putExtra("EventAction", 1);
+                                intent.putExtra("EventObj", item);
+                                intent.putExtra("admin_id", admin_id);
+
+                                startActivity(intent);
+                            }
                         }
                     };
 
+                    listView.setOnItemClickListener(listItemListener);
+
                     Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
-                    displayCategorizedListView(categorizedEventMap, selfCtxt, layout, admin_id, listItemListener);
+                    displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
 
                     viewCalendarButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
@@ -253,6 +277,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
             }
             //For joined events
             else if(tabNumber == 2) {
+                viewCalendarButton.setVisibility(View.VISIBLE);
                 Log.d("EventAdminHomeSpinner", "Tab2 clicked");
                 final List<Event> completedEventsList = eventsAdapter.getAdminCompletedEventsList(admin_id);
 
@@ -261,20 +286,26 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, final View view,
                                             int position, long id) {
-                        final Event item = (Event) parent.getItemAtPosition(position);
+                        Object obj = parent.getItemAtPosition(position);
 
-                        //to be in read mode
-                        Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                        intent.putExtra("EventAction", 2);
-                        intent.putExtra("EventObj", item);
-                        intent.putExtra("admin_id", admin_id);
+                        if(obj instanceof Event) {
+                            final Event item = (Event) obj;
 
-                        startActivity(intent);
+                            //to be in read mode
+                            Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
+                            intent.putExtra("EventAction", 2);
+                            intent.putExtra("EventObj", item);
+                            intent.putExtra("admin_id", admin_id);
+
+                            startActivity(intent);
+                        }
                     }
                 };
 
+                listView.setOnItemClickListener(listItemListener);
+
                 Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(completedEventsList);
-                displayCategorizedListView(categorizedEventMap, selfCtxt, layout, admin_id, listItemListener);
+                displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
 
                 viewCalendarButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
@@ -315,10 +346,61 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
 
                 viewCalendarButton.setVisibility(View.INVISIBLE);
             } else if (tabNumber == 4){
+                viewCalendarButton.setVisibility(View.INVISIBLE);
                 //For About Me
+                User admin = eventsAdapter.getParentDetail(admin_id);
+
+                TextView nameView = (TextView) adminDetailView.findViewById(R.id.name_text);
+                TextView nricView = (TextView) adminDetailView.findViewById(R.id.nric_text);
+                TextView genderView = (TextView) adminDetailView.findViewById(R.id.gender_text);
+                TextView contactView = (TextView) adminDetailView.findViewById(R.id.contact_text);
+                TextView emailView = (TextView) adminDetailView.findViewById(R.id.email_text);
+
+                this.REST_API = new RESTApi();
+                photo = (ImageView) adminDetailView.findViewById(R.id.photo);
+                String imageURL = REST_API.getBaseRestURL() + "/view_user_image?user_id=" + admin_id;
+                new LoadImage().execute(imageURL);
+
+                nameView.setText("Name:         " + admin.getFirstname() + " " + admin.getLastname());
+                nricView.setText("NRIC:           " + admin.getId());
+                genderView.setText( "Gender:        " + admin.getGender());
+                contactView.setText("Contact:       " + admin.getContact());
+                emailView.setText("Email:          " + admin.getEmail());
+                return aboutmeView;
             }
 
             return rootView;
+        }
+        private class LoadImage extends AsyncTask<String, String, Bitmap> {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                pDialog = new ProgressDialog(selfCtxt);
+                pDialog.setMessage("Loading Image ....");
+                pDialog.show();
+
+            }
+            protected Bitmap doInBackground(String... args) {
+                try {
+                    bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return bitmap;
+            }
+
+            protected void onPostExecute(Bitmap image) {
+
+                if(image != null){
+                    photo.setImageBitmap(image);
+                    pDialog.dismiss();
+                }else{
+                    pDialog.dismiss();
+                    Toast.makeText(selfCtxt, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
+
+                }
+            }
         }
     }
 

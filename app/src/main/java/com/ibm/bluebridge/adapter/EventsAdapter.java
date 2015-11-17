@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+import com.ibm.bluebridge.util.CONSTANTS;
 import com.ibm.bluebridge.util.RESTApi;
 import com.ibm.bluebridge.valueobject.Children;
 import com.ibm.bluebridge.valueobject.Event;
@@ -621,10 +622,9 @@ public class EventsAdapter {
 
         Map<String,List<Event>> categorizedEventMap = new HashMap<>();
 
-        //create prefixed category entries
-        categorizedEventMap.put("Education", new ArrayList<Event>());
-        categorizedEventMap.put("Sports", new ArrayList<Event>());
-        categorizedEventMap.put("Volunteering", new ArrayList<Event>());
+       for(String category: CONSTANTS.CATEGORIES) {
+           categorizedEventMap.put(category, new ArrayList<Event>());
+       }
 
         for(Event event:allEvents) {
             List<Event> eventList = categorizedEventMap.get(event.getCategory());
@@ -633,4 +633,6 @@ public class EventsAdapter {
 
         return categorizedEventMap;
     }
+
+
 }
