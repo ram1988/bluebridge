@@ -22,9 +22,4 @@
         android:layout_height="550sp"
         android:layout_alignParentStart="true" />
 
-<<<<<<< HEAD
-    <!--<include layout="@layout/content_aboutme_parent" />-->
-
-=======
->>>>>>> origin/master
 </LinearLayout>

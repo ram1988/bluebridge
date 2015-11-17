@@ -91,8 +91,6 @@
             </intent-filter>
         </activity>
         <activity
-<<<<<<< HEAD
-=======
             android:name=".EventParentHomeSpinnerActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
@@ -103,7 +101,6 @@
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
         <activity
->>>>>>> origin/master
             android:name=".EventAdminHomeSpinnerCateActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >

@@ -61,6 +61,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
     private static FragmentManager fragmentManager;
     private static Button viewCalendarButton;
     private static SessionManager session;
+    private Parent parent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,10 +108,12 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
         selfCtxt = this;
         session = SessionManager.getSessionInstance(this);
         parent_id = session.getUserId();
+
         System.out.println("Parent-->"+parent_id);
 
         fragmentManager  = getSupportFragmentManager();
         eventsAdapter = new EventsAdapter(selfCtxt);
+        parent = eventsAdapter.getParentDetail(parent_id);
 
         Intent intent = getIntent();
 

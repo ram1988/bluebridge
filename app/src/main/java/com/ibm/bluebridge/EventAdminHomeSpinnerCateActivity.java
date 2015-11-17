@@ -58,6 +58,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
     private static EventsAdapter eventsAdapter ;
     private static FragmentManager fragmentManager;
     private static Button viewCalendarButton;
+    private static User user;
 
     private static SessionManager session;
 
@@ -84,7 +85,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 4) {  //Last item is logout
+                if (position == 4) {  //Last item is logout
                     session.logout();
                     return;
                 }
@@ -105,10 +106,12 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
         admin_id = session.getUserId();
         System.out.println("Admin-->"+admin_id);
 
+
         selfCtxt = selfActivity = this;
         fragmentManager  = getSupportFragmentManager();
         final Activity localRef = this;
         eventsAdapter = new EventsAdapter(selfCtxt);
+        user = eventsAdapter.getParentDetail(admin_id);
 
         Intent intent = getIntent();
         String message = intent.getStringExtra("message");
@@ -348,7 +351,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
             } else if (tabNumber == 4){
                 viewCalendarButton.setVisibility(View.INVISIBLE);
                 //For About Me
-                User admin = eventsAdapter.getParentDetail(admin_id);
+
 
                 TextView nameView = (TextView) adminDetailView.findViewById(R.id.name_text);
                 TextView nricView = (TextView) adminDetailView.findViewById(R.id.nric_text);
@@ -361,11 +364,11 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                 String imageURL = REST_API.getBaseRestURL() + "/view_user_image?user_id=" + admin_id;
                 new LoadImage().execute(imageURL);
 
-                nameView.setText("Name:         " + admin.getFirstname() + " " + admin.getLastname());
-                nricView.setText("NRIC:           " + admin.getId());
-                genderView.setText( "Gender:        " + admin.getGender());
-                contactView.setText("Contact:       " + admin.getContact());
-                emailView.setText("Email:          " + admin.getEmail());
+                nameView.setText("Name:         " + user.getFirstname() + " " + user.getLastname());
+                nricView.setText("NRIC:           " + user.getId());
+                genderView.setText( "Gender:        " + user.getGender());
+                contactView.setText("Contact:       " + user.getContact());
+                emailView.setText("Email:          " + user.getEmail());
                 return aboutmeView;
             }
 

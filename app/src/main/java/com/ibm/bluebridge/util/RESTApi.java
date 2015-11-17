@@ -120,7 +120,12 @@ public class RESTApi {
                             jsonStr.append(line);
                         }
                         Log.d("RESTApi", "jsonStrfrom-->" + jsonStr.toString());
-                        respJsonObj.put("response", new JSONArray(jsonStr.toString()));
+                        try{
+                            respJsonObj.put("response", new JSONArray(jsonStr.toString()));
+                        }
+                        catch(JSONException excep) {
+                            respJsonObj.put("response", new JSONObject(jsonStr.toString()));
+                        }
                         Log.d("RESTApi", "jsonObj-->" + respJsonObj);
                         respJsonObj.notifyAll();
                     }
