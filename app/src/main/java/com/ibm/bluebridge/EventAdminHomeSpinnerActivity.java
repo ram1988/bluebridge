@@ -27,6 +27,9 @@ import android.widget.TextView;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.adapter.StatisticsAdapter;
+import com.ibm.bluebridge.charts.HorizontalBarChartActivity;
+import com.ibm.bluebridge.charts.LineActivity;
+import com.ibm.bluebridge.charts.PieChartActivity;
 import com.ibm.bluebridge.eventcalendar.CalendarManager;
 import com.ibm.bluebridge.eventcalendar.EventCalendarView;
 import com.ibm.bluebridge.util.SessionManager;
@@ -73,7 +76,7 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 4) {  //Last item is logout
+                if (position == 4) {  //Last item is logout
                     session.logout();
                     return;
                 }
@@ -288,14 +291,14 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
                 chart1.setCategory("Parents' Finished Hours");
                 ChartItem chart2 = new ChartItem();
                 chart2.setCategory("Number of Parents by Child Registration Year");
-                ChartItem chart3 = new ChartItem();
-                chart3.setCategory("Percentage of Finished by child registration year");
+                //ChartItem chart3 = new ChartItem();
+                //chart3.setCategory("Percentage of Finished by child registration year");
                 ChartItem chart4 = new ChartItem();
                 chart4.setCategory("Number of Registration by Event Category");
 
                 charts.add(chart1);
                 charts.add(chart2);
-                charts.add(chart3);
+                //charts.add(chart3);
                 charts.add(chart4);
 
                 StatisticsAdapter adapter = new StatisticsAdapter(selfCtxt, charts);
@@ -307,11 +310,30 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
                                             int position, long id) {
 
                         if(position == 0){
-                            Intent chart = new Intent();
-                            chart.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.charts.AdminChart1Activity");
+                            String data_json = "{\"Sunny Chow\":8.25," +
+                                    "\"Felicia Ng\":5.5," +
+                                    "\"Maria Tay\":10.1," +
+                                    "\"Andrew Ng\":9.3" +
+                                    "}";
+
+                            Intent chart = new Intent(getContext(), HorizontalBarChartActivity.class);
+                            chart.putExtra("input", data_json);
+                            chart.putExtra("legend", "every parent's finished hour");
                             startActivity(chart);
                         }else if(position == 1){
+                            String data_json = "{\"2017\":2,\"2018\":3,\"2019\":1}";
 
+                            Intent chart = new Intent(getContext(), LineActivity.class);
+                            chart.putExtra("input", data_json);
+                            chart.putExtra("legend", "number of parents by child registration year");
+                            startActivity(chart);
+                        }else if(position == 2){
+                            String data_json = "{\"Education\":5,\"Sports\":2}";
+
+                            Intent chart = new Intent(getContext(), PieChartActivity.class);
+                            chart.putExtra("input", data_json);
+                            chart.putExtra("legend", "Number of registration by event category for current year");
+                            startActivity(chart);
                         }
 
                     }

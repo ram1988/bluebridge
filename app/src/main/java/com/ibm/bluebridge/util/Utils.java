@@ -3,13 +3,17 @@ package com.ibm.bluebridge.util;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.provider.CalendarContract;
 import android.util.Log;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.ibm.mobilefirstplatform.clientsdk.android.security.api.AuthorizationManager;
 
 import org.json.JSONException;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -120,5 +124,28 @@ public class Utils {
         calendar.set(year, month, day, hour, minute);
 
         return calendar.getTimeInMillis();
+    }
+
+    public static void sendEmail(Chart chart, Context context){
+        Date now = new Date();
+        String date = android.text.format.DateFormat.format("yyyy-MM-dd-hh-mm-ss", now).toString();
+
+        // image naming and path  to include sd card  appending name you choose for file
+        String snapshotPath = Utils.getChartDir();
+        String snapshotFilename = date + ".jpg";
+
+        chart.saveToPath(snapshotPath , snapshotFilename);
+
+        File imageFile = new File(snapshotPath +"\\"+ snapshotFilename);
+        Uri uri = Uri.fromFile(imageFile);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_EMAIL, "");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "BlueBridge - chart email");
+        intent.putExtra(Intent.EXTRA_TEXT, "");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        context.startActivity(intent);
     }
 }

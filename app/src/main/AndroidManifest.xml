@@ -94,10 +94,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".charts.LineActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
         <activity
             android:name=".EventAdminHomeSpinnerActivity"
             android:label="@string/app_name"
@@ -113,9 +109,20 @@
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-        <activity android:name=".charts.HorizontalBarChartActivity" >
+        <activity
+            android:name=".charts.HorizontalBarChartActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" >
         </activity>
-        <activity android:name=".charts.AdminChart1Activity" >
+        <activity
+            android:name=".charts.LineActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".charts.PieChartActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
