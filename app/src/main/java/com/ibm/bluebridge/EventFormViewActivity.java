@@ -197,7 +197,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                 }
             });
         }
-        else if(mode == 1) { //admin edit event
+        else if(mode == 1) { //admin edit events
             EditText eventTitle = (EditText) findViewById(R.id.event_title);
             EditText duty = (EditText) findViewById(R.id.event_desc_edit);
             DatePicker eventDatePicker = (DatePicker) findViewById(R.id.event_date_picker);
