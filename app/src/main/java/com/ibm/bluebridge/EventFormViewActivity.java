@@ -188,7 +188,7 @@ public class EventFormViewActivity extends EventMasterActivity {
 
 
 
-                    Intent intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
+                    Intent intent = new Intent(ctxt, EventAdminHomeSpinnerCateActivity.class);
                     intent.putExtra("user_id", adminId);
                     intent.putExtra("message","Event Added!!!");
 
@@ -308,7 +308,7 @@ public class EventFormViewActivity extends EventMasterActivity {
 
 
 
-                    Intent intent = new Intent(ctxt, EventAdminHomeTabActivity.class);
+                    Intent intent = new Intent(ctxt, EventAdminHomeSpinnerCateActivity.class);
                     intent.putExtra("user_id", adminId);
                     intent.putExtra("message","Event Deleted!!!");
 
