@@ -304,9 +304,15 @@ public class EventAdminHomeSpinnerActivity extends EventMasterActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, final View view,
                                             int position, long id) {
-                        Intent chart = new Intent();
-                        chart.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.charts.LineActivity");
-                        startActivity(chart);
+
+                        if(position == 0){
+                            Intent chart = new Intent();
+                            chart.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.charts.AdminChart1Activity");
+                            startActivity(chart);
+                        }else if(position == 1){
+
+                        }
+
                     }
                 });
 

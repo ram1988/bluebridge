@@ -14,11 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -48,8 +44,6 @@ import java.util.Date;
 public class LineActivity extends AppCompatActivity implements
         OnChartValueSelectedListener, OnChartGestureListener {
     private LineChart mChart;
-    private SeekBar mSeekBarX, mSeekBarY;
-    private TextView tvX, tvY;
     private String snapshotPath;
 
     @Override
