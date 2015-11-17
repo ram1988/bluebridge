@@ -1,5 +1,6 @@
 package com.ibm.bluebridge;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -255,8 +256,6 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                             showCalendarBox(eventList);
                         }
                     });
-                    */
-
 
                     Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
                     displayCategorizedListView(categorizedEventMap, selfCtxt, layout, parent_id, listItemListener);
@@ -303,8 +302,6 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                             showCalendarBox(eventList);
                         }
                     });
-                    */
-
 
                     Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
                     displayCategorizedListView(categorizedEventMap, selfCtxt, layout, parent_id, listItemListener);
@@ -350,7 +347,6 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                             showCalendarBox(eventList);
                         }
                     });
-                    */
                     Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
                     displayCategorizedListView(categorizedEventMap, selfCtxt, layout, parent_id, listItemListener);
 
