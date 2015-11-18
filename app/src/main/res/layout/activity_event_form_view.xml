@@ -23,19 +23,20 @@
                 android:padding="16dp">
                 <TextView android:textStyle="bold"
                     android:id="@+id/event_title_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
                     android:textSize="25sp"
-                    android:text="Event Name"/>
+                    android:text="Event Name"
+                    android:background="#FFA6CBFF"/>
 
                 <EditText android:id="@+id/event_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/event_title_label"
                     android:layout_alignLeft="@+id/event_title_label"
                     android:layout_weight="1"
-                    android:width="220sp"/>
+                    android:width="220sp"
+                    android:layout_below="@+id/event_title_label" />
 
                 </RelativeLayout>
 
@@ -56,12 +57,13 @@
                 android:padding="16dp">
 
                 <TextView android:id="@+id/event_desc_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
                     android:textSize="25sp"
                     android:textStyle="bold"
-                    android:text="Event Description"/>
+                    android:text="Event Description"
+                    android:background="#FFA6CBFF"/>
 
                 <EditText
                     android:id="@+id/event_desc_edit"
@@ -90,13 +92,13 @@
         android:padding="16dp">
 
         <TextView android:id="@+id/event_date_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textSize="25sp"
             android:layout_margin="@dimen/text_margin"
             android:textStyle="bold"
             android:text="Event Date"
-            />
+            android:background="#FFA6CBFF"/>
 
         <DatePicker
             android:layout_width="250dp"
@@ -124,12 +126,13 @@
         android:padding="16dp">
 
         <TextView android:id="@+id/start_time_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:layout_margin="@dimen/text_margin"
             android:text="Start Time"
-            android:textSize="25sp"  />
+            android:textSize="25sp"
+            android:background="#FFA6CBFF"/>
 
         <TimePicker
             android:id="@+id/start_time"
@@ -152,12 +155,13 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
         <TextView android:id="@+id/end_time_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:layout_margin="@dimen/text_margin"
             android:text="End Time"
-            android:textSize="25sp"/>
+            android:textSize="25sp"
+            android:background="#FFA6CBFF"/>
 
         <TimePicker
             android:id="@+id/end_time"
@@ -182,12 +186,13 @@
         android:padding="16dp">
 
         <TextView android:id="@+id/event_duration_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:textStyle="bold"
             android:textSize="25sp"
-            android:text="Event Duration (in hrs)" />
+            android:text="Event Duration (in hrs)"
+            android:background="#FFA6CBFF"/>
 
         <EditText android:id="@+id/event_duration"
             android:layout_width="wrap_content"
@@ -213,12 +218,13 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
         <TextView android:id="@+id/venue_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:textStyle="bold"
             android:text="Venue"
-            android:textSize="25sp"/>
+            android:textSize="25sp"
+            android:background="#FFA6CBFF"/>
 
         <EditText android:id="@+id/venue_edit"
             android:layout_width="wrap_content"
@@ -243,12 +249,13 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
         <TextView android:id="@+id/brief_time_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:textStyle="bold"
             android:text="Brief Time"
-            android:textSize="25sp"/>
+            android:textSize="25sp"
+            android:background="#FFA6CBFF"/>
 
         <TimePicker
             android:id="@+id/brief_time_picker"
@@ -272,12 +279,13 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
         <TextView android:id="@+id/brief_location_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="Place of Briefing"
             android:textStyle="bold"
-            android:textSize="25sp"/>
+            android:textSize="25sp"
+            android:background="#FFA6CBFF"/>
 
         <EditText android:id = "@+id/brief_location"
             android:layout_width="wrap_content"
@@ -302,12 +310,13 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
         <TextView android:id="@+id/teacher_in_charge_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:text="Teacher in Charge"
             android:textStyle="bold"
-            android:textSize="25sp"  />
+            android:textSize="25sp"
+            android:background="#FFA6CBFF"/>
 
         <EditText android:id = "@+id/teacher_in_charge_edit"
             android:layout_width="wrap_content"
@@ -333,12 +342,13 @@
         android:padding="16dp">
 
         <TextView android:id="@+id/max_volunteers_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:text="Max no. of volunteers" />
+            android:text="Max no. of volunteers"
+            android:background="#FFA6CBFF"/>
 
         <EditText
             android:id="@+id/max_volunteers_text"
@@ -367,12 +377,13 @@
                 android:padding="16dp">
 
                 <TextView android:id="@+id/category_label"
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
                     android:textStyle="bold"
                     android:textSize="25sp"
-                    android:text="Category" />
+                    android:text="Category"
+                    android:background="#FFA6CBFF"/>
 
                 <Spinner
                     android:id="@+id/category_value"
