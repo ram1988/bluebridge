@@ -21,6 +21,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.ibm.bluebridge.R;
+import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
 
 import org.json.JSONException;
@@ -29,9 +30,13 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/*
+ * Expect "input" json string and "legend" when calling this Activity
+ */
 public class PieChartActivity extends AppCompatActivity implements OnChartValueSelectedListener {
     private PieChart mChart;
     private Typeface tf;
+    SessionManager session = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +44,14 @@ public class PieChartActivity extends AppCompatActivity implements OnChartValueS
         setContentView(R.layout.activity_chart_pie);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        session = SessionManager.getSessionInstance(this);
 
         Intent input = getIntent();
         String data_json = input.getStringExtra("input");
         String legend = input.getStringExtra("legend");
 
-        data_json = "{\"Education\":5,\"Sports\":2}";
-        legend = "Number of registration by event category for current year";
+        //data_json = "{\"Education\":5,\"Sports\":2}";
+        //legend = "Number of registration by event category for current year";
 
         mChart = (PieChart) findViewById(R.id.chart1);
         mChart.setUsePercentValues(true);
@@ -78,9 +84,14 @@ public class PieChartActivity extends AppCompatActivity implements OnChartValueS
         // add a selection listener
         mChart.setOnChartValueSelectedListener(this);
 
-        setData(data_json, legend);
+        if(data_json == null || legend == null){
+            Log.e("LineActivity", "Null data_json or legend from intent");
+        }else{
+            // add data
+            setData(data_json, legend);
+        }
 
-        mChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
+        mChart.animateY(1000, Easing.EasingOption.EaseInOutQuad);
         // mChart.spin(2000, 0, 360);
 
         Legend l = mChart.getLegend();
@@ -92,7 +103,7 @@ public class PieChartActivity extends AppCompatActivity implements OnChartValueS
         final Button button = (Button) findViewById(R.id.button_id);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Utils.sendEmail(mChart, getApplicationContext());
+                Utils.sendEmail(session.getUserEmail(), mChart, getApplicationContext());
             }
         });
 
@@ -168,7 +179,6 @@ public class PieChartActivity extends AppCompatActivity implements OnChartValueS
 
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
-
         if (e == null)
             return;
         Log.i("VAL SELECTED",

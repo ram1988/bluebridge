@@ -127,6 +127,7 @@ public class SplashActivity extends AppCompatActivity {
             Log.d("SplashActivity", "chart folder has been made. "+mPath);
         }
 
+        Log.i("Utils", "Chart directory is "+mPath);
         Utils.setSdDir(sd_dir);
         Utils.setChartDir(mPath);
     }

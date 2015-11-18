@@ -24,6 +24,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.ibm.bluebridge.R;
+import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
 
 import org.json.JSONException;
@@ -33,12 +34,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /*
- * Expect "input" json string and "legend" when calling this Activity
+ * Expect "input" json string, "max", "limit" and "legend" when calling this Activity
  */
 public class HorizontalBarChartActivity extends AppCompatActivity implements OnChartValueSelectedListener {
 
     protected HorizontalBarChart mChart;
     private Typeface tf;
+    SessionManager session = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,10 +48,13 @@ public class HorizontalBarChartActivity extends AppCompatActivity implements OnC
         setContentView(R.layout.activity_chart_horizontal_bar);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        session = SessionManager.getSessionInstance(this);
 
         Intent input = getIntent();
         String data_json = input.getStringExtra("input");
         String legend = input.getStringExtra("legend");
+        int max = input.getIntExtra("max", 10);
+        int limit = input.getIntExtra("limit", 10);
 
         //data_json = "{\"Sunny Chow\":8.25," +
         //        "\"Felicia Ng\":5.5," +
@@ -76,7 +81,7 @@ public class HorizontalBarChartActivity extends AppCompatActivity implements OnC
         xl.setDrawGridLines(true);
         xl.setGridLineWidth(0.3f);
 
-        LimitLine ll = new LimitLine(10f, "Finish Goal");
+        LimitLine ll = new LimitLine(limit, "Finish Goal");
         ll.setLineWidth(4f);
         ll.setLineColor(Color.RED);
         ll.enableDashedLine(10f, 10f, 0f);
@@ -89,7 +94,7 @@ public class HorizontalBarChartActivity extends AppCompatActivity implements OnC
         yl.setTypeface(tf);
         yl.removeAllLimitLines();
         yl.addLimitLine(ll);
-        yl.setAxisMaxValue(13f);
+        yl.setAxisMaxValue(max + 2);
         yl.setDrawAxisLine(true);
         yl.setDrawGridLines(true);
         yl.setGridLineWidth(0.3f);
@@ -99,13 +104,18 @@ public class HorizontalBarChartActivity extends AppCompatActivity implements OnC
         yr.setDrawAxisLine(true);
         yr.setDrawGridLines(false);
 
-        setData(data_json, legend);
-        mChart.animateY(2500);
+        if(data_json == null || legend == null){
+            Log.e("LineActivity", "Null data_json or legend from intent");
+        }else{
+            // add data
+            setData(data_json, legend);
+        }
+        mChart.animateY(1000);
 
         final Button button = (Button) findViewById(R.id.button_id);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Utils.sendEmail(mChart, getApplicationContext());
+                Utils.sendEmail(session.getUserEmail(), mChart, getApplicationContext());
             }
         });
     }

@@ -126,25 +126,26 @@ public class Utils {
         return calendar.getTimeInMillis();
     }
 
-    public static void sendEmail(Chart chart, Context context){
+    public static void sendEmail(String email, Chart chart, Context context){
         Date now = new Date();
         String date = android.text.format.DateFormat.format("yyyy-MM-dd-hh-mm-ss", now).toString();
 
-        // image naming and path  to include sd card  appending name you choose for file
+        // image naming and path to include sd card appending name you choose for file
         String snapshotPath = Utils.getChartDir();
         String snapshotFilename = date + ".jpg";
 
         chart.saveToPath(snapshotPath , snapshotFilename);
 
-        File imageFile = new File(snapshotPath +"\\"+ snapshotFilename);
+        File imageFile = new File(snapshotPath + snapshotFilename);
         Uri uri = Uri.fromFile(imageFile);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        String uriText = "mailto:" + Uri.encode(email) +
+                "?subject=" + Uri.encode("BlueBridge - chart email") +
+                "&body=" + Uri.encode("the body of the message");
+        Uri emailuri = Uri.parse(uriText);
+        intent.setData(emailuri);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_EMAIL, "");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "BlueBridge - chart email");
-        intent.putExtra(Intent.EXTRA_TEXT, "");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         context.startActivity(intent);
     }

@@ -70,6 +70,19 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_admin_home_spinner);
 
+        /** Asked to logout **/
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.ibm.bluebridge.ACTION_LOGOUT");
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("onReceive", "Logout in progress");
+                //At this point you should start the login activity and finish this one
+                finish();
+            }
+        }, intentFilter);
+        //** Asked to logout **//
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
 
 
@@ -320,20 +333,21 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                 });
 
             } else if (tabNumber == 3){
+                //For Statistics
                 List<ChartItem> charts = new ArrayList<ChartItem>();
 
                 ChartItem chart1 = new ChartItem();
                 chart1.setCategory("Parents' Finished Hours");
                 ChartItem chart2 = new ChartItem();
                 chart2.setCategory("Number of Parents by Child Registration Year");
-                //ChartItem chart3 = new ChartItem();
-                //chart3.setCategory("Percentage of Finished by child registration year");
+                ChartItem chart3 = new ChartItem();
+                chart3.setCategory("Percentage of Finished by child registration year");
                 ChartItem chart4 = new ChartItem();
                 chart4.setCategory("Number of Registration by Event Category");
 
                 charts.add(chart1);
                 charts.add(chart2);
-                //charts.add(chart3);
+                charts.add(chart3);
                 charts.add(chart4);
 
                 StatisticsAdapter adapter = new StatisticsAdapter(selfCtxt, charts);
@@ -352,6 +366,8 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                                     "}";
 
                             Intent chart = new Intent(getContext(), HorizontalBarChartActivity.class);
+                            chart.putExtra("max", 11);
+                            chart.putExtra("limit", 10);
                             chart.putExtra("input", data_json);
                             chart.putExtra("legend", "every parent's finished hour");
                             startActivity(chart);
@@ -359,6 +375,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             String data_json = "{\"2017\":2,\"2018\":3,\"2019\":1}";
 
                             Intent chart = new Intent(getContext(), LineActivity.class);
+                            chart.putExtra("max", 3);
                             chart.putExtra("input", data_json);
                             chart.putExtra("legend", "number of parents by child registration year");
                             startActivity(chart);

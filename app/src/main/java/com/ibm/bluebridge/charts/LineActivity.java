@@ -1,6 +1,7 @@
 package com.ibm.bluebridge.charts;
 
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.ibm.bluebridge.R;
+import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
 
 import org.json.JSONException;
@@ -34,10 +36,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/*
+ * Expect "input" json string, "max" and "legend" when calling this Activity
+ */
 public class LineActivity extends AppCompatActivity implements
         OnChartValueSelectedListener, OnChartGestureListener {
     private LineChart mChart;
     private String snapshotPath;
+    SessionManager session = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,8 @@ public class LineActivity extends AppCompatActivity implements
         Intent input = getIntent();
         String data_json = input.getStringExtra("input");
         String legend = input.getStringExtra("legend");
+        int max = input.getIntExtra("max", 10);
+        session = SessionManager.getSessionInstance(this);
 
         //data_json = "{\"2017\":2,\"2018\":3,\"2019\":1}";
         //legend = "number of parents by child registration year";
@@ -87,7 +95,7 @@ public class LineActivity extends AppCompatActivity implements
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
         //leftAxis.addLimitLine(ll1);
-        leftAxis.setAxisMaxValue(10f);
+        leftAxis.setAxisMaxValue(max+2);
         leftAxis.setAxisMinValue(0f);
         //leftAxis.setStartAtZero(false);
         //leftAxis.setYOffset(20f);
@@ -97,12 +105,16 @@ public class LineActivity extends AppCompatActivity implements
         //mChart.getViewPortHandler().setMaximumScaleY(2f);
         //mChart.getViewPortHandler().setMaximumScaleX(2f);
 
-        // add data
-        setData(data_json, legend);
+        if(data_json == null || legend == null){
+            Log.e("LineActivity", "Null data_json or legend from intent");
+        }else{
+            // add data
+            setData(data_json, legend);
+        }
 
-//        mChart.setVisibleXRange(20);
-//        mChart.setVisibleYRange(20f, AxisDependency.LEFT);
-//        mChart.centerViewTo(20, 50, AxisDependency.LEFT);
+//      mChart.setVisibleXRange(20);
+//      mChart.setVisibleYRange(20f, AxisDependency.LEFT);
+//      mChart.centerViewTo(20, 50, AxisDependency.LEFT);
 
         mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
 
@@ -114,7 +126,7 @@ public class LineActivity extends AppCompatActivity implements
         final Button button = (Button) findViewById(R.id.button_id);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Utils.sendEmail(mChart, getApplicationContext());
+                Utils.sendEmail(session.getUserEmail(), mChart, getApplicationContext());
             }
         });
 
