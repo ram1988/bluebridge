@@ -34,6 +34,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/*
+ * Expect "input" json string, "max" and "legend" when calling this Activity
+ */
 public class LineActivity extends AppCompatActivity implements
         OnChartValueSelectedListener, OnChartGestureListener {
     private LineChart mChart;
@@ -46,6 +49,7 @@ public class LineActivity extends AppCompatActivity implements
         Intent input = getIntent();
         String data_json = input.getStringExtra("input");
         String legend = input.getStringExtra("legend");
+        int max = input.getIntExtra("max", 10);
 
         //data_json = "{\"2017\":2,\"2018\":3,\"2019\":1}";
         //legend = "number of parents by child registration year";
@@ -87,7 +91,7 @@ public class LineActivity extends AppCompatActivity implements
         YAxis leftAxis = mChart.getAxisLeft();
         leftAxis.removeAllLimitLines(); // reset all limit lines to avoid overlapping lines
         //leftAxis.addLimitLine(ll1);
-        leftAxis.setAxisMaxValue(10f);
+        leftAxis.setAxisMaxValue(max+2);
         leftAxis.setAxisMinValue(0f);
         //leftAxis.setStartAtZero(false);
         //leftAxis.setYOffset(20f);
@@ -97,12 +101,16 @@ public class LineActivity extends AppCompatActivity implements
         //mChart.getViewPortHandler().setMaximumScaleY(2f);
         //mChart.getViewPortHandler().setMaximumScaleX(2f);
 
-        // add data
-        setData(data_json, legend);
+        if(data_json == null || legend == null){
+            Log.e("LineActivity", "Null data_json or legend from intent");
+        }else{
+            // add data
+            setData(data_json, legend);
+        }
 
-//        mChart.setVisibleXRange(20);
-//        mChart.setVisibleYRange(20f, AxisDependency.LEFT);
-//        mChart.centerViewTo(20, 50, AxisDependency.LEFT);
+//      mChart.setVisibleXRange(20);
+//      mChart.setVisibleYRange(20f, AxisDependency.LEFT);
+//      mChart.centerViewTo(20, 50, AxisDependency.LEFT);
 
         mChart.animateX(2500, Easing.EasingOption.EaseInOutQuart);
 

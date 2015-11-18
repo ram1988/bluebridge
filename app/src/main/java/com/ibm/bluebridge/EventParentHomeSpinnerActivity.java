@@ -37,6 +37,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.charts.HorizontalBarChartActivity;
+import com.ibm.bluebridge.charts.LineActivity;
+import com.ibm.bluebridge.charts.PieChartActivity;
 import com.ibm.bluebridge.eventcalendar.CalendarManager;
 import com.ibm.bluebridge.adapter.StatisticsAdapter;
 import com.ibm.bluebridge.eventcalendar.EventCalendarView;
@@ -324,10 +327,24 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, final View view,
                                             int position, long id) {
-                        Intent chart = new Intent();
-                        chart.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.charts.LineActivity");
 
-                        startActivity(chart);
+                        if(position == 0){
+                            String data_json = "{\"2017\":2,\"2018\":3,\"2019\":1}";
+
+                            Intent chart = new Intent(getContext(), LineActivity.class);
+                            chart.putExtra("max", 3);
+                            chart.putExtra("input", data_json);
+                            chart.putExtra("legend", "Number of Participated Events by Year");
+                            startActivity(chart);
+                        }else if(position == 1){
+                            String data_json = "{\"2017\":8,\"2018\":9,\"2019\":10}";
+
+                            Intent chart = new Intent(getContext(), LineActivity.class);
+                            chart.putExtra("max", 10);
+                            chart.putExtra("input", data_json);
+                            chart.putExtra("legend", "Completed Hours of Participated Events by Year");
+                            startActivity(chart);
+                        }
                     }
                 });
 

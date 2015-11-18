@@ -353,6 +353,8 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                                     "}";
 
                             Intent chart = new Intent(getContext(), HorizontalBarChartActivity.class);
+                            chart.putExtra("max", 11);
+                            chart.putExtra("limit", 10);
                             chart.putExtra("input", data_json);
                             chart.putExtra("legend", "every parent's finished hour");
                             startActivity(chart);
@@ -360,6 +362,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             String data_json = "{\"2017\":2,\"2018\":3,\"2019\":1}";
 
                             Intent chart = new Intent(getContext(), LineActivity.class);
+                            chart.putExtra("max", 3);
                             chart.putExtra("input", data_json);
                             chart.putExtra("legend", "number of parents by child registration year");
                             startActivity(chart);
