@@ -138,13 +138,14 @@ public class Utils {
 
         File imageFile = new File(snapshotPath + snapshotFilename);
         Uri uri = Uri.fromFile(imageFile);
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        String uriText = "mailto:" + Uri.encode(email) +
+                "?subject=" + Uri.encode("BlueBridge - chart email") +
+                "&body=" + Uri.encode("the body of the message");
+        Uri emailuri = Uri.parse(uriText);
+        intent.setData(emailuri);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_EMAIL, email);
-        intent.putExtra(Intent.EXTRA_SUBJECT, "BlueBridge - chart email");
-        intent.putExtra(Intent.EXTRA_TEXT, "");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         context.startActivity(intent);
     }
