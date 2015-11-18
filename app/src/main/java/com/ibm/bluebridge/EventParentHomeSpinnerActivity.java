@@ -1,7 +1,9 @@
 package com.ibm.bluebridge;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -15,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -70,6 +73,19 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_parent_home_spinner);
+
+        /** Asked to logout **/
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.ibm.bluebridge.ACTION_LOGOUT");
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("onReceive", "Logout in progress");
+                //At this point you should start the login activity and finish this one
+                finish();
+            }
+        }, intentFilter);
+        //** Asked to logout **//
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
 

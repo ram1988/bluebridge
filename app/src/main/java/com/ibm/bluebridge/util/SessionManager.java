@@ -1,5 +1,6 @@
 package com.ibm.bluebridge.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -148,6 +149,11 @@ public class SessionManager {
         Intent loginPage = new Intent(ctxt, EventLoginActivity.class);
         loginPage.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctxt.startActivity(loginPage);
+
+        //Ask each activity to clear themselves
+        Intent broadcastIntent = new Intent();
+        broadcastIntent.setAction("com.ibm.bluebridge.ACTION_LOGOUT");
+        ctxt.sendBroadcast(broadcastIntent);
 
         return true;
     }

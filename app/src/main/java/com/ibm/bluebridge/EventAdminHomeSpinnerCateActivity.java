@@ -2,8 +2,10 @@ package com.ibm.bluebridge;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources.Theme;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -69,6 +71,19 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_admin_home_spinner);
+
+        /** Asked to logout **/
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.ibm.bluebridge.ACTION_LOGOUT");
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.d("onReceive", "Logout in progress");
+                //At this point you should start the login activity and finish this one
+                finish();
+            }
+        }, intentFilter);
+        //** Asked to logout **//
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
 

@@ -21,6 +21,7 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.ibm.bluebridge.R;
+import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
 
 import org.json.JSONException;
@@ -35,6 +36,7 @@ import java.util.Iterator;
 public class PieChartActivity extends AppCompatActivity implements OnChartValueSelectedListener {
     private PieChart mChart;
     private Typeface tf;
+    SessionManager session = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class PieChartActivity extends AppCompatActivity implements OnChartValueS
         setContentView(R.layout.activity_chart_pie);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
+        session = SessionManager.getSessionInstance(this);
 
         Intent input = getIntent();
         String data_json = input.getStringExtra("input");
@@ -100,7 +103,7 @@ public class PieChartActivity extends AppCompatActivity implements OnChartValueS
         final Button button = (Button) findViewById(R.id.button_id);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Utils.sendEmail(mChart, getApplicationContext());
+                Utils.sendEmail(session.getUserEmail(), mChart, getApplicationContext());
             }
         });
 
