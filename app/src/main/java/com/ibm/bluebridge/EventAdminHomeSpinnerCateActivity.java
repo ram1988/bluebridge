@@ -342,14 +342,14 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                 chart1.setCategory("Parents' Finished Hours");
                 ChartItem chart2 = new ChartItem();
                 chart2.setCategory("Number of Parents by Child Registration Year");
-                //ChartItem chart3 = new ChartItem();
-                //chart3.setCategory("Percentage of Finished by child registration year");
+                ChartItem chart3 = new ChartItem();
+                chart3.setCategory("Percentage of Finished by child registration year");
                 ChartItem chart4 = new ChartItem();
                 chart4.setCategory("Number of Registration by Event Category");
 
                 charts.add(chart1);
                 charts.add(chart2);
-                //charts.add(chart3);
+                charts.add(chart3);
                 charts.add(chart4);
 
                 StatisticsAdapter adapter = new StatisticsAdapter(selfCtxt, charts);
