@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInstaller;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -18,6 +19,8 @@ import android.widget.Toast;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
 import com.ibm.bluebridge.eventcalendar.CalendarManager;
+import com.ibm.bluebridge.util.RESTApi;
+import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.util.Validator;
 import com.ibm.bluebridge.valueobject.Event;
@@ -35,10 +38,12 @@ public class EventFormViewActivity extends EventMasterActivity {
     private Context ctxt;
     private String adminId;
     private String parentId;
+    SessionManager session = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        session = SessionManager.getSessionInstance(this);
         Intent intent = getIntent();
         int mode = intent.getIntExtra("EventAction", 2);
         if (mode == 0 || mode == 1) {
@@ -62,11 +67,20 @@ public class EventFormViewActivity extends EventMasterActivity {
          *
          */
         ctxt = this;
-        adminId = intent.getStringExtra("admin_id");
-        parentId = intent.getStringExtra("parent_id");
-        Event currentEvent = (Event)intent.getSerializableExtra("EventObj");
 
+        if(session.isAdmin())
+            adminId = session.getUserId();
+        else
+            parentId = session.getUserId();
 
+        Event currentEvent;
+        String eventId = intent.getStringExtra("event_id");
+        if(eventId != null) {
+            EventsAdapter eventUtil = new EventsAdapter();
+            currentEvent = eventUtil.getEvent(eventId);
+        }else{
+            currentEvent = (Event)intent.getSerializableExtra("EventObj");
+        }
         //setCurrentDateOnView();
         populateControls(currentEvent, mode);
     }
@@ -334,9 +348,6 @@ public class EventFormViewActivity extends EventMasterActivity {
             showRegButton.setVisibility(View.INVISIBLE);
             cancelButton.setVisibility(View.INVISIBLE);
 
-            actionButton.setVisibility(View.INVISIBLE);
-            showRegButton.setVisibility(View.INVISIBLE);
-            cancelButton.setVisibility(View.INVISIBLE);
             if (parentId != null) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                 Date event_date = new Date(event.getEventDate());

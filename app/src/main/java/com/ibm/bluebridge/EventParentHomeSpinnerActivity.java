@@ -48,6 +48,7 @@ import com.ibm.bluebridge.adapter.StatisticsAdapter;
 import com.ibm.bluebridge.eventcalendar.EventCalendarView;
 import com.ibm.bluebridge.util.RESTApi;
 import com.ibm.bluebridge.util.SessionManager;
+import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.valueobject.ChartItem;
 import com.ibm.bluebridge.valueobject.Children;
 import com.ibm.bluebridge.valueobject.Event;
@@ -135,6 +136,11 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
         parent = eventsAdapter.getParentDetail(parent_id);
 
         Intent intent = getIntent();
+        boolean alert = intent.getBooleanExtra("alert", false);
+        String message = intent.getStringExtra("message");
+
+        if(alert)
+            Utils.showAlertDialog(message, this);
 
         viewCalendarButton = (Button) findViewById(R.id.calendar_view);
 

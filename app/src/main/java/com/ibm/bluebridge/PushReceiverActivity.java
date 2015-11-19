@@ -41,6 +41,7 @@ public class PushReceiverActivity extends AppCompatActivity {
 
         MFPInternalPushMessage message = (MFPInternalPushMessage) getIntent().getExtras().get("message");
         JSONObject message_json = message.toJson();
+
         try {
             String payload = message_json.getString(KEY_PAYLOAD);
             JSONObject payload_json = new JSONObject(payload);
@@ -48,16 +49,33 @@ public class PushReceiverActivity extends AppCompatActivity {
                 String type = payload_json.getString(KEY_TYPE);
                 if(type != null) {
                     if (type.toLowerCase().equals(PUSH_TYPE.EVENT.getValue())){
-                        if(session.isAdmin())
-                            redirect("com.ibm.bluebridge.EventAdminHomeSpinnerActivity", message_json);
-                        else if(session.isParent())
-                            redirect("com.ibm.bluebridge.EventParentHomeSpinnerActivity", message_json);
-                    } else if (type.toLowerCase().equals(PUSH_TYPE.ALERT.getValue())) {
-                        if(session.isAdmin())
-                            redirect("com.ibm.bluebridge.EventAdminHomeSpinnerActivity", message_json);
-                        else if(session.isParent())
-                            redirect("com.ibm.bluebridge.EventParentHomeSpinnerActivity", message_json);
+                        String event_id = payload_json.getString("event_id");
+                        PushReceiverActivity.this.finish();
 
+                        Intent intent = new Intent();
+                        intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventFormViewActivity");
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.putExtra("event_id", event_id);
+
+                        Log.i("PushReceiverActivity", "Redirecting to com.ibm.bluebridge.EventFormViewActivity");
+                        this.startActivity(intent);
+                    } else if (type.toLowerCase().equals(PUSH_TYPE.ALERT.getValue())) {
+                        String push_message = payload_json.getString("message");
+                        PushReceiverActivity.this.finish();
+                        Intent intent = new Intent();
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        if(session.isAdmin()){
+                            intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventAdminHomeSpinnerCateActivity");
+                            intent.putExtra("message", push_message);
+                            intent.putExtra("alert", true);
+                            this.startActivity(intent);
+                        }else if(session.isParent()){
+                            intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventParentHomeSpinnerActivity");
+                            intent.putExtra("message", push_message);
+                            intent.putExtra("alert", true);
+                            this.startActivity(intent);
+                        }
                     } else {
                         Log.e("PushReceiverActivity", "Invalid payload, cannot handle. Redirecting to home page.");
                         redirect("com.ibm.bluebridge.EventLoginActivity", message_json);
@@ -73,21 +91,6 @@ public class PushReceiverActivity extends AppCompatActivity {
 
     private void redirect(String className, JSONObject message) throws JSONException{
         //finish the redirector activity so it can't be returned to
-        PushReceiverActivity.this.finish();
 
-        Intent intent = new Intent();
-        intent.setClassName("com.ibm.bluebridge", className);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-        Iterator<?> keys = message.keys();
-        while(keys.hasNext()) {
-            String key = (String)keys.next();
-            String value = message.getString(key);
-
-            intent.putExtra(key, value);
-        }
-
-        Log.i("PushReceiverActivity", "Redirecting to "+className);
-        this.startActivity(intent);
     }
 }

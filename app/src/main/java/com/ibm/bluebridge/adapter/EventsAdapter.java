@@ -634,5 +634,53 @@ public class EventsAdapter {
         return categorizedEventMap;
     }
 
+    public Event getEvent(String eventId){
+        String requestUrl = REST_API.getBaseRestURL() + "/view_event_details?event_id="+eventId;
+        REST_API.getResponse(requestUrl);
+        Object response = null;
+        Event event = null;
 
+        try {
+            response = REST_API.getRespObj().get("response");
+
+            if(response != null) {
+                JSONObject item = (JSONObject) response;
+
+                event = new Event();
+                event.setEventId(item.getString("id"));
+                event.setEventName(item.getString("name"));
+                event.setEventDescription(item.getString("duty"));
+                event.setEventDate(item.getString("date"));
+                event.setStartTime(item.getString("start_time"));
+                event.setEndTime(item.getString("end_time"));
+                event.setVenue(item.getString("venue"));
+                event.setTeacherInCharge(item.getString("teacher_in_charge"));
+                event.setBriefingTime(item.getString("briefing_time"));
+                event.setBriefingPlace(item.getString("briefing_place"));
+                event.setMaxVolunteers(item.getInt("max_volunteers"));
+                event.setVacancy(item.getInt("event_vacancy"));
+                event.setCategory(item.getString("category"));
+                event.setDuration(item.getString("duration_in_hour"));
+
+                JSONArray parents_registered = item.getJSONArray("parents_registered");
+                JSONArray parents_attended = item.getJSONArray("parents_attended");
+
+                if(parents_registered.length() == 0){
+                    event.setRegistered(false);
+                }else{
+                    event.setRegistered(true);
+                }
+
+                if(parents_attended.length() == 0){
+                    event.setAttended(false);
+                }else{
+                    event.setAttended(true);
+                }
+            }
+        }catch(JSONException excep) {
+            Log.e("JSONException","Skipping the exception if no mapping found");
+        }
+
+        return event;
+    }
 }

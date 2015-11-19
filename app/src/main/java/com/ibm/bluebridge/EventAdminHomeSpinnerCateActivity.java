@@ -132,14 +132,11 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
         user = eventsAdapter.getAdminDetail(admin_id);
 
         Intent intent = getIntent();
+        boolean alert = intent.getBooleanExtra("alert", false);
         String message = intent.getStringExtra("message");
 
-
-
-        if(message!=null && !message.equals("") ) {
+        if(alert)
             Utils.showAlertDialog(message, this);
-            intent.removeExtra("message");
-        }
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_fab);
         viewCalendarButton = (Button) findViewById(R.id.calendar_view);
