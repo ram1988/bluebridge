@@ -129,7 +129,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
         fragmentManager  = getSupportFragmentManager();
         final Activity localRef = this;
         eventsAdapter = new EventsAdapter(selfCtxt);
-        user = eventsAdapter.getParentDetail(admin_id);
+        user = eventsAdapter.getAdminDetail(admin_id);
 
         Intent intent = getIntent();
         String message = intent.getStringExtra("message");
