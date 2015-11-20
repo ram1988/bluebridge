@@ -160,9 +160,9 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
     }
 
     @Override
-    protected void onStop(){
+    protected void onDestroy(){
         unregisterReceiver(logoutReceiver);
-        super.onStop();
+        super.onDestroy();
     }
 
     @Override
@@ -408,6 +408,8 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             chart.putExtra("input", data_json);
                             chart.putExtra("legend", "number of parents by child registration year");
                             startActivity(chart);
+                        } else if (position == 2) {
+                            String data_json = "{\"Education\":5,\"Sports\":2, \"Charity\":4, \"Entertainment\":1}";
                         } else if (position == 2) {
                             String data_json = "{\"Education\":5,\"Sports\":2}";
 

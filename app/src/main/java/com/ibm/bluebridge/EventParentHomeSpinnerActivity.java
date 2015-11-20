@@ -151,9 +151,9 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
     }
 
     @Override
-    protected void onStop(){
+    protected void onDestroy(){
         unregisterReceiver(logoutReceiver);
-        super.onStop();
+        super.onDestroy();
     }
 
 
