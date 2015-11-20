@@ -158,9 +158,9 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
     }
 
     @Override
-    protected void onStop(){
+    protected void onDestroy(){
         unregisterReceiver(logoutReceiver);
-        super.onStop();
+        super.onDestroy();
     }
 
     @Override
@@ -366,7 +366,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                     public void onItemClick(AdapterView<?> parent, final View view,
                                             int position, long id) {
 
-                        if(position == 0){
+                        if (position == 0) {
                             String data_json = "{\"Sunny Chow\":8.25," +
                                     "\"Felicia Ng\":5.5," +
                                     "\"Maria Tay\":10.1," +
@@ -379,7 +379,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             chart.putExtra("input", data_json);
                             chart.putExtra("legend", "every parent's finished hour");
                             startActivity(chart);
-                        }else if(position == 1){
+                        } else if (position == 1) {
                             String data_json = "{\"2017\":2,\"2018\":3,\"2019\":1}";
 
                             Intent chart = new Intent(getContext(), LineActivity.class);
@@ -387,7 +387,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             chart.putExtra("input", data_json);
                             chart.putExtra("legend", "number of parents by child registration year");
                             startActivity(chart);
-                        }else if(position == 2){
+                        } else if (position == 2) {
                             String data_json = "{\"Education\":5,\"Sports\":2, \"Charity\":4, \"Entertainment\":1}";
 
                             Intent chart = new Intent(getContext(), PieChartActivity.class);
