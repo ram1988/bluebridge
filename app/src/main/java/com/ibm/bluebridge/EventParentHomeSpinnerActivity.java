@@ -235,6 +235,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
             ScrollView parentDetailView = (ScrollView)aboutmeView.findViewById(R.id.parent_details);
             ArrayAdapter<Event> adapter = null;
             int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            new LoaderDialog().execute();
 
 
             AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
@@ -436,6 +437,51 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                     Toast.makeText(selfCtxt, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
 
                 }
+            }
+        }
+
+        public static class LoaderDialog extends AsyncTask<Void, Void, Void> {
+
+            private ProgressDialog ringProgressDialog;
+            private String message;
+            private boolean stop;
+
+
+            public void closeDialog() {
+                stop = true;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                ringProgressDialog = new ProgressDialog(selfCtxt);
+                System.out.println("Prexecute dialog111111--->" + message);
+                ringProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                ringProgressDialog.setMessage("Loading...");
+                ringProgressDialog.setIndeterminate(true);
+                ringProgressDialog.setCancelable(true);
+                ringProgressDialog.show();
+            }
+
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+
+
+            protected void onPostExecute(Void value) {
+
+                super.onPostExecute(value);
+                ringProgressDialog.dismiss();
             }
         }
     }

@@ -25,6 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ibm.bluebridge.adapter.EventsAdapter;
+import com.ibm.bluebridge.util.CONSTANTS;
+import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.valueobject.Event;
 import com.ibm.bluebridge.valueobject.Parent;
 
@@ -178,7 +180,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
                     noRegMsg.setVisibility(View.INVISIBLE);
                     ListView listView = (ListView)rootView.findViewById(R.id.listview);
 
-                    // specify an adapter (see also next example)
+                   // Utils.LoaderDialog loadingDialog = new Utils.LoaderDialog();
                     ArrayAdapter<Parent> mAdapter = getParentListItemAdapter(selfCtxt, parentList, ParentModes.PARENT_REGISTERED, event_id);
                     listView.setAdapter(mAdapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -194,6 +196,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
                             startActivity(intent);
                         }
                     });
+                   // loadingDialog.closeDialog();
                 }
             }
             else if(tabNumber == 2){
@@ -205,7 +208,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
                     noRegMsg.setVisibility(View.INVISIBLE);
                     ListView listView = (ListView)rootView.findViewById(R.id.listview);
 
-                    // specify an adapter (see also next example)
+                   // Utils.LoaderDialog loadingDialog = new Utils.LoaderDialog();
                     ArrayAdapter<Parent> mAdapter = getParentListItemAdapter(selfCtxt, parentList, ParentModes.PARENT_ATTENDED, event_id);
                     listView.setAdapter(mAdapter);
                     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -221,6 +224,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
                             startActivity(intent);
                         }
                     });
+                   // loadingDialog.closeDialog();
                 }
             }
 
