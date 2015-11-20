@@ -69,6 +69,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
     private static Button viewCalendarButton;
     private static SessionManager session;
     private Parent parent;
+    BroadcastReceiver logoutReceiver = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +79,15 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
         /** Asked to logout **/
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.ibm.bluebridge.ACTION_LOGOUT");
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d("onReceive", "Logout in progress");
-                //At this point you should start the login activity and finish this one
-                finish();
-            }
-        }, intentFilter);
+        logoutReceiver = new BroadcastReceiver() {
+                                @Override
+                                public void onReceive(Context context, Intent intent) {
+                                    Log.d("onReceive", "Logout in progress");
+                                    //At this point you should start the login activity and finish this one
+                                    finish();
+                                }
+                            };
+        registerReceiver(logoutReceiver, intentFilter);
         //** Asked to logout **//
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -144,6 +146,12 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
 
         viewCalendarButton = (Button) findViewById(R.id.calendar_view);
 
+    }
+
+    @Override
+    protected void onStop(){
+        unregisterReceiver(logoutReceiver);
+        super.onStop();
     }
 
 
