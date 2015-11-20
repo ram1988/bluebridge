@@ -63,6 +63,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
     private static EventsAdapter eventsAdapter ;
     private static FragmentManager fragmentManager;
     private static Button viewCalendarButton;
+    private static Button refreshViewButton;
     private static User user;
     BroadcastReceiver logoutReceiver = null;
 
@@ -142,6 +143,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
 
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_fab);
         viewCalendarButton = (Button) findViewById(R.id.calendar_view);
+        refreshViewButton = (Button) findViewById(R.id.refresh_view);
         fab.setVisibility(View.VISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
 
@@ -256,6 +258,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
             //For all events
             if(tabNumber == 1 ) {
                 viewCalendarButton.setVisibility(View.VISIBLE);
+                refreshViewButton.setVisibility(View.VISIBLE);
                 Log.d("EventAdminHomeSpinner", "Tab1 clicked");
 
                 final List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
@@ -270,7 +273,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                 } else {
                     noEventsMsg.setVisibility(View.INVISIBLE);
 
-                    AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
+                    final AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
 
                         @Override
                         public void onItemClick(AdapterView<?> parent, final View view,
@@ -300,15 +303,25 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             showCalendarBox(eventList);
                         }
                     });
+
+                    refreshViewButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            fragmentManager.beginTransaction()
+                                    .replace(R.id.container, PlaceholderFragment.newInstance(1))
+                                    .commit();
+                        }
+                    });
+
                 }
             }
             //For joined events
             else if(tabNumber == 2) {
                 viewCalendarButton.setVisibility(View.VISIBLE);
+                refreshViewButton.setVisibility(View.VISIBLE);
                 Log.d("EventAdminHomeSpinner", "Tab2 clicked");
                 final List<Event> completedEventsList = eventsAdapter.getAdminCompletedEventsList(admin_id);
 
-                AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
+                final AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> parent, final View view,
@@ -340,6 +353,14 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                     }
                 });
 
+                refreshViewButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.container, PlaceholderFragment.newInstance(2))
+                                .commit();
+                    }
+                });
+
             } else if (tabNumber == 3){
                 //For Statistics
                 List<ChartItem> charts = new ArrayList<ChartItem>();
@@ -366,7 +387,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                     public void onItemClick(AdapterView<?> parent, final View view,
                                             int position, long id) {
 
-                        if(position == 0){
+                        if (position == 0) {
                             String data_json = "{\"Sunny Chow\":8.25," +
                                     "\"Felicia Ng\":5.5," +
                                     "\"Maria Tay\":10.1," +
@@ -379,7 +400,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             chart.putExtra("input", data_json);
                             chart.putExtra("legend", "every parent's finished hour");
                             startActivity(chart);
-                        }else if(position == 1){
+                        } else if (position == 1) {
                             String data_json = "{\"2017\":2,\"2018\":3,\"2019\":1}";
 
                             Intent chart = new Intent(getContext(), LineActivity.class);
@@ -387,7 +408,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             chart.putExtra("input", data_json);
                             chart.putExtra("legend", "number of parents by child registration year");
                             startActivity(chart);
-                        }else if(position == 2){
+                        } else if (position == 2) {
                             String data_json = "{\"Education\":5,\"Sports\":2}";
 
                             Intent chart = new Intent(getContext(), PieChartActivity.class);
@@ -400,8 +421,10 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                 });
 
                 viewCalendarButton.setVisibility(View.INVISIBLE);
+                refreshViewButton.setVisibility(View.INVISIBLE);
             } else if (tabNumber == 4){
                 viewCalendarButton.setVisibility(View.INVISIBLE);
+                refreshViewButton.setVisibility(View.INVISIBLE);
                 //For About Me
 
 
