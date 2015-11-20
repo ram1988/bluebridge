@@ -64,6 +64,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
     private static FragmentManager fragmentManager;
     private static Button viewCalendarButton;
     private static User user;
+    BroadcastReceiver logoutReceiver = null;
 
     private static SessionManager session;
 
@@ -75,14 +76,15 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
         /** Asked to logout **/
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.ibm.bluebridge.ACTION_LOGOUT");
-        registerReceiver(new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d("onReceive", "Logout in progress");
-                //At this point you should start the login activity and finish this one
-                finish();
-            }
-        }, intentFilter);
+        logoutReceiver = new BroadcastReceiver() {
+                            @Override
+                            public void onReceive(Context context, Intent intent) {
+                                Log.d("onReceive", "Logout in progress");
+                                //At this point you should start the login activity and finish this one
+                                finish();
+                            }
+                        };
+        registerReceiver(logoutReceiver, intentFilter);
         //** Asked to logout **//
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -153,6 +155,12 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onStop(){
+        unregisterReceiver(logoutReceiver);
+        super.onStop();
     }
 
     @Override
@@ -238,7 +246,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
             int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-
+            new LoaderDialog().execute();
             final ListView listView = (ListView) rootView.findViewById(R.id.listview);
             TextView noEventsMsg = (TextView)rootView.findViewById(R.id.no_events_message);
             View aboutmeView = inflater.inflate(R.layout.content_aboutme_admin, container, false);
@@ -249,6 +257,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
             if(tabNumber == 1 ) {
                 viewCalendarButton.setVisibility(View.VISIBLE);
                 Log.d("EventAdminHomeSpinner", "Tab1 clicked");
+
                 final List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
                 CalendarManager calendarManager = new CalendarManager(selfCtxt);
 
@@ -446,6 +455,51 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                     Toast.makeText(selfCtxt, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
 
                 }
+            }
+        }
+
+        public static class LoaderDialog extends AsyncTask<Void, Void, Void> {
+
+            private ProgressDialog ringProgressDialog;
+            private String message;
+            private boolean stop;
+
+
+            public void closeDialog() {
+                stop = true;
+            }
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                ringProgressDialog = new ProgressDialog(selfCtxt);
+                System.out.println("Prexecute dialog111111--->" + message);
+                ringProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                ringProgressDialog.setMessage("Loading...");
+                ringProgressDialog.setIndeterminate(true);
+                ringProgressDialog.setCancelable(true);
+                ringProgressDialog.show();
+            }
+
+
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+
+
+
+            protected void onPostExecute(Void value) {
+
+                super.onPostExecute(value);
+                ringProgressDialog.dismiss();
             }
         }
     }

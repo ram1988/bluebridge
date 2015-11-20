@@ -1,12 +1,17 @@
 package com.ibm.bluebridge.util;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.CalendarContract;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.Chart;
 import com.ibm.mobilefirstplatform.clientsdk.android.security.api.AuthorizationManager;
@@ -14,6 +19,8 @@ import com.ibm.mobilefirstplatform.clientsdk.android.security.api.AuthorizationM
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -149,4 +156,102 @@ public class Utils {
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         context.startActivity(intent);
     }
+
+
+
+
+    public static class LoaderDialog extends AsyncTask<Void, Void, Void> {
+
+        private ProgressDialog ringProgressDialog;
+        private String message;
+        private boolean stop;
+
+        /*public LoaderDialog(Context ctxt, String message) {
+            super();
+            System.out.println("Laoder dialog--->" + message);
+            ringProgressDialog = new ProgressDialog(ctxt);
+            this.message = message;
+        }*/
+
+        public void closeDialog() {
+            stop = true;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                Thread.sleep(15000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            System.out.println("Prexecute dialog111111--->" + message);
+            ringProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            ringProgressDialog.setMessage("Loading...");
+            ringProgressDialog.setIndeterminate(true);
+            ringProgressDialog.setCancelable(true);
+            ringProgressDialog.show();
+        }
+
+
+        protected void onPostExecute(Void value) {
+
+            super.onPostExecute(value);
+            ringProgressDialog.dismiss();
+        }
+    }
+
+
+  /*  public static class LoaderDialog  {
+
+        private ProgressDialog ringProgressDialog;
+        private String message;
+        private boolean stop;
+
+        public LoaderDialog(final Context ctxt, String msg) {
+            System.out.println("Laoder dialog--->" + msg);
+            this.message = msg;
+
+            ringProgressDialog = new ProgressDialog(ctxt);
+            ringProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            ringProgressDialog.setMessage(message);
+            ringProgressDialog.setIndeterminate(true);
+            ringProgressDialog.setCancelable(true);
+            ringProgressDialog.show();
+
+            Thread mThread = new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    System.out.println("Start running");
+
+                    while(!stop) {
+
+                    }
+
+                    ringProgressDialog.dismiss();
+                    System.out.println("Stop running");
+
+
+
+                }
+            });
+
+            mThread.start();
+        }
+
+        public void closeDialog() {
+            ringProgressDialog.dismiss();
+            stop = true;
+        }
+    }
+ */
 }

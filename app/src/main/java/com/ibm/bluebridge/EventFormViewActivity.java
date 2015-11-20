@@ -207,6 +207,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                     intent.putExtra("message","Event Added!!!");
 
                     startActivity(intent);
+                    finish();
 
                 }
             });
@@ -301,6 +302,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                     intent.putExtra("event_name", event.getEventName());
 
                     startActivity(intent);
+                    finish();
                 }
             });
 
@@ -327,6 +329,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                     intent.putExtra("message","Event Deleted!!!");
 
                     startActivity(intent);
+                    finish();
                 }
             });
         }
@@ -391,6 +394,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                     Intent intent = new Intent(ctxt, EventParentHomeSpinnerActivity.class);
                     intent.putExtra("user_id", parentId);
                     startActivity(intent);
+                    finish();
                 }
             });
 
@@ -404,6 +408,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                     Intent intent = new Intent(ctxt, EventParentHomeSpinnerActivity.class);
                     intent.putExtra("user_id", parentId);
                     startActivity(intent);
+                    finish();
                 }
             });
 
@@ -416,6 +421,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                     intent.putExtra("event_name", event.getEventName());
 
                     startActivity(intent);
+                    finish();
                 }
             });
         }
