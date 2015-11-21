@@ -54,14 +54,13 @@ public class Utils {
     }
 
     //Cannot be called before the push notification api is called
-    public static String getDeviceId()
-    {
+    public static String getDeviceId() {
         String deviceId = "";
         try {
             deviceId = (String) AuthorizationManager.getInstance().getDeviceIdentity().get("id");
             Log.d("getDeviceId", "MFPPush:computeRegId() - DeviceId obtained from AuthorizationManager object id field is : " + deviceId);
-            if(deviceId == null) {
-                deviceId = (String)AuthorizationManager.getInstance().getDeviceIdentity().get("deviceId");
+            if (deviceId == null) {
+                deviceId = (String) AuthorizationManager.getInstance().getDeviceIdentity().get("deviceId");
                 Log.d("getDeviceId", "MFPPush:computeRegId() - DeviceId obtained from AuthorizationManager object deviceId field is : " + deviceId);
             }
         } catch (JSONException var2) {
@@ -77,7 +76,7 @@ public class Utils {
 
         try {
             Date date = formatter.parse(dateInString);
-            resultDate =  formatter.format(date);
+            resultDate = formatter.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -118,7 +117,7 @@ public class Utils {
         alertDialogBuilder
                 .setMessage(msg)
                 .setCancelable(false)
-                .setPositiveButton("OK",null);
+                .setPositiveButton("OK", null);
 
         // create alert dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
@@ -133,7 +132,7 @@ public class Utils {
         return calendar.getTimeInMillis();
     }
 
-    public static void sendEmail(String email, Chart chart, Context context){
+    public static void sendEmail(String email, Chart chart, Context context) {
         Date now = new Date();
         String date = android.text.format.DateFormat.format("yyyy-MM-dd-hh-mm-ss", now).toString();
 
@@ -141,7 +140,7 @@ public class Utils {
         String snapshotPath = Utils.getChartDir();
         String snapshotFilename = date + ".jpg";
 
-        chart.saveToPath(snapshotPath , snapshotFilename);
+        chart.saveToPath(snapshotPath, snapshotFilename);
 
         File imageFile = new File(snapshotPath + snapshotFilename);
         Uri uri = Uri.fromFile(imageFile);
@@ -158,100 +157,20 @@ public class Utils {
     }
 
 
-
-
-    public static class LoaderDialog extends AsyncTask<Void, Void, Void> {
+    public static class LoaderDialog {
 
         private ProgressDialog ringProgressDialog;
         private String message;
-        private boolean stop;
 
-        /*public LoaderDialog(Context ctxt, String message) {
-            super();
-            System.out.println("Laoder dialog--->" + message);
+        public LoaderDialog(Context ctxt, String message) {
             ringProgressDialog = new ProgressDialog(ctxt);
-            this.message = message;
-        }*/
-
-        public void closeDialog() {
-            stop = true;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                Thread.sleep(15000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            System.out.println("Prexecute dialog111111--->" + message);
-            ringProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            ringProgressDialog.setMessage("Loading...");
-            ringProgressDialog.setIndeterminate(true);
-            ringProgressDialog.setCancelable(true);
-            ringProgressDialog.show();
-        }
-
-
-        protected void onPostExecute(Void value) {
-
-            super.onPostExecute(value);
-            ringProgressDialog.dismiss();
-        }
-    }
-
-
-  /*  public static class LoaderDialog  {
-
-        private ProgressDialog ringProgressDialog;
-        private String message;
-        private boolean stop;
-
-        public LoaderDialog(final Context ctxt, String msg) {
-            System.out.println("Laoder dialog--->" + msg);
-            this.message = msg;
-
-            ringProgressDialog = new ProgressDialog(ctxt);
-            ringProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             ringProgressDialog.setMessage(message);
-            ringProgressDialog.setIndeterminate(true);
-            ringProgressDialog.setCancelable(true);
+            ringProgressDialog.setCancelable(false);
             ringProgressDialog.show();
-
-            Thread mThread = new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    System.out.println("Start running");
-
-                    while(!stop) {
-
-                    }
-
-                    ringProgressDialog.dismiss();
-                    System.out.println("Stop running");
-
-
-
-                }
-            });
-
-            mThread.start();
         }
 
         public void closeDialog() {
             ringProgressDialog.dismiss();
-            stop = true;
         }
     }
- */
 }

@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Instances;
+import android.support.v4.content.ContextCompat;
 
 import com.ibm.bluebridge.util.Utils;
 import com.ibm.bluebridge.valueobject.Event;
@@ -41,9 +42,19 @@ public class CalendarManager {
         ContentValues values = prepareContentVal(event);
 
         System.out.println("Content vales-->" + values);
-        long eventId = checkEventExistence(values.getAsLong(CalendarContract.Events.DTSTART),values.getAsLong(CalendarContract.Events.DTEND),event.getEventName());
+        long eventId = checkEventExistence(values.getAsLong(CalendarContract.Events.DTSTART), values.getAsLong(CalendarContract.Events.DTEND), event.getEventName());
 
-        if(eventId == -1) {
+        if (eventId == -1) {
+            if (ContextCompat.checkSelfPermission(context,Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    public void requestPermissions(@NonNull String[] permissions, int requestCode)
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for Activity#requestPermissions for more details.
+                return;
+            }
             Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
             System.out.println("Content URI-->" + uri);
         } else {

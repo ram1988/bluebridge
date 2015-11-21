@@ -46,6 +46,7 @@ public class RESTApi {
             try {
                 Log.d("RESTApi", "Main Thread Waiting for response...");
                 respJsonObj.wait();
+                Log.d("RESTApi", "Released...");
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

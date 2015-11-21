@@ -91,8 +91,6 @@ public class EventsAdapter {
 
                         //System.out.println("jsonobj--->" + item.get("name"));
                     }
-                } else {
-
                 }
             }
 
@@ -103,9 +101,7 @@ public class EventsAdapter {
         catch(Exception excep){
             excep.printStackTrace();
         }
-        finally {
-            // restConnection.disconnect();
-        }
+
         return eventsList;
     }
 

@@ -237,15 +237,15 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_event_parent_home_spinner, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_event_parent_home_spinner, container, false);
             LinearLayout layout=(LinearLayout) rootView.findViewById(R.id.parent_list_layout);
             final ListView listView = (ListView) rootView.findViewById(R.id.listview);
             TextView noEventsMsg = (TextView)rootView.findViewById(R.id.no_events_message);
             View aboutmeView = inflater.inflate(R.layout.content_aboutme_parent, container, false);
             ScrollView parentDetailView = (ScrollView)aboutmeView.findViewById(R.id.parent_details);
             ArrayAdapter<Event> adapter = null;
-            int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-            new LoaderDialog().execute();
+            final int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+
 
 
             final AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
@@ -271,30 +271,38 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
 
             //For all events
             if(tabNumber == 1 ) {
-                final List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
+                viewCalendarButton.setVisibility(View.VISIBLE);
+                refreshViewButton.setVisibility(View.VISIBLE);
+                parentDetailView.setVisibility(View.INVISIBLE);
 
-                if(eventList.isEmpty()){
-                    noEventsMsg.setVisibility(View.VISIBLE);
-                } else {
-                    noEventsMsg.setVisibility(View.INVISIBLE);
+                class LoaderDialogForAllEvents extends AsyncTask<Void, Void, List<Event>> {
 
-                    Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
-                    displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
+                    private Utils.LoaderDialog ringProgressDialog;
 
-                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            showCalendarBox(eventList);
-                        }
-                    });
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        System.out.println("Dialog begin..");
+                        ringProgressDialog = new Utils.LoaderDialog(selfCtxt, "Loading All Events....");
+                    }
 
-                    refreshViewButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.container, PlaceholderFragment.newInstance(1))
-                                    .commit();
-                        }
-                    });
+                    @Override
+                    protected List<Event> doInBackground(Void... params) {
+
+                        List<Event> eventList = eventsAdapter.getAllEventsList(parent_id);
+                        return eventList;
+                    }
+
+                    protected void onPostExecute(final List<Event> eventList) {
+                        super.onPostExecute(eventList);
+                        System.out.println("Dialog close..");
+                        ringProgressDialog.closeDialog();
+
+                        displayEvents(listItemListener, eventList, rootView, tabNumber);
+                    }
                 }
+
+                new LoaderDialogForAllEvents().execute();
             }
             //For joined events
             else if(tabNumber == 2) {
@@ -302,71 +310,84 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                 viewCalendarButton.setVisibility(View.VISIBLE);
                 refreshViewButton.setVisibility(View.VISIBLE);
                 parentDetailView.setVisibility(View.INVISIBLE);
-                final List<Event> eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
 
-                CalendarManager calendarManager = new CalendarManager(selfCtxt);
 
-                for(Event event:eventList) {
-                    calendarManager.addCalendarEvent(event);
+                class LoaderDialogForJoinedEvents extends AsyncTask<Void, Void, List<Event>> {
+
+                    private Utils.LoaderDialog ringProgressDialog;
+
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        System.out.println("Dialog begin..");
+                        ringProgressDialog = new Utils.LoaderDialog(selfCtxt, "Loading Joined Events....");
+                    }
+
+                    @Override
+                    protected List<Event> doInBackground(Void... params) {
+
+                        List<Event> eventList = eventsAdapter.getAllJoinedEventsList(parent_id);
+                        return eventList;
+                    }
+
+                    protected void onPostExecute(final List<Event> eventList) {
+                        super.onPostExecute(eventList);
+                        System.out.println("Dialog close..");
+                        ringProgressDialog.closeDialog();
+
+                        CalendarManager calendarManager = new CalendarManager(selfCtxt);
+
+                        for(Event event:eventList) {
+                            calendarManager.addCalendarEvent(event);
+                        }
+
+                        displayEvents(listItemListener, eventList, rootView, tabNumber);
+                    }
                 }
 
-
-                if(eventList.isEmpty()){
-                    noEventsMsg.setVisibility(View.VISIBLE);
-                } else {
-                    noEventsMsg.setVisibility(View.INVISIBLE);
-                    Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
-                    displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
-
-                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            showCalendarBox(eventList);
-                        }
-                    });
-
-                    refreshViewButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.container, PlaceholderFragment.newInstance(2))
-                                    .commit();
-                        }
-                    });
-                }
+                new LoaderDialogForJoinedEvents().execute();
             }
             //For attended events
             else if(tabNumber == 3) {
                 viewCalendarButton.setVisibility(View.VISIBLE);
                 refreshViewButton.setVisibility(View.VISIBLE);
                 parentDetailView.setVisibility(View.INVISIBLE);
-                final List<Event> eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
 
-                CalendarManager calendarManager = new CalendarManager(selfCtxt);
 
-                for(Event event:eventList) {
-                    calendarManager.addCalendarEvent(event);
+                class LoaderDialogForUnJoinedEvents extends AsyncTask<Void, Void, List<Event>> {
+
+                    private Utils.LoaderDialog ringProgressDialog;
+
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        System.out.println("Dialog begin..");
+                        ringProgressDialog = new Utils.LoaderDialog(selfCtxt, "Loading Unjoined Events....");
+                    }
+
+                    @Override
+                    protected List<Event> doInBackground(Void... params) {
+
+                        List<Event> eventList = eventsAdapter.getAllAttendedEventsList(parent_id);
+                        return eventList;
+                    }
+
+                    protected void onPostExecute(final List<Event> eventList) {
+                        super.onPostExecute(eventList);
+                        System.out.println("Dialog close..");
+                        ringProgressDialog.closeDialog();
+
+                        CalendarManager calendarManager = new CalendarManager(selfCtxt);
+
+                        for(Event event:eventList) {
+                            calendarManager.addCalendarEvent(event);
+                        }
+
+                        displayEvents(listItemListener, eventList, rootView, tabNumber);
+                    }
                 }
 
-                if(eventList.isEmpty()){
-                    noEventsMsg.setVisibility(View.VISIBLE);
-                } else {
-                    noEventsMsg.setVisibility(View.INVISIBLE);
-                    Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
-                    displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
-
-                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            showCalendarBox(eventList);
-                        }
-                    });
-
-                    refreshViewButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.container, PlaceholderFragment.newInstance(3))
-                                    .commit();
-                        }
-                    });
-                }
+                new LoaderDialogForUnJoinedEvents().execute();
             }else if (tabNumber == 4){
                 //For Statistics
                 List<ChartItem> charts = new ArrayList<ChartItem>();
@@ -477,50 +498,36 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
             }
         }
 
-        public static class LoaderDialog extends AsyncTask<Void, Void, Void> {
+        private void displayEvents(AdapterView.OnItemClickListener listItemListener, final List<Event> eventList, View eventView, final int tabPosition) {
 
-            private ProgressDialog ringProgressDialog;
-            private String message;
-            private boolean stop;
+            ListView listView = (ListView) eventView.findViewById(R.id.listview);
+            TextView noEventsMsg = (TextView)eventView.findViewById(R.id.no_events_message);
 
+            if(eventList.isEmpty()){
+                noEventsMsg.setVisibility(View.VISIBLE);
+            } else {
+                noEventsMsg.setVisibility(View.INVISIBLE);
 
-            public void closeDialog() {
-                stop = true;
-            }
+                Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
+                displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
 
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                ringProgressDialog = new ProgressDialog(selfCtxt);
-                System.out.println("Prexecute dialog111111--->" + message);
-                ringProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                ringProgressDialog.setMessage("Loading...");
-                ringProgressDialog.setIndeterminate(true);
-                ringProgressDialog.setCancelable(true);
-                ringProgressDialog.show();
-            }
+                viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        showCalendarBox(eventList);
+                    }
+                });
 
-
-            @Override
-            protected Void doInBackground(Void... params) {
-
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            }
-
-
-
-            protected void onPostExecute(Void value) {
-
-                super.onPostExecute(value);
-                ringProgressDialog.dismiss();
+                refreshViewButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.container, PlaceholderFragment.newInstance(tabPosition))
+                                .commit();
+                    }
+                });
             }
         }
+
+
     }
 
     private static void showCalendarBox(List<Event> eventList) {

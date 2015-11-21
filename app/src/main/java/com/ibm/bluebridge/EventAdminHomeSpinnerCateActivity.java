@@ -106,16 +106,16 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 4) {  //Last item is logout
-                    session.logout();
-                    return;
-                }
+                    if (position == 4) {  //Last item is logout
+                        session.logout();
+                        return;
+                    }
 
-                // When the given dropdown item is selected, show its contents in the
-                // container view.
-                getSupportFragmentManager().beginTransaction()
+
+                    getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                         .commit();
+
             }
 
             @Override
@@ -242,126 +242,135 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_event_admin_home_tab, container, false);
-            LinearLayout layout=(LinearLayout) rootView.findViewById(R.id.admin_list_layout);
+            final View rootView = inflater.inflate(R.layout.fragment_event_admin_home_tab, container, false);
+            LinearLayout layout = (LinearLayout) rootView.findViewById(R.id.admin_list_layout);
 
-            int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            final int tabNumber = getArguments().getInt(ARG_SECTION_NUMBER);
             //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            new LoaderDialog().execute();
+            //new LoaderDialog().execute();
             final ListView listView = (ListView) rootView.findViewById(R.id.listview);
-            TextView noEventsMsg = (TextView)rootView.findViewById(R.id.no_events_message);
+            final TextView noEventsMsg = (TextView) rootView.findViewById(R.id.no_events_message);
             View aboutmeView = inflater.inflate(R.layout.content_aboutme_admin, container, false);
-            ScrollView adminDetailView = (ScrollView)aboutmeView.findViewById(R.id.admin_details);
+            ScrollView adminDetailView = (ScrollView) aboutmeView.findViewById(R.id.admin_details);
 
 
             //For all events
-            if(tabNumber == 1 ) {
+            if (tabNumber == 1) {
                 viewCalendarButton.setVisibility(View.VISIBLE);
                 refreshViewButton.setVisibility(View.VISIBLE);
                 Log.d("EventAdminHomeSpinner", "Tab1 clicked");
 
-                final List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
-                CalendarManager calendarManager = new CalendarManager(selfCtxt);
+                class LoaderDialogForManagedEvents extends AsyncTask<Void, Void, List<Event>> {
 
-                for(Event event:eventList) {
-                    calendarManager.addCalendarEvent(event);
-                }
+                    private Utils.LoaderDialog ringProgressDialog;
 
-                if(eventList.isEmpty()){
-                    noEventsMsg.setVisibility(View.VISIBLE);
-                } else {
-                    noEventsMsg.setVisibility(View.INVISIBLE);
+                    @Override
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        System.out.println("Dialog begin..");
+                        ringProgressDialog = new Utils.LoaderDialog(selfCtxt,"Loading Managed Events....");
+                    }
 
-                    final AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
+                    @Override
+                    protected List<Event> doInBackground(Void... params) {
 
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, final View view,
-                                                int position, long id) {
-                            Object obj = parent.getItemAtPosition(position);
+                        final List<Event> eventList = eventsAdapter.getAdminEventsList(admin_id);
+                        return eventList;
+                    }
 
-                            if(obj instanceof Event) {
-                                final Event item = (Event) obj;
+                    protected void onPostExecute(final List<Event> eventList) {
+                        super.onPostExecute(eventList);
+                        System.out.println("Dialog close..");
+                        ringProgressDialog.closeDialog();
 
-                                Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                                intent.putExtra("EventAction", 1);
-                                intent.putExtra("EventObj", item);
-                                intent.putExtra("admin_id", admin_id);
+                        CalendarManager calendarManager = new CalendarManager(selfCtxt);
 
-                                startActivity(intent);
+                        for (Event event : eventList) {
+                            calendarManager.addCalendarEvent(event);
+                        }
+
+                        AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, final View view,
+                                                    int position, long id) {
+                                Object obj = parent.getItemAtPosition(position);
+
+                                if (obj instanceof Event) {
+                                    final Event item = (Event) obj;
+
+                                    Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
+                                    intent.putExtra("EventAction", 1);
+                                    intent.putExtra("EventObj", item);
+                                    intent.putExtra("admin_id", admin_id);
+
+                                    startActivity(intent);
+                                }
                             }
-                        }
-                    };
-
-                    listView.setOnItemClickListener(listItemListener);
-
-                    Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
-                    displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
-
-                    viewCalendarButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            showCalendarBox(eventList);
-                        }
-                    });
-
-                    refreshViewButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.container, PlaceholderFragment.newInstance(1))
-                                    .commit();
-                        }
-                    });
-
+                        };
+                        displayEvents(listItemListener, eventList, rootView, tabNumber);
+                    }
                 }
+
+                new LoaderDialogForManagedEvents().execute();
             }
             //For joined events
-            else if(tabNumber == 2) {
+            else if (tabNumber == 2) {
                 viewCalendarButton.setVisibility(View.VISIBLE);
                 refreshViewButton.setVisibility(View.VISIBLE);
                 Log.d("EventAdminHomeSpinner", "Tab2 clicked");
-                final List<Event> completedEventsList = eventsAdapter.getAdminCompletedEventsList(admin_id);
 
-                final AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
+                class LoaderDialogForCompletedEvents extends AsyncTask<Void, Void, List<Event>> {
+
+                    private Utils.LoaderDialog ringProgressDialog;
 
                     @Override
-                    public void onItemClick(AdapterView<?> parent, final View view,
-                                            int position, long id) {
-                        Object obj = parent.getItemAtPosition(position);
-
-                        if(obj instanceof Event) {
-                            final Event item = (Event) obj;
-
-                            //to be in read mode
-                            Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
-                            intent.putExtra("EventAction", 2);
-                            intent.putExtra("EventObj", item);
-                            intent.putExtra("admin_id", admin_id);
-
-                            startActivity(intent);
-                        }
+                    protected void onPreExecute() {
+                        super.onPreExecute();
+                        System.out.println("Dialog begin..");
+                        ringProgressDialog = new Utils.LoaderDialog(selfCtxt,"Loading Completed Events...");
                     }
-                };
 
-                listView.setOnItemClickListener(listItemListener);
+                    @Override
+                    protected List<Event> doInBackground(Void... params) {
 
-                Map<String,List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(completedEventsList);
-                displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
-
-                viewCalendarButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        showCalendarBox(completedEventsList);
+                        List<Event> eventList = eventsAdapter.getAdminCompletedEventsList(admin_id);
+                        return eventList;
                     }
-                });
 
-                refreshViewButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.container, PlaceholderFragment.newInstance(2))
-                                .commit();
+                    protected void onPostExecute(final List<Event> eventList) {
+                        super.onPostExecute(eventList);
+                        System.out.println("Dialog close..");
+                        ringProgressDialog.closeDialog();
+
+                        AdapterView.OnItemClickListener listItemListener = new AdapterView.OnItemClickListener() {
+
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, final View view,
+                                                    int position, long id) {
+                                Object obj = parent.getItemAtPosition(position);
+
+                                if (obj instanceof Event) {
+                                    final Event item = (Event) obj;
+
+                                    //to be in read mode
+                                    Intent intent = new Intent(selfCtxt, EventFormViewActivity.class);
+                                    intent.putExtra("EventAction", 2);
+                                    intent.putExtra("EventObj", item);
+                                    intent.putExtra("admin_id", admin_id);
+
+                                    startActivity(intent);
+                                }
+                            }
+                        };
+                        displayEvents(listItemListener, eventList, rootView, tabNumber);
                     }
-                });
+                }
 
-            } else if (tabNumber == 3){
+                new LoaderDialogForCompletedEvents().execute();
+
+            } else if (tabNumber == 3) {
                 //For Statistics
                 List<ChartItem> charts = new ArrayList<ChartItem>();
 
@@ -424,7 +433,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
 
                 viewCalendarButton.setVisibility(View.INVISIBLE);
                 refreshViewButton.setVisibility(View.INVISIBLE);
-            } else if (tabNumber == 4){
+            } else if (tabNumber == 4) {
                 viewCalendarButton.setVisibility(View.INVISIBLE);
                 refreshViewButton.setVisibility(View.INVISIBLE);
                 //For About Me
@@ -443,7 +452,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
 
                 nameView.setText("Name:         " + user.getFirstname() + " " + user.getLastname());
                 nricView.setText("NRIC:           " + user.getId());
-                genderView.setText( "Gender:        " + user.getGender());
+                genderView.setText("Gender:        " + user.getGender());
                 contactView.setText("Contact:       " + user.getContact());
                 emailView.setText("Email:          " + user.getEmail());
                 return aboutmeView;
@@ -451,6 +460,42 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
 
             return rootView;
         }
+
+        private void displayEvents(AdapterView.OnItemClickListener listItemListener, final List<Event> eventList, View eventView, final int tabPosition) {
+
+            ListView listView = (ListView) eventView.findViewById(R.id.listview);
+            TextView noEventsMsg = (TextView) eventView.findViewById(R.id.no_events_message);
+            CalendarManager calendarManager = new CalendarManager(selfCtxt);
+
+            for (Event event : eventList) {
+                calendarManager.addCalendarEvent(event);
+            }
+
+            if (eventList.isEmpty()) {
+                noEventsMsg.setVisibility(View.VISIBLE);
+            } else {
+                noEventsMsg.setVisibility(View.INVISIBLE);
+
+                listView.setOnItemClickListener(listItemListener);
+                Map<String, List<Event>> categorizedEventMap = eventsAdapter.categorizeEvents(eventList);
+                displayCategorizedListView(categorizedEventMap, selfCtxt, listView);
+
+                viewCalendarButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        showCalendarBox(eventList);
+                    }
+                });
+
+                refreshViewButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.container, PlaceholderFragment.newInstance(tabPosition))
+                                .commit();
+                    }
+                });
+            }
+        }
+
         private class LoadImage extends AsyncTask<String, String, Bitmap> {
             @Override
             protected void onPreExecute() {
@@ -460,6 +505,7 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                 pDialog.show();
 
             }
+
             protected Bitmap doInBackground(String... args) {
                 try {
                     bitmap = BitmapFactory.decodeStream((InputStream) new URL(args[0]).getContent());
@@ -472,10 +518,10 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
 
             protected void onPostExecute(Bitmap image) {
 
-                if(image != null){
+                if (image != null) {
                     photo.setImageBitmap(image);
                     pDialog.dismiss();
-                }else{
+                } else {
                     pDialog.dismiss();
                     Toast.makeText(selfCtxt, "Image Does Not exist or Network Error", Toast.LENGTH_SHORT).show();
 
@@ -483,50 +529,6 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
             }
         }
 
-        public static class LoaderDialog extends AsyncTask<Void, Void, Void> {
-
-            private ProgressDialog ringProgressDialog;
-            private String message;
-            private boolean stop;
-
-
-            public void closeDialog() {
-                stop = true;
-            }
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                ringProgressDialog = new ProgressDialog(selfCtxt);
-                System.out.println("Prexecute dialog111111--->" + message);
-                ringProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                ringProgressDialog.setMessage("Loading...");
-                ringProgressDialog.setIndeterminate(true);
-                ringProgressDialog.setCancelable(true);
-                ringProgressDialog.show();
-            }
-
-
-            @Override
-            protected Void doInBackground(Void... params) {
-
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            }
-
-
-
-            protected void onPostExecute(Void value) {
-
-                super.onPostExecute(value);
-                ringProgressDialog.dismiss();
-            }
-        }
     }
 
     private static void showCalendarBox(List<Event> eventList) {
