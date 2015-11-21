@@ -138,6 +138,11 @@ public class RESTApi {
                 synchronized(respJsonObj) {
                     respJsonObj.notifyAll();
                 }
+                try {
+                    respJsonObj.put("response", null);
+                } catch (JSONException e1) {
+                    e1.printStackTrace();
+                }
                 Log.e("RESTApi", "issue in connection");
                 e.printStackTrace();
             }

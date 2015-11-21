@@ -102,6 +102,8 @@ public class EventsAdapter {
             excep.printStackTrace();
         }
 
+        System.out.println("List size--->" + eventsList.size());
+
         return eventsList;
     }
 
@@ -113,6 +115,7 @@ public class EventsAdapter {
             System.out.println("Admin URI--->" + allEventsAPI);
             REST_API.getResponse(allEventsAPI);
             Object response = null;
+
 
             try {
                 response = REST_API.getRespObj().get("response");
@@ -163,6 +166,8 @@ public class EventsAdapter {
         finally {
             // restConnection.disconnect();
         }
+
+        System.out.println("List size--->" + eventsList.size());
         return eventsList;
     }
 
