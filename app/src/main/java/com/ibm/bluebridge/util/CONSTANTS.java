@@ -6,7 +6,8 @@ package com.ibm.bluebridge.util;
 public interface CONSTANTS {
     String PREFERENCE_NAME = "com.ibm.bluebridge";
 
-    String BM_ROUTE = "http://school-volunteer-bluebridge.mybluemix.net/";
+    //String BM_ROUTE = "http://school-volunteer-bluebridge.mybluemix.net/";
+    String BM_ROUTE = "http://hq-mobile-test.mybluemix.net/";
     String BM_UUID = "";
     String[] CATEGORIES = {"Education", "Sports", "Music", "Charity" , "Others"};
     String LOADING_DIALOG_TITLE = "Please Wait...";
