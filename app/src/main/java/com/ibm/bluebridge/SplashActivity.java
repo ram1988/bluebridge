@@ -1,39 +1,37 @@
 package com.ibm.bluebridge;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Environment;
-import android.sax.StartElementListener;
+import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.os.Handler;
 
-import com.ibm.bluebridge.charts.LineActivity;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.ibm.bluebridge.gcm.QuickstartPreferences;
+import com.ibm.bluebridge.gcm.RegistrationIntentService;
 import com.ibm.bluebridge.util.SessionManager;
 import com.ibm.bluebridge.util.Utils;
-import com.ibm.mobilefirstplatform.clientsdk.android.core.api.BMSClient;
-import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPush;
-import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushException;
-import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushNotificationListener;
-import com.ibm.mobilefirstplatform.clientsdk.android.push.api.MFPPushResponseListener;
 
 import java.io.File;
-import java.net.MalformedURLException;
 
 public class SplashActivity extends AppCompatActivity {
-    private static String APPLICATION_ROUTE = "http://school-volunteer-bluebridge.mybluemix.net";
-    private static String APPLICATION_GUID = "c5328838-1f5f-4221-8845-7872da171306";
     private SessionManager session;
 
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final String TAG = "MainActivity";
 
-    //private static String APPLICATION_ROUTE = "http://hq-mobile-test.mybluemix.net";
-    //private static String APPLICATION_GUID = "4f2f35d9-105e-47af-9394-4036c8af47f5";
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 2000;
-
-    MFPPush push = null;
-    MFPPushNotificationListener notificationListener = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +56,8 @@ public class SplashActivity extends AppCompatActivity {
          * Initialize everything app needs
          */
         try {
-            initializePushNotification();
+            //initializePushNotification();
+            initializeGCM();
             initializeSDCardDirectory();
         }catch(Exception e){
             Log.e("SplashActivity", "Excetion while initializing app");
@@ -83,34 +82,28 @@ public class SplashActivity extends AppCompatActivity {
         }, SPLASH_TIME_OUT);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+    }
 
-    private void initializePushNotification(){
-        // Initialize IBM Bluemix Push Notification SDK
-        try {
-            // Initialize the SDK for Java (Android) with IBM Bluemix GUID and route
-            BMSClient.getInstance().initialize(getApplicationContext(), APPLICATION_ROUTE, APPLICATION_GUID);
-        }catch(MalformedURLException e){
-            Log.e("BMSClient", "Malformed Bluemix route URL");
-        }
-        //Initializing client Push SDK
-        MFPPush.getInstance().initialize(getApplicationContext());
-        push = MFPPush.getInstance();
-
-        //For Java (Android)
-        push.register(new MFPPushResponseListener<String>() {
+    private void initializeGCM(){
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
-            public void onSuccess(String s) {
-                Log.i("MFPPushResponseListener", "Device registration succeeded.");
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
             }
+        };
 
-            @Override
-            public void onFailure(MFPPushException e) {
-                Log.e("MFPPushResponseListener", "Device registration failed.");
-            }
-        });
-
-        if (push != null) {
-            push.listen(notificationListener);
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
         }
     }
 
@@ -127,8 +120,29 @@ public class SplashActivity extends AppCompatActivity {
             Log.d("SplashActivity", "chart folder has been made. "+mPath);
         }
 
-        Log.i("Utils", "Chart directory is "+mPath);
+        Log.i("Utils", "Chart directory is " + mPath);
         Utils.setSdDir(sd_dir);
         Utils.setChartDir(mPath);
+    }
+
+    /**
+     * Check the device to make sure it has the Google Play Services APK. If
+     * it doesn't, display a dialog that allows users to download the APK from
+     * the Google Play Store or enable it in the device's system settings.
+     */
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 }

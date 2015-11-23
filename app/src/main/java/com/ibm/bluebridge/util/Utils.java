@@ -14,7 +14,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.Chart;
-import com.ibm.mobilefirstplatform.clientsdk.android.security.api.AuthorizationManager;
+import com.ibm.bluebridge.gcm.RegistrationIntentService;
 
 import org.json.JSONException;
 
@@ -55,19 +55,10 @@ public class Utils {
 
     //Cannot be called before the push notification api is called
     public static String getDeviceId() {
-        String deviceId = "";
-        try {
-            deviceId = (String) AuthorizationManager.getInstance().getDeviceIdentity().get("id");
-            Log.d("getDeviceId", "MFPPush:computeRegId() - DeviceId obtained from AuthorizationManager object id field is : " + deviceId);
-            if (deviceId == null) {
-                deviceId = (String) AuthorizationManager.getInstance().getDeviceIdentity().get("deviceId");
-                Log.d("getDeviceId", "MFPPush:computeRegId() - DeviceId obtained from AuthorizationManager object deviceId field is : " + deviceId);
-            }
-        } catch (JSONException var2) {
-            var2.printStackTrace();
-        }
+        if(RegistrationIntentService.getDeviceToken() != null)
+            return RegistrationIntentService.getDeviceToken();
 
-        return deviceId;
+        return "";
     }
 
     public static String convertDateFormat(String dateInString) {

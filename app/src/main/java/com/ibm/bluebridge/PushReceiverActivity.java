@@ -1,19 +1,11 @@
 package com.ibm.bluebridge;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.ibm.bluebridge.util.SessionManager;
-import com.ibm.bluebridge.util.Utils;
-import com.ibm.mobilefirstplatform.clientsdk.android.push.internal.MFPInternalPushMessage;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Iterator;
 
 public class PushReceiverActivity extends AppCompatActivity {
     private final String KEY_PAYLOAD = "payload";
@@ -39,58 +31,55 @@ public class PushReceiverActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_push_receiver);
 
-        MFPInternalPushMessage message = (MFPInternalPushMessage) getIntent().getExtras().get("message");
-        JSONObject message_json = message.toJson();
+        Bundle extras = getIntent().getExtras();
+        Log.d("PushReceiver", extras.toString());
 
         try {
-            String payload = message_json.getString(KEY_PAYLOAD);
-            JSONObject payload_json = new JSONObject(payload);
-            if(payload_json != null) {
-                String type = payload_json.getString(KEY_TYPE);
-                if(type != null) {
-                    if (type.toLowerCase().equals(PUSH_TYPE.EVENT.getValue())){
-                        String event_id = payload_json.getString("event_id");
-                        PushReceiverActivity.this.finish();
+            String type = extras.getString("type");
+            if(type != null) {
+                if (type.toLowerCase().equals(PUSH_TYPE.EVENT.getValue())){
+                    String event_id = extras.getString("event_id");
+                    PushReceiverActivity.this.finish();
 
-                        Intent intent = new Intent();
-                        intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventFormViewActivity");
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.putExtra("event_id", event_id);
+                    Intent intent = new Intent();
+                    intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventFormViewActivity");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("event_id", event_id);
 
-                        Log.i("PushReceiverActivity", "Redirecting to com.ibm.bluebridge.EventFormViewActivity");
+                    Log.i("PushReceiverActivity", "Redirecting to com.ibm.bluebridge.EventFormViewActivity");
+                    this.startActivity(intent);
+                } else if (type.toLowerCase().equals(PUSH_TYPE.ALERT.getValue())) {
+                    String push_message = extras.getString("message");
+                    PushReceiverActivity.this.finish();
+                    Intent intent = new Intent();
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    if(session.isAdmin()){
+                        intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventAdminHomeSpinnerCateActivity");
+                        intent.putExtra("message", push_message);
+                        intent.putExtra("alert", true);
                         this.startActivity(intent);
-                    } else if (type.toLowerCase().equals(PUSH_TYPE.ALERT.getValue())) {
-                        String push_message = payload_json.getString("message");
-                        PushReceiverActivity.this.finish();
-                        Intent intent = new Intent();
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                        if(session.isAdmin()){
-                            intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventAdminHomeSpinnerCateActivity");
-                            intent.putExtra("message", push_message);
-                            intent.putExtra("alert", true);
-                            this.startActivity(intent);
-                        }else if(session.isParent()){
-                            intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventParentHomeSpinnerActivity");
-                            intent.putExtra("message", push_message);
-                            intent.putExtra("alert", true);
-                            this.startActivity(intent);
-                        }
-                    } else {
-                        Log.e("PushReceiverActivity", "Invalid payload, cannot handle. Redirecting to home page.");
-                        redirect("com.ibm.bluebridge.EventLoginActivity", message_json);
+                    }else if(session.isParent()){
+                        intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventParentHomeSpinnerActivity");
+                        intent.putExtra("message", push_message);
+                        intent.putExtra("alert", true);
+                        this.startActivity(intent);
                     }
+                } else {
+                    Log.e("PushReceiverActivity", "Invalid payload, cannot handle. Redirecting to login page.");
+
+                    PushReceiverActivity.this.finish();
+                    Intent intent = new Intent();
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventLoginActivity");
+                    intent.putExtra("message", "Please login");
+                    intent.putExtra("alert", true);
+                    this.startActivity(intent);
                 }
             }
-        } catch (JSONException e) {
-            Log.e("PushReceiverActivity", e.getMessage());
         } catch (Exception e){
             Log.e("PushReceiverActivity", e.getMessage());
         }
     }
 
-    private void redirect(String className, JSONObject message) throws JSONException{
-        //finish the redirector activity so it can't be returned to
-
-    }
 }
