@@ -79,6 +79,15 @@ public class PushReceiverActivity extends AppCompatActivity {
             }
         } catch (Exception e){
             Log.e("PushReceiverActivity", e.getMessage());
+            Log.e("PushReceiverActivity", "Redirecting to login page");
+
+            PushReceiverActivity.this.finish();
+            Intent intent = new Intent();
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setClassName("com.ibm.bluebridge", "com.ibm.bluebridge.EventLoginActivity");
+            intent.putExtra("message", "Please login");
+            intent.putExtra("alert", true);
+            this.startActivity(intent);
         }
     }
 
