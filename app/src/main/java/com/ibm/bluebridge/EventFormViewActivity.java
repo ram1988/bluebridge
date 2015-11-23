@@ -278,6 +278,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                 public void onClick(View v) {
                     Event oldEvent = event;
                     Event newEvent = setEvent(new Event());
+                    newEvent.setEventId(event.getEventId());
                     String resCode = Validator.validate(newEvent);
                     if (resCode.equals("")) {
                         eventsAdapter.updateEvent(newEvent, adminId);
