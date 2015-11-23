@@ -354,7 +354,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                 parentDetailView.setVisibility(View.INVISIBLE);
 
 
-                class LoaderDialogForUnJoinedEvents extends AsyncTask<Void, Void, List<Event>> {
+                class LoaderDialogForCompletedEvents extends AsyncTask<Void, Void, List<Event>> {
 
                     private Utils.LoaderDialog ringProgressDialog;
 
@@ -362,7 +362,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                     protected void onPreExecute() {
                         super.onPreExecute();
                         System.out.println("Dialog begin..");
-                        ringProgressDialog = new Utils.LoaderDialog(selfCtxt, "Loading Unjoined Events....");
+                        ringProgressDialog = new Utils.LoaderDialog(selfCtxt, "Loading Completed Events....");
                     }
 
                     @Override
@@ -387,7 +387,7 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                     }
                 }
 
-                new LoaderDialogForUnJoinedEvents().execute();
+                new LoaderDialogForCompletedEvents().execute();
             }else if (tabNumber == 4){
                 //For Statistics
                 List<ChartItem> charts = new ArrayList<ChartItem>();
