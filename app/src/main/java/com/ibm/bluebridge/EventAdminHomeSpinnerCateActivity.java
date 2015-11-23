@@ -418,9 +418,9 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             chart.putExtra("legend", "number of parents by child registration year");
                             startActivity(chart);
                         } else if (position == 2) {
-                            String data_json = "{\"Education\":5,\"Sports\":2, \"Charity\":4, \"Entertainment\":1}";
-                        } else if (position == 2) {
-                            String data_json = "{\"Education\":5,\"Sports\":2}";
+
+                        } else if (position == 3) {
+                            String data_json = "{\"Education\":5,\"Sports\":2, \"Charity\":4, \"Entertainment\":1}";;
 
                             Intent chart = new Intent(getContext(), PieChartActivity.class);
                             chart.putExtra("input", data_json);
