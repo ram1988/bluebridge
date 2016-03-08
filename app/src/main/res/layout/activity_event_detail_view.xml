@@ -314,7 +314,7 @@
                     android:textStyle="bold"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="Teacher in Charge"
+                    android:text="Event Admin in Charge"
                     android:textSize="18sp"
                     android:background="#FFA6CBFF"/>
 

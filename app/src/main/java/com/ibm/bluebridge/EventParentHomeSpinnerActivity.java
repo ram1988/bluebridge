@@ -458,8 +458,8 @@ public class EventParentHomeSpinnerActivity extends EventMasterActivity {
                 jobView.setText(    "Job:              " + parent.getJob());
                 addressView.setText("Address:      " + parent.getAddress());
 
-                ArrayAdapter<Children> mAdapter = getChildrenListItemAdapter(selfCtxt, parent.getChildren());
-                childrenView.setAdapter(mAdapter);
+              /*  ArrayAdapter<Children> mAdapter = getChildrenListItemAdapter(selfCtxt, parent.getChildren());
+                childrenView.setAdapter(mAdapter);*/
                 return aboutmeView;
             }
 

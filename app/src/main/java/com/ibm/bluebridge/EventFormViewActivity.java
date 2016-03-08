@@ -294,7 +294,7 @@ public class EventFormViewActivity extends EventMasterActivity {
                 }
             });
 
-            showRegButton.setText("Show Registered Parents");
+            showRegButton.setText("Show Registered Volunteers");
             showRegButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 

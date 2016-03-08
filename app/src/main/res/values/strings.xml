@@ -45,5 +45,6 @@
     <string name="title_activity_event_manage_parents_spinner">EventManageParentsSpinnerActivity
     </string>
     <string name="title_activity_event_parent_home_spinner">EventParentHomeSpinnerActivity</string>
+    <string name="title_activity_volunteer_icon">VolunteerIconActivity</string>
 
 </resources>

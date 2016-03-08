@@ -74,7 +74,7 @@ public class EventParentDetailActivity extends EventMasterActivity {
         TextView emailView = (TextView) findViewById(R.id.email_text);
         TextView jobView = (TextView) findViewById(R.id.job_text);
         TextView addressView = (TextView) findViewById(R.id.address_text);
-        ListView childrenView = (ListView) findViewById(R.id.childrenlist);
+        //ListView childrenView = (ListView) findViewById(R.id.childrenlist);
         callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:+" + parent.getContact().trim()));
 
@@ -97,8 +97,8 @@ public class EventParentDetailActivity extends EventMasterActivity {
         emailView.setText(Html.fromHtml("Email:            <a href=\"mailto:" + parent.getEmail() + "\">" + parent.getEmail() + "</a>"));
         emailView.setMovementMethod(LinkMovementMethod.getInstance());
 
-        ArrayAdapter<Children> mAdapter = getChildrenListItemAdapter(ctxt, parent.getChildren());
-        childrenView.setAdapter(mAdapter);
+       // ArrayAdapter<Children> mAdapter = getChildrenListItemAdapter(ctxt, parent.getChildren());
+       // childrenView.setAdapter(mAdapter);
     }
 
     private class LoadImage extends AsyncTask<String, String, Bitmap> {

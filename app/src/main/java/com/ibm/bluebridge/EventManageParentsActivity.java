@@ -129,7 +129,7 @@ public class EventManageParentsActivity extends EventMasterActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "Registered Parents";
+                    return "Registered Volunteers";
                 case 1:
                     return "Mark Attendance";
             }

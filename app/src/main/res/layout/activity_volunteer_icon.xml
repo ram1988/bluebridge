@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:fitsSystemWindows="true"
+    tools:context="com.ibm.bluebridge.VolunteerIconActivity">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+                <Button
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:id="@+id/icon1"
+                android:drawableTop="@drawable/manage"
+                android:layout_weight="1"
+                android:text="Manage Events" />
+
+            <Button
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:id="@+id/icon2"
+                android:drawableTop="@drawable/complete"
+                android:layout_weight="1"
+                android:text="Completed Events"/>
+            </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/statistics"
+                android:layout_weight="1"
+                android:text="Statistics"/>
+
+            <Button
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/about_me"
+                android:layout_weight="1"
+                android:text="About Me"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/log_out"
+                android:layout_weight="1"
+                android:text="Log Out"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -107,7 +107,9 @@
             android:spinnersShown="true"
             android:calendarViewShown="false"
             android:layout_below="@+id/event_date_label"
-            android:layout_alignLeft="@+id/event_date_label"/>
+            android:layout_alignLeft="@+id/event_date_label"
+            android:clickable="true"
+            android:datePickerMode="spinner" />
 
         </RelativeLayout>
         </android.support.v7.widget.CardView>
@@ -139,7 +141,8 @@
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/start_time_label"
-            android:layout_alignLeft="@+id/start_time_label"/>
+            android:layout_alignLeft="@+id/start_time_label"
+            android:timePickerMode="spinner" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
@@ -168,7 +171,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/end_time_label"
-            android:layout_alignLeft="@+id/end_time_label"/>
+            android:layout_alignLeft="@+id/end_time_label"
+            android:timePickerMode="spinner" />
     </RelativeLayout>
    </android.support.v7.widget.CardView>
 
@@ -262,7 +266,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/brief_time_label"
-            android:layout_alignLeft="@+id/brief_time_label"/>
+            android:layout_alignLeft="@+id/brief_time_label"
+            android:timePickerMode="spinner" />
       </RelativeLayout>
     </android.support.v7.widget.CardView>
 
@@ -313,7 +318,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:text="Teacher in Charge"
+            android:text="Event Admin in Charge"
             android:textStyle="bold"
             android:textSize="25sp"
             android:background="#FFA6CBFF"/>

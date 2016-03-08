@@ -7,7 +7,7 @@ public interface CONSTANTS {
     String PREFERENCE_NAME = "com.ibm.bluebridge";
 
     //String BM_ROUTE = "http://school-volunteer-bluebridge.mybluemix.net/";
-    String BM_ROUTE = "http://hq-mobile-test.mybluemix.net/";
+    String BM_ROUTE = "http://bluebridge.mybluemix.net/";
     String BM_UUID = "4f2f35d9-105e-47af-9394-4036c8af47f5";
     String[] CATEGORIES = {"Education", "Sports", "Music", "Charity" , "Others"};
     String LOADING_DIALOG_TITLE = "Please Wait...";

@@ -375,17 +375,17 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                 List<ChartItem> charts = new ArrayList<ChartItem>();
 
                 ChartItem chart1 = new ChartItem();
-                chart1.setCategory("Parents' Finished Hours");
-                ChartItem chart2 = new ChartItem();
-                chart2.setCategory("Number of Parents by Child Registration Year");
+                chart1.setCategory("Volunteer's Finished Hours");
+               /* ChartItem chart2 = new ChartItem();
+                chart2.setCategory("Number of Vlu by Child Registration Year");
                 ChartItem chart3 = new ChartItem();
-                chart3.setCategory("Percentage of Finished by child registration year");
+                chart3.setCategory("Percentage of completed voluntary activities per year");*/
                 ChartItem chart4 = new ChartItem();
                 chart4.setCategory("Number of Registration by Event Category");
 
                 charts.add(chart1);
-                charts.add(chart2);
-                charts.add(chart3);
+               // charts.add(chart2);
+                //charts.add(chart3);
                 charts.add(chart4);
 
                 StatisticsAdapter adapter = new StatisticsAdapter(selfCtxt, charts);
@@ -407,9 +407,9 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             chart.putExtra("max", 11);
                             chart.putExtra("limit", 10);
                             chart.putExtra("input", data_json);
-                            chart.putExtra("legend", "every parent's finished hour");
+                            chart.putExtra("legend", "every volunteer's finished hour");
                             startActivity(chart);
-                        } else if (position == 1) {
+                        } /*else if (position == 1) {
                             String data_json = "{\"2017\":2,\"2018\":3,\"2019\":1}";
 
                             Intent chart = new Intent(getContext(), LineActivity.class);
@@ -417,9 +417,9 @@ public class EventAdminHomeSpinnerCateActivity extends EventMasterActivity {
                             chart.putExtra("input", data_json);
                             chart.putExtra("legend", "number of parents by child registration year");
                             startActivity(chart);
-                        } else if (position == 2) {
+                        }else if (position == 2) {
 
-                        } else if (position == 3) {
+                        } */else if (position == 1) {
                             String data_json = "{\"Education\":5,\"Sports\":2, \"Charity\":4, \"Entertainment\":1}";;
 
                             Intent chart = new Intent(getContext(), PieChartActivity.class);
